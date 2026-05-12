@@ -1,0 +1,35 @@
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor temp
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Office temp/lock files
+~$*
+.~lock.*#
+
+# Power BI temp
+*.pbix.tmp
+TempState/
+
+# Build artifacts
+*.zip
+dist/
+build/
+
+# Python (in case any helper scripts get added)
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Student work — should never end up here
+*Submission*
+*submission*
+grades/

@@ -1,0 +1,66 @@
+Visit_ID,Visit_Date,Beach,High_Temp_F,Water_Temp_F,UV_Index,Wave_Height_Ft,Hours_Spent,Group_Size,Total_Spent_USD,Crowd_Level,Activity,Satisfaction
+1,2025-05-04,Mid-Beach,83.8,80.0,6.6,0.7,4.8,3,90.64,Medium,Reading,8.1
+2,2025-05-07,Bal Harbour,83.2,80.1,6.2,1.0,4.7,4,117.42,Medium,Swimming,9.2
+3,2025-05-14,Mid-Beach,86.5,80.7,6.3,1.5,5.8,3,92.62,Low,Picnic,9.5
+4,2025-05-15,Crandon Park,84.3,79.3,6.2,1.2,5.6,2,86.62,Medium,Swimming,9.7
+5,2025-05-18,Haulover,84.3,81.8,8.3,4.3,2.7,3,62.68,High,Reading,8.3
+6,2025-05-19,Bal Harbour,80.5,78.2,6.1,1.8,4.7,2,96.26,Medium,Sunbathing,7.2
+7,2025-05-26,Bal Harbour,83.6,78.3,6.6,1.9,4.1,4,110.32,Low,Reading,9.0
+8,2025-05-28,Sunny Isles,87.4,83.1,9.2,4.4,4.3,4,96.56,Medium,Surfing,9.0
+9,2025-05-29,South Beach,81.3,76.6,8.1,2.0,3.9,3,88.38,Medium,Reading,5.6
+10,2025-05-30,South Beach,84.3,81.2,8.2,0.9,5.5,3,112.83,High,Volleyball,6.7
+11,2025-05-31,Crandon Park,84.5,82.3,7.9,3.1,2.5,4,61.5,Medium,Reading,9.5
+12,2025-06-01,Crandon Park,85.4,81.8,9.0,1.1,4.9,6,105.54,Low,Snorkeling,10
+13,2025-06-02,Sunny Isles,85.9,80.2,11.4,1.0,4.2,4,86.37,Low,Snorkeling,10
+14,2025-06-02,Sunny Isles,83.9,78.1,9.6,1.0,4.7,8,124.92,Medium,Swimming,9.9
+15,2025-06-05,Sunny Isles,87.5,84.4,10.0,3.0,4.0,8,116.19,Low,Surfing,9.5
+16,2025-06-09,Fort Lauderdale Beach,84.9,82.2,10.8,1.2,4.7,2,79.04,High,Picnic,8.2
+17,2025-06-15,Crandon Park,83.9,79.4,10.9,2.5,4.1,3,67.88,Low,Picnic,10
+18,2025-06-18,Fort Lauderdale Beach,88.7,86.7,11.2,2.7,5.4,5,99.51,Low,Picnic,7.9
+19,2025-06-20,South Beach,88.6,84.9,9.6,1.6,6.4,5,116.79,High,Picnic,5.1
+20,2025-06-22,Hollywood Beach,85.5,82.4,8.5,3.1,6.3,8,111.14,Medium,Surfing,10
+21,2025-06-25,Crandon Park,85.7,83.3,8.3,1.4,5.5,5,98.47,High,Swimming,10
+22,2025-06-28,Bal Harbour,85.4,80.6,8.4,2.1,4.6,8,140.66,Low,Surfing,10
+23,2025-06-28,South Beach,89.7,85.4,11.3,4.5,4.2,2,79.1,High,Sunbathing,4.9
+24,2025-07-01,Bal Harbour,88.9,83.9,11.4,3.1,3.7,5,102.91,Medium,Sunbathing,7.7
+25,2025-07-01,Mid-Beach,85.6,83.6,10.6,0.9,3.3,4,85.51,Low,Swimming,10
+26,2025-07-02,Sunny Isles,88.0,82.0,11.2,2.7,5.3,6,115.97,Low,Picnic,8.6
+27,2025-07-03,Fort Lauderdale Beach,91.3,88.9,12.0,3.9,1.7,5,71.26,Low,Reading,6.4
+28,2025-07-06,South Beach,92.7,89.6,9.4,2.2,5.1,2,96.27,Medium,Sunbathing,3.9
+29,2025-07-07,Hollywood Beach,87.0,81.4,9.2,1.7,3.3,2,52.07,Medium,Swimming,10
+30,2025-07-10,Mid-Beach,86.1,83.7,11.6,2.7,3.9,1,56.22,Low,Sunbathing,9.2
+31,2025-07-19,Bal Harbour,90.4,86.9,12.0,2.3,3.8,1,74.12,Low,Volleyball,8.0
+32,2025-07-19,Bal Harbour,86.6,84.5,9.9,2.4,6.2,1,97.59,Low,Volleyball,10
+33,2025-07-20,South Beach,85.5,79.8,11.0,3.4,2.1,3,89.34,Medium,Reading,8.0
+34,2025-07-22,South Beach,85.9,82.4,12.0,3.7,3.7,2,86.4,Medium,Picnic,7.1
+35,2025-07-24,Mid-Beach,90.3,87.8,12.0,2.5,4.9,2,81.79,Medium,Volleyball,6.6
+36,2025-07-26,Fort Lauderdale Beach,85.9,83.1,10.9,1.1,4.0,3,80.49,High,Volleyball,7.5
+37,2025-08-06,Bal Harbour,92.2,87.7,10.1,0.4,3.6,3,98.0,Medium,Snorkeling,7.2
+38,2025-08-07,Bal Harbour,87.0,82.4,9.0,3.5,6.4,2,106.1,Low,Volleyball,9.4
+39,2025-08-08,Fort Lauderdale Beach,91.3,87.5,10.5,4.3,5.4,4,93.47,Low,Sunbathing,6.2
+40,2025-08-08,Hollywood Beach,92.6,88.9,11.6,3.5,3.4,2,58.82,High,Surfing,4.8
+41,2025-08-12,Hollywood Beach,91.7,86.0,12.0,2.6,5.5,4,91.01,Medium,Volleyball,5.5
+42,2025-08-14,Sunny Isles,87.3,81.5,11.8,3.1,3.5,2,80.15,Medium,Surfing,9.3
+43,2025-08-19,Haulover,90.1,84.8,11.5,2.2,4.3,8,101.35,High,Sunbathing,6.2
+44,2025-08-20,Haulover,89.7,86.4,9.9,0.8,4.2,5,85.7,High,Snorkeling,7.1
+45,2025-08-21,Bal Harbour,87.3,84.2,10.1,2.3,4.0,4,110.13,Low,Surfing,8.5
+46,2025-08-22,Sunny Isles,88.4,86.4,9.3,4.0,6.6,4,111.59,Medium,Volleyball,8.1
+47,2025-08-22,Haulover,89.1,83.9,12.0,1.5,2.9,4,71.24,Medium,Snorkeling,7.6
+48,2025-08-22,Fort Lauderdale Beach,89.7,86.0,11.0,1.9,2.8,5,81.71,Low,Snorkeling,6.6
+49,2025-08-22,Haulover,86.5,82.2,11.2,2.5,3.7,2,56.72,High,Picnic,8.1
+50,2025-08-27,Fort Lauderdale Beach,87.1,83.8,10.6,1.8,3.4,8,102.53,Low,Swimming,10
+51,2025-08-30,Haulover,86.5,84.1,10.5,1.1,4.7,4,90.23,High,Swimming,8.2
+52,2025-09-04,Hollywood Beach,83.5,80.7,9.8,1.9,5.4,4,82.63,High,Sunbathing,6.8
+53,2025-09-15,Mid-Beach,84.1,78.4,10.1,4.0,3.9,2,78.02,Low,Sunbathing,9.4
+54,2025-09-15,Hollywood Beach,87.5,84.7,9.6,1.6,4.7,5,91.49,High,Sunbathing,8.0
+55,2025-09-16,Mid-Beach,89.8,84.1,10.0,1.2,4.2,2,71.32,High,Sunbathing,5.4
+56,2025-09-16,Fort Lauderdale Beach,82.5,77.2,8.4,4.4,3.9,6,94.86,Medium,Surfing,8.2
+57,2025-09-16,Haulover,89.6,86.7,7.2,4.3,3.4,1,46.05,Low,Sunbathing,8.2
+58,2025-09-16,South Beach,82.4,78.3,9.2,2.5,5.4,1,84.44,Medium,Volleyball,5.7
+59,2025-09-18,Fort Lauderdale Beach,83.3,77.9,8.6,3.5,4.6,2,75.45,Medium,Reading,7.9
+60,2025-09-19,Fort Lauderdale Beach,87.0,81.5,8.3,1.3,3.5,4,82.21,Low,Sunbathing,9.6
+61,2025-09-19,South Beach,87.3,81.5,7.5,1.0,4.6,4,100.35,Medium,Volleyball,6.9
+62,2025-09-20,Haulover,88.8,85.0,9.8,3.2,5.6,4,95.4,Low,Sunbathing,8.7
+63,2025-09-26,Bal Harbour,86.4,83.0,10.5,2.9,4.4,2,89.21,Low,Surfing,10
+64,2025-09-28,Bal Harbour,89.5,85.8,8.9,4.3,6.0,1,91.32,Medium,Surfing,8.3
+65,2025-09-30,Sunny Isles,88.9,85.3,10.3,2.8,4.3,1,60.59,Low,Sunbathing,8.6
