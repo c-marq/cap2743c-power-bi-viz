@@ -14,7 +14,7 @@ Constraints: No text, no readable chart labels, no logos, no other people; 16:9 
 # Chapter 1
 ## From Model to Message: Foundations of Power BI Visualization
 
-![Figure 1.1: The Crossroads — Camila stands between the data model she built in CAP2791C and the report she is about to build in CAP2743C.](images/ch01/fig-1-1-crossroads.png)
+<img width="1376" height="768" alt="image" src="https://github.com/user-attachments/assets/c5188086-8ec9-4b3b-8208-9e4616e36d03" />
 
 **Chapter 1 of 8** | **Part 1 of 4: Foundations of Visualization**
 
