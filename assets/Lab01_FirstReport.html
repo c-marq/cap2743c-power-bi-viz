@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab 1 — First Report from a Known Model | CAP2743C</title>
+<style>
+  /* ---------- BASE TYPOGRAPHY (ND-friendly) ---------- */
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 14pt;
+    line-height: 1.6;
+    color: #1a1a1a;
+    max-width: 950px;
+    margin: 0 auto;
+    padding: 30px 25px 60px;
+    background: #fafafa;
+    text-align: left;
+  }
+  h1 { font-size: 26pt; margin: 0 0 6px; color: #1a3a5c; }
+  h2 { font-size: 20pt; margin: 36px 0 14px; color: #1a3a5c; border-bottom: 2px solid #1a3a5c; padding-bottom: 6px; }
+  h3 { font-size: 17pt; margin: 22px 0 10px; color: #2c3e50; }
+  h4 { font-size: 14pt; margin: 16px 0 8px; color: #34495e; }
+  p, li { font-size: 14pt; }
+  a { color: #2E86C1; }
+  code {
+    font-family: "Consolas", "Courier New", monospace;
+    background: #eef1f4;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 13pt;
+  }
+  hr { border: none; border-top: 1px solid #ccc; margin: 36px 0; }
+
+  /* ---------- HEADER BAR ---------- */
+  .course-header {
+    background: #1a3a5c;
+    color: white;
+    padding: 18px 22px;
+    border-radius: 6px;
+    margin-bottom: 24px;
+  }
+  .course-header .course-code { font-size: 12pt; opacity: 0.85; letter-spacing: 1px; }
+  .course-header .lab-title { font-size: 22pt; font-weight: bold; margin: 4px 0; }
+  .course-header .meta { font-size: 12pt; opacity: 0.85; }
+
+  /* ---------- STUDENT NAME / DATE ---------- */
+  .name-bar {
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin-bottom: 24px;
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .name-bar label {
+    font-weight: bold;
+    font-size: 13pt;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .name-bar input {
+    font-family: inherit;
+    font-size: 14pt;
+    padding: 6px 8px;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    min-width: 240px;
+  }
+  .name-bar .date-input input { min-width: 160px; }
+
+  /* ---------- LAUNCH PAD ---------- */
+  .launch-pad {
+    background: white;
+    border: 2px solid #1a3a5c;
+    border-radius: 6px;
+    padding: 18px 22px;
+    margin: 20px 0 30px;
+  }
+  .launch-pad h3 { margin-top: 0; color: #1a3a5c; }
+  .launch-pad table { width: 100%; border-collapse: collapse; }
+  .launch-pad td { padding: 6px 10px; vertical-align: top; font-size: 13pt; }
+  .launch-pad td:first-child { font-weight: bold; width: 200px; color: #1a3a5c; }
+
+  /* ---------- UDN BOXES ---------- */
+  .udn-box {
+    padding: 14px 18px;
+    margin: 14px 0;
+    border-radius: 4px;
+    border-left: 5px solid;
+    font-size: 13.5pt;
+  }
+  .udn-box strong.label {
+    display: block;
+    font-size: 13pt;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+  }
+  .udn-box ol, .udn-box ul { margin: 6px 0 0 0; padding-left: 22px; }
+  .udn-box li { margin-bottom: 6px; }
+
+  .do-this        { background: #D5F5E3; border-color: #27AE60; }
+  .do-this .label { color: #1E8449; }
+  .why            { background: #D6EAF8; border-color: #2E86C1; }
+  .why .label     { color: #1A5276; }
+  .mistake        { background: #FEF9E7; border-color: #F1C40F; }
+  .mistake .label { color: #7D6608; }
+  .stop-check     { background: #FADBD8; border-color: #E74C3C; }
+  .stop-check .label { color: #922B21; }
+  .breath         { background: #E8DAEF; border-color: #8E44AD; }
+  .breath .label  { color: #6C3483; }
+
+  /* ---------- PHASE HEADERS ---------- */
+  .phase-banner {
+    background: #34495e;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 6px;
+    margin: 30px 0 14px;
+    font-size: 14pt;
+  }
+  .phase-banner .phase-num { font-weight: bold; font-size: 13pt; letter-spacing: 1px; opacity: 0.85; }
+  .phase-banner .phase-title { font-size: 18pt; font-weight: bold; }
+  .phase-banner .phase-time { font-size: 12pt; opacity: 0.85; }
+
+  /* ---------- PASTE ZONE ---------- */
+  .paste-zone {
+    border: 2px dashed #888;
+    border-radius: 6px;
+    padding: 30px 18px;
+    margin: 14px 0;
+    min-height: 200px;
+    text-align: center;
+    background: #fcfcfc;
+    cursor: pointer;
+    outline: none;
+    position: relative;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .paste-zone:focus { border-color: #2E86C1; background: #f0f7fc; }
+  .paste-zone .placeholder {
+    color: #666;
+    font-size: 13pt;
+    line-height: 1.5;
+  }
+  .paste-zone .placeholder kbd {
+    background: #eee;
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    padding: 2px 6px;
+    font-family: monospace;
+    font-size: 11pt;
+  }
+  .paste-zone.has-image {
+    border-style: solid;
+    border-color: #27AE60;
+    background: white;
+    padding: 8px;
+    cursor: default;
+    text-align: left;
+  }
+  .paste-zone img {
+    max-width: 100%;
+    display: block;
+    margin: 0 auto;
+    border-radius: 3px;
+  }
+  .remove-btn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: #E74C3C;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    padding: 4px 10px;
+    font-size: 11pt;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .remove-btn:hover { background: #C0392B; }
+
+  /* ---------- REFLECTION TEXTAREAS ---------- */
+  .reflection-q {
+    margin: 18px 0;
+  }
+  .reflection-q label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #34495e;
+  }
+  .reflection-q textarea {
+    width: 100%;
+    min-height: 120px;
+    font-family: inherit;
+    font-size: 13pt;
+    padding: 10px 12px;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    resize: vertical;
+    line-height: 1.5;
+  }
+
+  /* ---------- HOW THIS IS GRADED ---------- */
+  .rubric-mini {
+    background: #fffbe6;
+    border: 1px solid #d4b106;
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin: 24px 0;
+    font-size: 13pt;
+  }
+  .rubric-mini h4 { margin-top: 0; color: #7D6608; }
+  .rubric-mini ul { margin: 6px 0 0 0; }
+
+  /* ---------- SUBMIT SECTION ---------- */
+  .submit-section {
+    background: #1a3a5c;
+    color: white;
+    padding: 22px;
+    border-radius: 6px;
+    margin: 30px 0 10px;
+  }
+  .submit-section h3 { color: white; margin-top: 0; }
+  .submit-section ol li { margin-bottom: 8px; }
+
+  /* ---------- PRINT STYLES (PDF submission) ---------- */
+  @media print {
+    body { background: white; max-width: none; padding: 0.4in; font-size: 11pt; }
+    .remove-btn { display: none !important; }
+    .paste-zone { border: 1px solid #999; min-height: auto; padding: 8px; cursor: default; page-break-inside: avoid; }
+    .paste-zone .placeholder { display: none; }
+    .paste-zone:not(.has-image)::after { content: "[no screenshot pasted]"; color: #c0392b; font-style: italic; }
+    .udn-box, .phase-banner, .launch-pad, .rubric-mini, .submit-section { page-break-inside: avoid; }
+    .course-header { background: #1a3a5c !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .phase-banner { background: #34495e !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .submit-section { background: #1a3a5c !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    textarea { border: 1px solid #999; background: white; min-height: 60px; }
+    input { border: none; border-bottom: 1px solid #333; }
+    h2, h3 { page-break-after: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="course-header">
+  <div class="course-code">CAP2743C — POWER BI: DATA VISUALIZATION AND ANALYSIS</div>
+  <div class="lab-title">Lab 1 — First Report from a Known Model</div>
+  <div class="meta">Session 2 · Thursday, May 14, 2026 · 15 points · ≈60–75 min</div>
+</div>
+
+<!-- ===== NAME / DATE ===== -->
+<div class="name-bar">
+  <div>
+    <label for="student-name">Student Name</label>
+    <input type="text" id="student-name" name="student-name" placeholder="First Last">
+  </div>
+  <div class="date-input">
+    <label for="lab-date">Date</label>
+    <input type="text" id="lab-date" name="lab-date" placeholder="May 14, 2026">
+  </div>
+</div>
+
+<!-- ===== LAUNCH PAD ===== -->
+<div class="launch-pad">
+  <h3>🚀 Launch Pad</h3>
+  <table>
+    <tr><td>What you're building</td><td>A Power BI report with 3 visuals that answer real business questions about AdventureWorks.</td></tr>
+    <tr><td>Tool</td><td>Power BI Desktop</td></tr>
+    <tr><td>File to open</td><td><code>Lab01_FirstReport_Starter.pbix</code> (from Canvas → Week 1 → Lab 1 Starter File)</td></tr>
+    <tr><td>Save As immediately</td><td><code>LastName_FirstName_Lab01.pbix</code></td></tr>
+    <tr><td>Time estimate</td><td>60–75 minutes</td></tr>
+    <tr><td>Steps</td><td>9 steps across 3 phases</td></tr>
+    <tr><td>What "done" looks like</td><td>A saved <code>.pbix</code> with three visuals (one Card, one Bar Chart, one Line Chart) plus a completed reflection.</td></tr>
+    <tr><td>Start here →</td><td>Phase 1, Step 1 below.</td></tr>
+  </table>
+</div>
+
+<!-- ===== LEARNING OBJECTIVES ===== -->
+<h3>What you'll learn in this lab</h3>
+<ul>
+  <li>How to navigate Power BI Desktop's three main views (Report, Table, Model)</li>
+  <li>How to read a data model and identify fact vs. dimension tables</li>
+  <li>How to build three foundational visual types: <strong>Card</strong>, <strong>Bar Chart</strong>, and <strong>Line Chart</strong></li>
+  <li>How visual encoding choices (length, position) communicate information</li>
+</ul>
+
+<!-- ===========================================
+     PHASE 1 — ORIENT
+     =========================================== -->
+<div class="phase-banner">
+  <div class="phase-num">PHASE 1 OF 3</div>
+  <div class="phase-title">Orient — Get to know your data</div>
+  <div class="phase-time">≈15 minutes</div>
+</div>
+
+<h3>Step 1 — Save the file with your name</h3>
+
+<div class="udn-box do-this">
+  <strong class="label">✅ DO THIS</strong>
+  <ol>
+    <li>Open <code>Lab01_FirstReport_Starter.pbix</code> in Power BI Desktop.</li>
+    <li>Immediately go to <strong>File → Save As</strong>.</li>
+    <li>Rename the file: <code>LastName_FirstName_Lab01.pbix</code> (use YOUR last and first name).</li>
+    <li>Save it somewhere you'll remember — Desktop, Documents, or a course folder.</li>
+  </ol>
+</div>
+
+<div class="udn-box why">
+  <strong class="label">💡 WHY ARE WE DOING THIS?</strong>
+  This protects the clean starter file so the next student (or future-you) can use it. It also makes your submission easy for me to find when grading. Get in the habit — every Power BI lab in this course starts with Save As.
+</div>
+
+<h3>Step 2 — Switch to Model View</h3>
+
+<div class="udn-box do-this">
+  <strong class="label">✅ DO THIS</strong>
+  <ol>
+    <li>Look at the <strong>far-left sidebar</strong> of Power BI Desktop. You'll see three icons stacked vertically.</li>
+    <li>The icons are: <strong>Report View</strong> (chart icon, top), <strong>Table View</strong> (table icon, middle), <strong>Model View</strong> (three-connected-boxes icon, bottom).</li>
+    <li>Click the <strong>Model View</strong> icon (the bottom one).</li>
+    <li>The canvas changes to show the data model — a set of boxes (tables) connected by lines (relationships).</li>
+  </ol>
+</div>
+
+<h3>Step 3 — Identify the fact table and the dimensions</h3>
+
+<div class="udn-box do-this">
+  <strong class="label">✅ DO THIS</strong>
+  <ol>
+    <li>Find the table named <code>Sales_data</code>. This is the <strong>fact table</strong> — it holds the transactions.</li>
+    <li>Around it, look for these 5 <strong>dimension tables</strong>:
+      <ul>
+        <li><code>Date_data</code></li>
+        <li><code>Product_data</code></li>
+        <li><code>Customer_data</code></li>
+        <li><code>Reseller_data</code></li>
+        <li><code>Sales Territory_data</code></li>
+      </ul>
+    </li>
+    <li>Notice the lines connecting them — those are the relationships from CAP2791C.</li>
+  </ol>
+</div>
+
+<div class="udn-box why">
+  <strong class="label">💡 WHY ARE WE DOING THIS?</strong>
+  In CAP2791C you spent weeks BUILDING the star schema. In this course, you'll spend weeks USING it. Confirming the model is in place — and that you can read it — is the first step of every visualization project. If the model is wrong, no visual you build on top of it will be right.
+</div>
+
+<div class="udn-box mistake">
+  <strong class="label">⚠️ COMMON MISTAKE</strong>
+  You may also see a table called <code>Sales Order_data</code> that's roughly the same size as <code>Sales_data</code>. That's a special type called a <strong>degenerate dimension</strong> — we'll cover it in Chapter 2. For now, just notice it's there and don't worry about it.
+</div>
+
+<div class="udn-box stop-check">
+  <strong class="label">🛑 STOP AND CHECK — Screenshot Required</strong>
+  <ol>
+    <li>Press <code>Windows + Shift + S</code> (Windows) or <code>Cmd + Shift + 4</code> (Mac) to launch the screen-capture tool.</li>
+    <li>Capture the Model View showing <code>Sales_data</code> in the middle with the 5 dimensions connected to it.</li>
+    <li>Click into the paste zone below — you'll see the dashed border turn blue.</li>
+    <li>Press <code>Ctrl + V</code> (Windows) or <code>Cmd + V</code> (Mac) to paste.</li>
+    <li>If it worked, the border turns GREEN. If not, click the zone and try again.</li>
+  </ol>
+</div>
+
+<div class="paste-zone" tabindex="0" data-zone="model-view">
+  <div class="placeholder">
+    📷 <strong>Paste your Model View screenshot here</strong><br>
+    Click this box, then press <kbd>Ctrl</kbd> + <kbd>V</kbd>
+  </div>
+</div>
+
+<!-- ===========================================
+     PHASE 2 — BUILD
+     =========================================== -->
+<div class="phase-banner">
+  <div class="phase-num">PHASE 2 OF 3</div>
+  <div class="phase-title">Build — Three visuals, three answers</div>
+  <div class="phase-time">≈45 minutes</div>
+</div>
+
+<h3>Step 4 — Build Visual 1: Card showing Total Sales</h3>
+
+<div class="udn-box do-this">
+  <strong class="label">✅ DO THIS</strong>
+  <ol>
+    <li>Click the <strong>Report View</strong> icon at the top of the left sidebar (chart icon).</li>
+    <li>Your canvas is empty — a blank white page. That's where the report goes.</li>
+    <li>Look at the <strong>Visualizations pane</strong> on the right side of the screen. You'll see a grid of small icons.</li>
+    <li>Find the <strong>Card</strong> icon — it looks like a small rectangle with "123" inside. It's in one of the first few rows of icons.</li>
+    <li>Click the Card icon once. A blank card appears on your canvas.</li>
+    <li>Click on the blank card to select it (a border appears around it).</li>
+    <li>Now look at the <strong>Fields pane</strong> on the far right. Find <code>Sales_data</code> and click the arrow next to it to expand the list.</li>
+    <li><strong>Drag</strong> the <code>Sales Amount</code> field from <code>Sales_data</code> onto the card.</li>
+    <li>The card should now show a number around <strong>$29,358,677.22</strong>.</li>
+  </ol>
+</div>
+
+<div class="udn-box why">
+  <strong class="label">💡 WHY ARE WE DOING THIS?</strong>
+  A card is the simplest visual that exists — it shows one number that summarizes a whole dataset. Almost every dashboard you'll ever build starts with one or two cards at the top: "How much in total?" "How many in total?" Cards answer those questions instantly.
+</div>
+
+<div class="udn-box mistake">
+  <strong class="label">⚠️ COMMON MISTAKE</strong>
+  If your card shows a tiny number like "1" or a giant number like "121,253," you probably dragged the wrong field. Make sure it's <code>Sales Amount</code> from <code>Sales_data</code> — not one of the Key fields like <code>SalesOrderLineKey</code>. Keys are just IDs; they shouldn't be added together.
+</div>
+
+<div class="udn-box stop-check">
+  <strong class="label">🛑 STOP AND CHECK — Screenshot Required</strong>
+  Take a screenshot of just your card on the canvas (it's OK if some empty canvas is around it). Paste it below.
+</div>
+
+<div class="paste-zone" tabindex="0" data-zone="card-visual">
+  <div class="placeholder">
+    📷 <strong>Paste your Card screenshot here</strong><br>
+    Click this box, then press <kbd>Ctrl</kbd> + <kbd>V</kbd>
+  </div>
+</div>
+
+<h3>Step 5 — Build Visual 2: Bar Chart showing Sales by Category</h3>
+
+<div class="udn-box do-this">
+  <strong class="label">✅ DO THIS</strong>
+  <ol>
+    <li>Click on an empty area of your canvas to deselect the card.</li>
+    <li>In the Visualizations pane, find the <strong>Clustered bar chart</strong> icon — it looks like horizontal bars stacked. It's in the first row of icons, usually the leftmost.</li>
+    <li>Click it. A blank bar chart frame appears on the canvas.</li>
+    <li>In the Fields pane, expand <code>Product_data</code>.</li>
+    <li><strong>Drag</strong> <code>Category</code> from <code>Product_data</code> into the <strong>Y-axis</strong> field well (in the Visualizations pane, under "Build visual").</li>
+    <li>Expand <code>Sales_data</code> if it's collapsed.</li>
+    <li><strong>Drag</strong> <code>Sales Amount</code> from <code>Sales_data</code> into the <strong>X-axis</strong> field well.</li>
+    <li>The chart should now show 4 bars: <strong>Bikes, Components, Clothing, Accessories</strong>. Bikes will be by far the longest bar.</li>
+  </ol>
+</div>
+
+<div class="udn-box why">
+  <strong class="label">💡 WHY ARE WE DOING THIS?</strong>
+  A bar chart compares quantities across categories. The visual encoding here is <strong>length</strong> — the longer the bar, the larger the number. Length is one of the most accurately perceived visual encodings, which is why bar charts are so common. Your eye can rank lengths better than it can rank, say, colors or areas.
+</div>
+
+<div class="udn-box stop-check">
+  <strong class="label">🛑 STOP AND CHECK — Screenshot Required</strong>
+  Take a screenshot of your bar chart and paste it below. Make sure all 4 category bars are visible.
+</div>
+
+<div class="paste-zone" tabindex="0" data-zone="bar-visual">
+  <div class="placeholder">
+    📷 <strong>Paste your Bar Chart screenshot here</strong><br>
+    Click this box, then press <kbd>Ctrl</kbd> + <kbd>V</kbd>
+  </div>
+</div>
+
+<h3>Step 6 — Build Visual 3: Line Chart showing Sales over time</h3>
+
+<div class="udn-box do-this">
+  <strong class="label">✅ DO THIS</strong>
+  <ol>
+    <li>Click on an empty area of the canvas to deselect.</li>
+    <li>In the Visualizations pane, find the <strong>Line chart</strong> icon — it looks like a zigzag line. It's in the first or second row.</li>
+    <li>Click it. A blank line chart appears.</li>
+    <li>Expand <code>Date_data</code> in the Fields pane.</li>
+    <li><strong>Drag</strong> <code>Fiscal Year</code> from <code>Date_data</code> into the <strong>X-axis</strong> field well.</li>
+    <li>From <code>Sales_data</code>, <strong>drag</strong> <code>Sales Amount</code> into the <strong>Y-axis</strong> field well.</li>
+    <li>The chart should now show 4 points connected by a line, one for each fiscal year: <strong>FY2018, FY2019, FY2020, FY2021</strong>.</li>
+  </ol>
+</div>
+
+<div class="udn-box why">
+  <strong class="label">💡 WHY ARE WE DOING THIS?</strong>
+  A line chart shows change over time. The visual encoding here is <strong>position</strong> — the height of each point on the Y-axis tells you the value. We use lines (not bars) for time series because the connecting lines emphasize the <strong>change between periods</strong>, which is the whole point of showing data over time.
+</div>
+
+<div class="udn-box stop-check">
+  <strong class="label">🛑 STOP AND CHECK — Screenshot Required</strong>
+  Take a screenshot of your line chart and paste it below. You should be able to see all 4 fiscal year labels and the line connecting them.
+</div>
+
+<div class="paste-zone" tabindex="0" data-zone="line-visual">
+  <div class="placeholder">
+    📷 <strong>Paste your Line Chart screenshot here</strong><br>
+    Click this box, then press <kbd>Ctrl</kbd> + <kbd>V</kbd>
+  </div>
+</div>
+
+<!-- ===== TAKE A BREATH ===== -->
+<div class="udn-box breath">
+  <strong class="label">💜 TAKE A BREATH</strong>
+  You just built three visuals on your first day. That's real work — the same kind professional analysts do every week. Stretch, look away from your screen for 30 seconds, drink some water. The last phase is short.
+</div>
+
+<!-- ===========================================
+     PHASE 3 — VERIFY AND REFLECT
+     =========================================== -->
+<div class="phase-banner">
+  <div class="phase-num">PHASE 3 OF 3</div>
+  <div class="phase-title">Verify and Reflect</div>
+  <div class="phase-time">≈15 minutes</div>
+</div>
+
+<h3>Step 7 — Verify your canvas</h3>
+
+<div class="udn-box do-this">
+  <strong class="label">✅ DO THIS</strong>
+  Look at your canvas. You should see <strong>THREE visuals</strong>:
+  <ul>
+    <li>One Card (showing the total ~$29M)</li>
+    <li>One Bar Chart (4 product categories)</li>
+    <li>One Line Chart (4 fiscal years)</li>
+  </ul>
+  They can be arranged in any layout — side by side, stacked, however looks clean to you. Spend a minute arranging them so the canvas looks tidy.
+</div>
+
+<h3>Step 8 — Save your file</h3>
+
+<div class="udn-box do-this">
+  <strong class="label">✅ DO THIS</strong>
+  <ol>
+    <li>Press <code>Ctrl + S</code> (or <code>File → Save</code>).</li>
+    <li>Confirm the filename is <code>LastName_FirstName_Lab01.pbix</code> (NOT the original starter filename).</li>
+    <li>If you accidentally still have the starter filename, do <strong>File → Save As</strong> right now.</li>
+  </ol>
+</div>
+
+<h3>Step 9 — Reflection (~5 minutes)</h3>
+
+<p>Answer both questions below in 2–3 sentences each. There are no wrong answers as long as you engage with the question.</p>
+
+<div class="reflection-q">
+  <label for="reflect-1">Q1. In Step 5, you built a bar chart where each bar's length showed the Sales Amount for a category. <strong>What does the length of each bar represent?</strong> Why is "length" a useful visual encoding for comparing numbers? (Think about what you learned about visual encoding in Chapter 1.)</label>
+  <textarea id="reflect-1" name="reflect-1" placeholder="Type your answer here..."></textarea>
+</div>
+
+<div class="reflection-q">
+  <label for="reflect-2">Q2. Looking at your three finished visuals (Card, Bar, Line), <strong>which one do you think tells the most useful business story</strong>, and why? There's no single right answer — explain your reasoning.</label>
+  <textarea id="reflect-2" name="reflect-2" placeholder="Type your answer here..."></textarea>
+</div>
+
+<!-- ===== RUBRIC ===== -->
+<div class="rubric-mini">
+  <h4>📊 How this lab is graded — 15 points</h4>
+  <ul>
+    <li><strong>3 pts</strong> — Phase 1 Model View screenshot pasted, all 5 dimensions visible</li>
+    <li><strong>3 pts</strong> — Card visual with Total Sales (~$29M)</li>
+    <li><strong>3 pts</strong> — Bar Chart with 4 categories, longest bar = Bikes</li>
+    <li><strong>3 pts</strong> — Line Chart with 4 fiscal years</li>
+    <li><strong>3 pts</strong> — Reflection: both questions answered substantively (2–3 sentences each)</li>
+  </ul>
+  <p style="margin: 10px 0 0 0;"><strong>Tier:</strong> Excellent (13–15) / Good (10–12) / Needs Work (0–9). Below Good is eligible for one redo for up to Good-tier score.</p>
+</div>
+
+<!-- ===== SUBMIT ===== -->
+<div class="submit-section">
+  <h3>📤 Submit to Canvas</h3>
+  <ol>
+    <li>Print this page to PDF: <code>Ctrl + P</code> → "Save as PDF" → name it <code>LastName_FirstName_Lab01.pdf</code></li>
+    <li>Go to Canvas → Week 1 → <strong>Submit: Lab 1</strong></li>
+    <li>Upload <strong>both</strong> files:
+      <ul>
+        <li><code>LastName_FirstName_Lab01.pbix</code></li>
+        <li><code>LastName_FirstName_Lab01.pdf</code></li>
+      </ul>
+    </li>
+    <li>Click <strong>Submit Assignment</strong>.</li>
+  </ol>
+  <p><strong>Due:</strong> Thursday May 14, 11:59 PM. 48-hour grace period applies (no penalty through Saturday May 16 11:59 PM).</p>
+</div>
+
+<p style="text-align: center; color: #666; margin-top: 30px; font-size: 11pt;">
+  CAP2743C · Lab 1 · Summer A 2026 · Prof. Marquez
+</p>
+
+<!-- ===== PASTE ZONE JAVASCRIPT ===== -->
+<script>
+  document.querySelectorAll('.paste-zone').forEach(zone => {
+    // Save original placeholder HTML for restoration
+    zone.dataset.originalHtml = zone.innerHTML;
+
+    zone.addEventListener('paste', (e) => {
+      e.preventDefault();
+      const items = e.clipboardData && e.clipboardData.items;
+      if (!items) return;
+
+      for (const item of items) {
+        if (item.type && item.type.indexOf('image/') === 0) {
+          const blob = item.getAsFile();
+          const reader = new FileReader();
+          reader.onload = (evt) => {
+            zone.innerHTML = '';
+            const img = document.createElement('img');
+            img.src = evt.target.result;
+            img.alt = 'Pasted screenshot';
+            zone.appendChild(img);
+
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'remove-btn';
+            btn.textContent = '✕ Remove';
+            btn.addEventListener('click', (clickEvt) => {
+              clickEvt.stopPropagation();
+              zone.innerHTML = zone.dataset.originalHtml;
+              zone.classList.remove('has-image');
+            });
+            zone.appendChild(btn);
+            zone.classList.add('has-image');
+          };
+          reader.readAsDataURL(blob);
+          return;
+        }
+      }
+    });
+
+    // Click anywhere in zone gives it focus for paste
+    zone.addEventListener('click', () => {
+      if (!zone.classList.contains('has-image')) {
+        zone.focus();
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
