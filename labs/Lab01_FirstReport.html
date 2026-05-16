@@ -392,18 +392,19 @@
     <li>Click the <strong>Report View</strong> icon at the top of the left sidebar (chart icon).</li>
     <li>Your canvas is empty — a blank white page. That's where the report goes.</li>
     <li>Look at the <strong>Visualizations pane</strong> on the right side of the screen. You'll see a grid of small icons.</li>
-    <li>Find the <strong>Card</strong> icon — it looks like a small rectangle with "123" inside. It's in one of the first few rows of icons.</li>
+    <li>Find the <strong>Card</strong> icon — a small rectangle with a tiny <strong>lightning bolt</strong> on it. It's in one of the first few rows of icons.</li>
     <li>Click the Card icon once. A blank card appears on your canvas.</li>
     <li>Click on the blank card to select it (a border appears around it).</li>
-    <li>Now look at the <strong>Fields pane</strong> on the far right. Find <code>Sales_data</code> and click the arrow next to it to expand the list.</li>
-    <li><strong>Drag</strong> the <code>Sales Amount</code> field from <code>Sales_data</code> onto the card.</li>
-    <li>The card should now show a number around <strong>$29,358,677.22</strong>.</li>
+    <li>Now look at the <strong>Data pane</strong> on the far right. Find <code>Sales_data</code> and click the arrow next to it to expand the list.</li>
+    <li><strong>Drag</strong> the <code>Sales Amount</code> field from <code>Sales_data</code> into the <strong>Data</strong> field well (in the Visualizations pane, under "Build visual").</li>
+    <li>The card should now show a number around <strong>$109,809,274.20</strong>.</li>
   </ol>
 </div>
 
 <div class="udn-box why">
   <strong class="label">💡 WHY ARE WE DOING THIS?</strong>
-  A card is the simplest visual that exists — it shows one number that summarizes a whole dataset. Almost every dashboard you'll ever build starts with one or two cards at the top: "How much in total?" "How many in total?" Cards answer those questions instantly.
+  A card is the simplest visual that exists — it shows one number that summarizes a whole dataset. Almost every dashboard you'll ever build starts with one or two cards at the top: "How much in total?" "How many in total?" Cards answer those questions instantly.<br><br>
+  One note: Power BI updated the Card visual in late 2025, so the icon now has a small lightning bolt. That's just Microsoft's way of marking it as the current version — it works the same way for our purposes. You may see extra formatting options on this card; ignore them for now, we only need the number.
 </div>
 
 <div class="udn-box mistake">
@@ -431,7 +432,7 @@
     <li>Click on an empty area of your canvas to deselect the card.</li>
     <li>In the Visualizations pane, find the <strong>Clustered bar chart</strong> icon — it looks like horizontal bars stacked. It's in the first row of icons, usually the leftmost.</li>
     <li>Click it. A blank bar chart frame appears on the canvas.</li>
-    <li>In the Fields pane, expand <code>Product_data</code>.</li>
+    <li>In the Data pane, expand <code>Product_data</code>.</li>
     <li><strong>Drag</strong> <code>Category</code> from <code>Product_data</code> into the <strong>Y-axis</strong> field well (in the Visualizations pane, under "Build visual").</li>
     <li>Expand <code>Sales_data</code> if it's collapsed.</li>
     <li><strong>Drag</strong> <code>Sales Amount</code> from <code>Sales_data</code> into the <strong>X-axis</strong> field well.</li>
@@ -464,11 +465,16 @@
     <li>Click on an empty area of the canvas to deselect.</li>
     <li>In the Visualizations pane, find the <strong>Line chart</strong> icon — it looks like a zigzag line. It's in the first or second row.</li>
     <li>Click it. A blank line chart appears.</li>
-    <li>Expand <code>Date_data</code> in the Fields pane.</li>
-    <li><strong>Drag</strong> <code>Fiscal Year</code> from <code>Date_data</code> into the <strong>X-axis</strong> field well.</li>
+    <li>Expand <code>Date_data</code> in the Data pane.</li>
+    <li><strong>Drag</strong> <code>Year</code> from <code>Date_data</code> into the <strong>X-axis</strong> field well.</li>
     <li>From <code>Sales_data</code>, <strong>drag</strong> <code>Sales Amount</code> into the <strong>Y-axis</strong> field well.</li>
-    <li>The chart should now show 4 points connected by a line, one for each fiscal year: <strong>FY2018, FY2019, FY2020, FY2021</strong>.</li>
+    <li>The chart should now show 3 points connected by a line, one for each year: <strong>2018, 2019, 2020</strong>.</li>
   </ol>
+</div>
+
+<div class="udn-box mistake">
+  <strong class="label">⚠️ COMMON MISTAKE</strong>
+  You may notice there's no point for 2017, even though the data starts in fiscal year 2017. That's expected — 2017 has no sales recorded in this dataset, so there's nothing for the line to plot. An empty year is data telling you something, not a mistake.
 </div>
 
 <div class="udn-box why">
@@ -478,7 +484,7 @@
 
 <div class="udn-box stop-check">
   <strong class="label">🛑 STOP AND CHECK — Screenshot Required</strong>
-  Take a screenshot of your line chart and paste it below. You should be able to see all 4 fiscal year labels and the line connecting them.
+  Take a screenshot of your line chart and paste it below. You should be able to see all 3 year labels (2018, 2019, 2020) and the line connecting them.
 </div>
 
 <div class="paste-zone" tabindex="0" data-zone="line-visual">
@@ -509,9 +515,9 @@
   <strong class="label">✅ DO THIS</strong>
   Look at your canvas. You should see <strong>THREE visuals</strong>:
   <ul>
-    <li>One Card (showing the total ~$29M)</li>
+    <li>One Card (showing the total ~$109.8M)</li>
     <li>One Bar Chart (4 product categories)</li>
-    <li>One Line Chart (4 fiscal years)</li>
+    <li>One Line Chart (3 years)</li>
   </ul>
   They can be arranged in any layout — side by side, stacked, however looks clean to you. Spend a minute arranging them so the canvas looks tidy.
 </div>
@@ -546,9 +552,9 @@
   <h4>📊 How this lab is graded — 15 points</h4>
   <ul>
     <li><strong>3 pts</strong> — Phase 1 Model View screenshot pasted, all 5 dimensions visible</li>
-    <li><strong>3 pts</strong> — Card visual with Total Sales (~$29M)</li>
+    <li><strong>3 pts</strong> — Card visual with Total Sales (~$109.8M)</li>
     <li><strong>3 pts</strong> — Bar Chart with 4 categories, longest bar = Bikes</li>
-    <li><strong>3 pts</strong> — Line Chart with 4 fiscal years</li>
+    <li><strong>3 pts</strong> — Line Chart with 3 years (2018–2020)</li>
     <li><strong>3 pts</strong> — Reflection: both questions answered substantively (2–3 sentences each)</li>
   </ul>
   <p style="margin: 10px 0 0 0;"><strong>Tier:</strong> Excellent (13–15) / Good (10–12) / Needs Work (0–9). Below Good is eligible for one redo for up to Good-tier score.</p>
