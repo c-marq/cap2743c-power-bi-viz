@@ -1,3 +1,8 @@
+---
+title: "Chapter 1 — From Model to Message"
+subtitle: "Foundations of Power BI Visualization"
+---
+
 <!--
 NANO BANANA PRO IMAGE PROMPT
 File: images/ch01/fig-1-1-crossroads.png
@@ -11,10 +16,14 @@ Style: Photo-real with a subtle digital-painting finish; clean, premium, editori
 Constraints: No text, no readable chart labels, no logos, no other people; 16:9 aspect ratio.
 -->
 
-# Chapter 1
-## From Model to Message: Foundations of Power BI Visualization
+:::{figure} ../images/ch01/fig-1-1-crossroads.png
+:label: fig-1-1
+:alt: Camila at a crossroads in a glass-walled corporate hallway at dusk, holographic data visuals lining a lit path; Miami skyline beyond the windows.
+:width: 100%
+:align: center
 
-<img width="1376" height="768" alt="image" src="https://github.com/user-attachments/assets/c5188086-8ec9-4b3b-8208-9e4616e36d03" />
+**Figure 1.1.** *The Crossroads.* Camila chooses between two paths — one lit by the data she has just learned to wield.
+:::
 
 **Chapter 1 of 8** | **Part 1 of 4: Foundations of Visualization**
 
@@ -87,21 +96,42 @@ graph TD
     D -.new questions.-> B
 ```
 
-**Figure 1.2:** The bridge from CAP2791C to CAP2743C. The model exists to power the report. The report exists to drive a decision. Decisions raise new questions, which sometimes feed back into the model.
+**Diagram 1.1.** The bridge from CAP2791C to CAP2743C. The model exists to power the report. The report exists to drive a decision. Decisions raise new questions, which sometimes feed back into the model.
 
 For this whole course we use the **AdventureWorks** dataset. AdventureWorks is a fictional global bicycle company — a real Microsoft sample dataset that has been used for Power BI and SQL training for over a decade. It is also the dataset Microsoft uses on the PL-300 certification exam, so working with it serves a second purpose. The data spans multiple fiscal years, two sales channels (Reseller and Internet), six countries across three regions, and a product catalog of bikes and components.
 
 In the fictional world of this textbook, AdventureWorks has a regional sales office in downtown Miami. Camila works there. Marcus runs it. Their day-to-day is South Florida. The data they analyze is global. That dual frame — local people, global data — is going to come up a lot.
 
-> 💡 **WHY ARE WE DOING THIS?**
->
-> The temptation in this course is to ignore CAP2791C and treat Power BI as if it starts fresh in the Report View. It does not. Every filter you click on a report ripples through the relationships you built last semester. Every measure you display was written against the star schema you designed. The model is not background — it is the engine. The report is the steering wheel.
+<div style="background-color: #D6EAF8; border-left: 5px solid #2E86C1; padding: 15px; margin: 15px 0; border-radius: 4px;">
+<strong style="color: #1B4F72;">💡 WHY ARE WE DOING THIS?</strong><br><br>
+The temptation in this course is to ignore CAP2791C and treat Power BI as if it starts fresh in the Report View. It does not. Every filter you click on a report ripples through the relationships you built last semester. Every measure you display was written against the star schema you designed. The model is not background — it is the engine. The report is the steering wheel.
+</div>
 
 ---
 
 ## 1.2 Why Visualization Matters: Turning Numbers into Decisions
 
 Let us go back to Camila's Monday morning meeting.
+
+<!--
+NANO BANANA PRO — CHAPTER 1 FIGURE 2 (concept infographic)
+File: images/ch01/fig-1-2-data-dump-vs-decision.png
+Title: A Data Dump vs. a Decision
+Concept: A report exists to drive a decision, not to display data — the Decision Question.
+Archetype: Before/after — two panels, central "THE DECISION QUESTION" arrow.
+Reference: images/_style-reference/fig-3-2-two-reactions.png
+Labels: panel headers "DATA DUMP" / "A DECISION"; callouts "11 VISUALS, 0 ANSWERS" / "CALL THESE TWO TERRITORIES"; footer "WHAT DOES MY AUDIENCE NEED TO DECIDE?".
+Palette: navy #1B2A47, gold #C9A23A, white / pale-blue background.
+-->
+
+:::{figure} ../images/ch01/fig-1-2-data-dump-vs-decision.png
+:label: fig-1-2
+:alt: A before-and-after infographic. On the left, a cluttered report crammed with eleven small mismatched charts, labeled "11 visuals, 0 answers." On the right, a focused report with one sorted bar chart and a number card, labeled "call these two territories." A central arrow reads "the Decision Question."
+:width: 100%
+:align: center
+
+**Figure 1.2.** *A Data Dump vs. a Decision.* Same data, two reports — one is a record, the other drives a decision.
+:::
 
 > **Story: Eleven Visuals, Zero Answers**
 >
@@ -156,7 +186,7 @@ graph TD
     Canvas --- Selection
 ```
 
-**Figure 1.3:** The anatomy of a Power BI report. Five parts wrap around the canvas. Learn these names; the rest of the chapter and the rest of the book uses them constantly.
+**Diagram 1.2.** The anatomy of a Power BI report. Five parts wrap around the canvas. Learn these names; the rest of the chapter and the rest of the book uses them constantly.
 
 **The Canvas** is the white area in the middle of the screen. Visuals — your charts, tables, and cards — live on the canvas. Think of it as the dashboard of a car: the speedometer, fuel gauge, GPS, and climate controls all have their assigned zones. Where you place a visual matters as much as what visual you choose.
 
@@ -186,6 +216,26 @@ You have absorbed a lot of vocabulary. Stand up, stretch, get some water. Look a
 ---
 
 ## 1.4 Visual Encoding 101 — Position, Length, Color, Area
+
+<!--
+NANO BANANA PRO — CHAPTER 1 FIGURE 3 (concept infographic)
+File: images/ch01/fig-1-3-visual-encoding.png
+Title: Visual Encoding 101
+Concept: The four visual encoding channels ranked by how accurately the eye reads quantity.
+Archetype: Row diagram — four channel rows, each with a demonstration and a verdict pill.
+Reference: this figure is itself a locked style anchor in images/_style-reference/.
+Labels: rows POSITION / LENGTH / AREA / COLOR; pills "MOST ACCURATE" / "HIGHLY ACCURATE" / "OFTEN MISJUDGED" / "CATEGORIES, NOT QUANTITY".
+Palette: navy #1B2A47, gold #C9A23A, white / pale-blue background.
+-->
+
+:::{figure} ../images/ch01/fig-1-3-visual-encoding.png
+:label: fig-1-3
+:alt: A four-row infographic titled "Visual Encoding 101." Each row demonstrates one channel — position, length, area, color — with a verdict: position is most accurate, length highly accurate, area often misjudged, and color is for categories not quantity.
+:width: 100%
+:align: center
+
+**Figure 1.3.** *Visual Encoding 101.* The four channels a chart can use, ranked by how accurately the eye reads quantity from each.
+:::
 
 > **Story: Dr. Iyer's Whiteboard**
 >
@@ -229,7 +279,7 @@ graph TD
     Col --> L
 ```
 
-**Figure 1.4:** The visual encoding accuracy hierarchy. This ranking is based on decades of perception research by William Cleveland, Robert McGill, and others. Position beats length, length beats angle, angle beats area, area beats color intensity. The further down the list you go, the more the eye has to guess.
+**Diagram 1.3.** The visual encoding accuracy hierarchy. This ranking is based on decades of perception research by William Cleveland, Robert McGill, and others. Position beats length, length beats angle, angle beats area, area beats color intensity. The further down the list you go, the more the eye has to guess.
 
 There is also something called **pre-attentive processing**. Some visual features — a single red dot in a sea of black dots, a single tall bar in a row of short ones — register in your brain before you consciously decide to look. They take about 250 milliseconds. They happen automatically. A well-designed chart uses pre-attentive features to put your audience's attention where it belongs *before they have time to think*.
 
@@ -284,6 +334,26 @@ Back to Camila.
 > By the time she finally opens Power BI Wednesday afternoon, she knows what she is building. A single page. Three visuals. One question.
 >
 > On Thursday morning Marcus looks at it. He pulls out his notebook. He writes down two territory names. He looks at Camila and says, *"This. This is what I needed."*
+
+<!--
+NANO BANANA PRO — CHAPTER 1 FIGURE 4 (concept infographic)
+File: images/ch01/fig-1-4-match-question-visual.png
+Title: Match the Question to the Visual
+Concept: The audience's question decides the chart type — five question types mapped to their best visual.
+Archetype: Card row — five cards, each a question type with its recommended visual.
+Reference: images/_style-reference/fig-1-3-visual-encoding.png
+Labels: cards COMPARE CATEGORIES (sorted bar), CHANGE OVER TIME (line chart), PARTS OF A WHOLE (stacked bar), ONE KEY NUMBER (card), A RELATIONSHIP (scatter plot).
+Palette: navy #1B2A47, gold #C9A23A, white / pale-blue background.
+-->
+
+:::{figure} ../images/ch01/fig-1-4-match-question-visual.png
+:label: fig-1-4
+:alt: A five-card infographic titled "Match the Question to the Visual." Each card pairs a question type with its best chart: compare categories with a sorted bar, change over time with a line chart, parts of a whole with a stacked bar, one key number with a card, and a relationship with a scatter plot.
+:width: 100%
+:align: center
+
+**Figure 1.4.** *Match the Question to the Visual.* Five common questions, and the visual that answers each most accurately.
+:::
 
 <div style="background-color: #FEF9E7; border-left: 5px solid #F1C40F; padding: 15px; margin: 15px 0; border-radius: 4px;">
 <strong style="color: #7D6608;">⚠️ COMMON MISTAKE</strong><br><br>
@@ -429,7 +499,7 @@ graph TD
     Decision -.feedback.-> Q
 ```
 
-**Figure 1.5:** How the chapter's ideas fit together. The Decision Question drives the shape of the answer, which drives the visual channel, which drives the visual type. The data model from CAP2791C feeds every visual. The audience's decision feeds back into the next iteration of the question.
+**Diagram 1.4.** How the chapter's ideas fit together. The Decision Question drives the shape of the answer, which drives the visual channel, which drives the visual type. The data model from CAP2791C feeds every visual. The audience's decision feeds back into the next iteration of the question.
 
 ### Vocabulary Review
 
