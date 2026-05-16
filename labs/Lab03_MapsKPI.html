@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab 3 — Maps & KPI Cards | CAP2743C</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 14pt; line-height: 1.6; color: #1a1a1a;
+    max-width: 950px; margin: 0 auto; padding: 30px 25px 60px;
+    background: #fafafa; text-align: left;
+  }
+  h1 { font-size: 26pt; margin: 0 0 6px; color: #1a3a5c; }
+  h2 { font-size: 20pt; margin: 36px 0 14px; color: #1a3a5c; border-bottom: 2px solid #1a3a5c; padding-bottom: 6px; }
+  h3 { font-size: 17pt; margin: 22px 0 10px; color: #2c3e50; }
+  h4 { font-size: 14pt; margin: 16px 0 8px; color: #34495e; }
+  p, li { font-size: 14pt; }
+  a { color: #2E86C1; }
+  code {
+    font-family: "Consolas", "Courier New", monospace;
+    background: #eef1f4; padding: 2px 6px; border-radius: 3px; font-size: 13pt;
+  }
+  hr { border: none; border-top: 1px solid #ccc; margin: 36px 0; }
+
+  .course-header {
+    background: #1a3a5c; color: white; padding: 18px 22px;
+    border-radius: 6px; margin-bottom: 24px;
+  }
+  .course-header .course-code { font-size: 12pt; opacity: 0.85; letter-spacing: 1px; }
+  .course-header .lab-title { font-size: 22pt; font-weight: bold; margin: 4px 0; }
+  .course-header .meta { font-size: 12pt; opacity: 0.85; }
+
+  .name-bar {
+    background: white; border: 1px solid #ccc; border-radius: 6px;
+    padding: 14px 18px; margin-bottom: 24px; display: flex; gap: 24px; flex-wrap: wrap;
+  }
+  .name-bar label { font-weight: bold; font-size: 13pt; display: block; margin-bottom: 4px; }
+  .name-bar input {
+    font-family: inherit; font-size: 14pt; padding: 6px 8px;
+    border: 1px solid #aaa; border-radius: 4px; min-width: 240px;
+  }
+  .name-bar .date-input input { min-width: 160px; }
+
+  .launch-pad {
+    background: white; border: 2px solid #1a3a5c; border-radius: 6px;
+    padding: 18px 22px; margin: 20px 0 30px;
+  }
+  .launch-pad h3 { margin-top: 0; color: #1a3a5c; }
+  .launch-pad table { width: 100%; border-collapse: collapse; }
+  .launch-pad td { padding: 6px 10px; vertical-align: top; font-size: 13pt; }
+  .launch-pad td:first-child { font-weight: bold; width: 200px; color: #1a3a5c; }
+
+  .udn-box {
+    padding: 14px 18px; margin: 14px 0; border-radius: 4px;
+    border-left: 5px solid; font-size: 13.5pt;
+  }
+  .udn-box strong.label {
+    display: block; font-size: 13pt; margin-bottom: 6px; letter-spacing: 0.5px;
+  }
+  .udn-box ol, .udn-box ul { margin: 6px 0 0 0; padding-left: 22px; }
+  .udn-box li { margin-bottom: 6px; }
+
+  .do-this        { background: #D5F5E3; border-color: #27AE60; }
+  .do-this .label { color: #1E8449; }
+  .why            { background: #D6EAF8; border-color: #2E86C1; }
+  .why .label     { color: #1A5276; }
+  .mistake        { background: #FEF9E7; border-color: #F1C40F; }
+  .mistake .label { color: #7D6608; }
+  .stop-check     { background: #FADBD8; border-color: #E74C3C; }
+  .stop-check .label { color: #922B21; }
+  .breath         { background: #E8DAEF; border-color: #8E44AD; }
+  .breath .label  { color: #6C3483; }
+
+  .phase-banner {
+    background: #34495e; color: white; padding: 12px 18px;
+    border-radius: 6px; margin: 30px 0 14px; font-size: 14pt;
+  }
+  .phase-banner .phase-num { font-weight: bold; font-size: 13pt; letter-spacing: 1px; opacity: 0.85; }
+  .phase-banner .phase-title { font-size: 18pt; font-weight: bold; }
+  .phase-banner .phase-time { font-size: 12pt; opacity: 0.85; }
+
+  .paste-zone {
+    border: 2px dashed #888; border-radius: 6px; padding: 30px 18px;
+    margin: 14px 0; min-height: 200px; text-align: center; background: #fcfcfc;
+    cursor: pointer; outline: none; position: relative;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .paste-zone:focus { border-color: #2E86C1; background: #f0f7fc; }
+  .paste-zone .placeholder { color: #666; font-size: 13pt; line-height: 1.5; }
+  .paste-zone .placeholder kbd {
+    background: #eee; border: 1px solid #aaa; border-radius: 3px;
+    padding: 2px 6px; font-family: monospace; font-size: 11pt;
+  }
+  .paste-zone.has-image {
+    border-style: solid; border-color: #27AE60; background: white;
+    padding: 8px; cursor: default; text-align: left;
+  }
+  .paste-zone img { max-width: 100%; display: block; margin: 0 auto; border-radius: 3px; }
+  .remove-btn {
+    position: absolute; top: 6px; right: 6px; background: #E74C3C;
+    color: white; border: none; border-radius: 3px; padding: 4px 10px;
+    font-size: 11pt; cursor: pointer; font-family: inherit;
+  }
+  .remove-btn:hover { background: #C0392B; }
+
+  .reflection-q { margin: 18px 0; }
+  .reflection-q label { display: block; font-weight: bold; margin-bottom: 8px; color: #34495e; }
+  .reflection-q textarea {
+    width: 100%; min-height: 120px; font-family: inherit; font-size: 13pt;
+    padding: 10px 12px; border: 1px solid #aaa; border-radius: 4px;
+    resize: vertical; line-height: 1.5;
+  }
+
+  .rubric-mini {
+    background: #fffbe6; border: 1px solid #d4b106; border-radius: 6px;
+    padding: 14px 18px; margin: 24px 0; font-size: 13pt;
+  }
+  .rubric-mini h4 { margin-top: 0; color: #7D6608; }
+  .rubric-mini ul { margin: 6px 0 0 0; }
+
+  .submit-section {
+    background: #1a3a5c; color: white; padding: 22px;
+    border-radius: 6px; margin: 30px 0 10px;
+  }
+  .submit-section h3 { color: white; margin-top: 0; }
+  .submit-section ol li { margin-bottom: 8px; }
+
+  @media print {
+    body { background: white; max-width: none; padding: 0.4in; font-size: 11pt; }
+    .remove-btn { display: none !important; }
+    .paste-zone { border: 1px solid #999; min-height: auto; padding: 8px; cursor: default; page-break-inside: avoid; }
+    .paste-zone .placeholder { display: none; }
+    .paste-zone:not(.has-image)::after { content: "[no screenshot pasted]"; color: #c0392b; font-style: italic; }
+    .udn-box, .phase-banner, .launch-pad, .rubric-mini, .submit-section { page-break-inside: avoid; }
+    .course-header { background: #1a3a5c !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .phase-banner { background: #34495e !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .submit-section { background: #1a3a5c !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    textarea { border: 1px solid #999; background: white; min-height: 60px; }
+    input { border: none; border-bottom: 1px solid #333; }
+    h2, h3 { page-break-after: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="course-header">
+  <div class="course-code">CAP2743C · POWER BI: DATA VISUALIZATION AND ANALYSIS</div>
+  <div class="lab-title">Lab 3 — Maps &amp; KPI Cards</div>
+  <div class="meta">In-Class Lab · 15 points · Week 2 · Chapter 2</div>
+</div>
+
+<!-- ===== NAME / DATE ===== -->
+<div class="name-bar">
+  <div>
+    <label for="student-name">Your Name</label>
+    <input type="text" id="student-name" placeholder="First Last">
+  </div>
+  <div class="date-input">
+    <label for="lab-date">Date</label>
+    <input type="text" id="lab-date" placeholder="MM / DD / YYYY">
+  </div>
+</div>
+
+<!-- ===== LAUNCH PAD ===== -->
+<div class="launch-pad">
+  <h3>🚀 Launch Pad — Read This First</h3>
+  <table>
+    <tr><td>What this lab is</td><td>You will build a one-page report with two of Chapter 2's families: a filled map that answers "where," and a row of cards that answer "what is the headline number."</td></tr>
+    <tr><td>What you need</td><td>Power BI Desktop, open, with the AdventureWorks model loaded. A live internet connection — maps need it to draw.</td></tr>
+    <tr><td>Starter file</td><td>Open your saved <code>.pbix</code> from Lab 2, or download the starter from the Canvas assignment page.</td></tr>
+    <tr><td>What "done" looks like</td><td>A saved <code>.pbix</code> with one page: three cards across the top, one filled map below, plus this worksheet completed.</td></tr>
+    <tr><td>Time</td><td>About 75 minutes. Block B work — steady pace.</td></tr>
+    <tr><td>How to submit</td><td>Save your <code>.pbix</code> as <code>LastName_FirstName_Lab03.pbix</code>. Submit it plus this worksheet as a PDF to the Canvas assignment.</td></tr>
+  </table>
+</div>
+
+<div class="udn-box why">
+  <strong class="label">💡 WHAT THIS LAB IS REALLY ABOUT</strong>
+  Two families today. The <strong>map family</strong> answers a question no chart can — <em>where</em> is something happening? The <strong>single-value family</strong> answers the opposite kind of question — what is the one number that matters? By the end you'll have built a page that pairs them, the way a real dashboard's top row works.
+</div>
+
+<div class="udn-box mistake">
+  <strong class="label">⚠️ BEFORE YOU START — Internet Required</strong>
+  Maps in Power BI draw using an online map service. If your map shows up blank or as a gray box, check that you are connected to the internet. This is the one lab where being offline will actually block you.
+</div>
+
+<hr>
+
+<!-- ================= PHASE 1 ================= -->
+<div class="phase-banner">
+  <span class="phase-num">PHASE 1</span><br>
+  <span class="phase-title">Build the Card Row</span>
+  <span class="phase-time"> · about 30 minutes</span>
+</div>
+
+<p>Start with the three headline numbers. They go across the top of the page — the place a reader's eye lands first.</p>
+
+<h3>Task 1 — Card: Total Sales</h3>
+
+<div class="udn-box do-this">
+  <strong class="label">✅ DO THIS</strong>
+  <ol>
+    <li>On a blank report page, click the <strong>Card</strong> icon in the Visualizations pane — the rectangle with a small lightning bolt.</li>
+    <li>From the <code>Sales</code> table, drag <code>Total Sales</code> into the <strong>Data</strong> field well.</li>
+    <li>The card shows one large number. Drag it to the top-LEFT of the page.</li>
+  </ol>
+</div>
+
+<div class="udn-box why">
+  <strong class="label">💡 WHY THE LIGHTNING BOLT</strong>
+  Power BI updated the Card visual in late 2025. The icon now carries a small lightning bolt to mark it as the current version. It does more than the old card — images, extra formatting — but for a headline number it works exactly the same: one field in, one number out.
+</div>
+
+<h3>Task 2 — Card: Order Quantity</h3>
+
+<div class="udn-box do-this">
+  <strong class="label">✅ DO THIS</strong>
+  <ol>
+    <li>Click an empty area of the canvas to deselect Task 1's card.</li>
+    <li>Click the <strong>Card</strong> icon again — a second blank card appears.</li>
+    <li>From the <code>Sales</code> table, drag <code>Order Quantity</code> into the <strong>Data</strong> field well.</li>
+    <li>Place this card to the RIGHT of the first one, the same size.</li>
+  </ol>
+</div>
+
+<h3>Task 3 — Card: Order Count</h3>
+
+<div class="udn-box do-this">
+  <strong class="label">✅ DO THIS</strong>
+  <ol>
+    <li>Deselect, then add a third <strong>Card</strong>.</li>
+    <li>From the <code>Sales Order</code> table, drag <code>Sales Order</code> into the <strong>Data</strong> field well.</li>
+    <li>Click the small dropdown arrow next to <code>Sales Order</code> in the field well and choose <strong>Count</strong> — you want how many orders, not a list.</li>
+    <li>Place this card to the right of the second one. You now have three cards in a row.</li>
+  </ol>
+</div>
+
+<div class="udn-box mistake">
+  <strong class="label">⚠️ COMMON MISTAKE</strong>
+  If a card shows a tiny number like "1," or a long string of text, you dragged the wrong kind of field, or Power BI is not aggregating it. For Task 3, make sure the field well says <strong>Count of Sales Order</strong> — not just "Sales Order." A card needs an aggregated number.
+</div>
+
+<div class="udn-box stop-check">
+  <strong class="label">🛑 STOP AND CHECK — Screenshot Required</strong>
+  Your page should now have three cards in a row across the top, each showing one large number with a label. Take a screenshot of the full row and paste it below.
+</div>
+
+<div class="paste-zone" tabindex="0" data-zone="card-row">
+  <div class="placeholder">📷 <strong>Paste your three-card row screenshot here</strong><br>
+  Click this box, then press <kbd>Ctrl</kbd> + <kbd>V</kbd></div>
+</div>
+
+<div class="udn-box breath">
+  <strong class="label">💜 TAKE A BREATH</strong>
+  Card row done. The map is next, and it's the more interesting build. Step away from the screen for a minute — water, stretch — then come back fresh.
+</div>
+
+<hr>
+
+<!-- ================= PHASE 2 ================= -->
+<div class="phase-banner">
+  <span class="phase-num">PHASE 2</span><br>
+  <span class="phase-title">Build the Filled Map</span>
+  <span class="phase-time"> · about 30 minutes</span>
+</div>
+
+<h3>Task 4 — Filled Map: Sales by Country</h3>
+
+<div class="udn-box do-this">
+  <strong class="label">✅ DO THIS</strong>
+  <ol>
+    <li>Click an empty area of the canvas, BELOW the card row.</li>
+    <li>In the Visualizations pane, click the <strong>Filled map</strong> icon — a globe with shaded regions.</li>
+    <li>From the <code>Sales Territory</code> table, drag <code>Country</code> into the <strong>Location</strong> field well.</li>
+    <li>From the <code>Sales</code> table, drag <code>Total Sales</code> into the <strong>Tooltips</strong> field well. Power BI shades each country by that value.</li>
+    <li>Resize the map so it fills the space below the cards.</li>
+  </ol>
+</div>
+
+<div class="udn-box why">
+  <strong class="label">💡 WHY A FILLED MAP</strong>
+  A filled map (a choropleth) shades whole regions — darker for higher. Use it when your geography is <em>areas</em>: countries, states, counties. The map answers "where," not "rank." If the question were "which three countries sold the most," a sorted bar would be the sharper tool — but the question here is geographic pattern.
+</div>
+
+<div class="udn-box mistake">
+  <strong class="label">⚠️ COMMON MISTAKE</strong>
+  If the map draws but no countries are shaded, Power BI may not recognize the location field. Click the <code>Country</code> field in the Data pane, go to the <strong>Column tools</strong> ribbon, and check that its <strong>Data category</strong> is set to <strong>Country/Region</strong>. Giving Power BI the geographic hint fixes most map problems.
+</div>
+
+<div class="udn-box stop-check">
+  <strong class="label">🛑 STOP AND CHECK — Screenshot Required</strong>
+  Your map should show the AdventureWorks countries shaded by sales — darker where sales are higher. Take a screenshot and paste it below.
+</div>
+
+<div class="paste-zone" tabindex="0" data-zone="filled-map">
+  <div class="placeholder">📷 <strong>Paste your filled map screenshot here</strong><br>
+  Click this box, then press <kbd>Ctrl</kbd> + <kbd>V</kbd></div>
+</div>
+
+<h3>Task 5 — The Full Page</h3>
+
+<div class="udn-box do-this">
+  <strong class="label">✅ DO THIS</strong>
+  <ol>
+    <li>Line up your three cards in a neat, equal-sized row across the top.</li>
+    <li>Position the filled map below them, filling the rest of the page.</li>
+    <li>Take one screenshot of the WHOLE page — cards and map together — and paste it below.</li>
+  </ol>
+</div>
+
+<div class="udn-box why">
+  <strong class="label">💡 WHY THIS LAYOUT</strong>
+  This is the shape of a real dashboard's top section: headline numbers a reader can't miss, sitting above a visual that gives the geographic context. Cards answer "how much," the map answers "where." Together they brief the reader before they read a single chart in detail.
+</div>
+
+<div class="udn-box stop-check">
+  <strong class="label">🛑 STOP AND CHECK — Screenshot Required</strong>
+  Paste a screenshot of the complete page below — three cards on top, filled map beneath.
+</div>
+
+<div class="paste-zone" tabindex="0" data-zone="full-page">
+  <div class="placeholder">📷 <strong>Paste your full-page screenshot here</strong><br>
+  Click this box, then press <kbd>Ctrl</kbd> + <kbd>V</kbd></div>
+</div>
+
+<hr>
+
+<!-- ================= PHASE 3 ================= -->
+<div class="phase-banner">
+  <span class="phase-num">PHASE 3</span><br>
+  <span class="phase-title">Reflect</span>
+  <span class="phase-time"> · about 15 minutes</span>
+</div>
+
+<div class="reflection-q">
+  <label>1. Chapter 2 warns that a map "spends a lot of canvas." For the question "which country sold the most," would a sorted bar chart have been a better choice than your filled map? Explain your reasoning.</label>
+  <textarea></textarea>
+</div>
+
+<div class="reflection-q">
+  <label>2. You built three cards. If you had to cut one of them and replace it with something else, which would you cut, and what single number would you show instead? Why?</label>
+  <textarea></textarea>
+</div>
+
+<div class="reflection-q">
+  <label>3. Chapter 2 calls the gauge the "spoke key" of the single-value family — a tool reached for far more often than it should be. In your own words, why does a card usually beat a gauge?</label>
+  <textarea></textarea>
+</div>
+
+<!-- ===== RUBRIC ===== -->
+<div class="rubric-mini">
+  <h4>📋 How This Lab Is Graded — 15 points</h4>
+  <ul>
+    <li><strong>2 pts</strong> — Task 1: card showing Total Sales</li>
+    <li><strong>2 pts</strong> — Task 2: card showing Order Quantity</li>
+    <li><strong>2 pts</strong> — Task 3: card showing Count of orders (correctly aggregated)</li>
+    <li><strong>3 pts</strong> — Task 4: filled map shaded by Total Sales</li>
+    <li><strong>3 pts</strong> — Task 5: full page assembled — card row above, map below</li>
+    <li><strong>3 pts</strong> — Phase 3: all three reflection questions answered thoughtfully</li>
+  </ul>
+</div>
+
+<!-- ===== SUBMIT ===== -->
+<div class="submit-section">
+  <h3>📤 How to Submit</h3>
+  <ol>
+    <li><strong>Save your Power BI file</strong> as <code>LastName_FirstName_Lab03.pbix</code>.</li>
+    <li><strong>Save this worksheet as a PDF</strong> — use your browser's Print function and choose "Save as PDF." Your pasted screenshots and typed answers are included automatically.</li>
+    <li><strong>Upload both files</strong> to the Lab 3 assignment in Canvas.</li>
+    <li>The 48-hour grace period applies — but submitting today, while the work is fresh, is always the better call.</li>
+  </ol>
+</div>
+
+<p style="text-align:center; color:#888; font-size:11pt; margin-top:30px;">
+CAP2743C · Lab 3 · Summer A 2026 · Prof. Marquez
+</p>
+
+<script>
+  document.querySelectorAll('.paste-zone').forEach(zone => {
+    zone.dataset.originalHtml = zone.innerHTML;
+    zone.addEventListener('paste', (e) => {
+      e.preventDefault();
+      const items = e.clipboardData && e.clipboardData.items;
+      if (!items) return;
+      for (const item of items) {
+        if (item.type && item.type.indexOf('image/') === 0) {
+          const blob = item.getAsFile();
+          const reader = new FileReader();
+          reader.onload = (evt) => {
+            zone.innerHTML = '';
+            const img = document.createElement('img');
+            img.src = evt.target.result;
+            img.alt = 'Pasted screenshot';
+            zone.appendChild(img);
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'remove-btn';
+            btn.textContent = '✕ Remove';
+            btn.addEventListener('click', (clickEvt) => {
+              clickEvt.stopPropagation();
+              zone.innerHTML = zone.dataset.originalHtml;
+              zone.classList.remove('has-image');
+            });
+            zone.appendChild(btn);
+            zone.classList.add('has-image');
+          };
+          reader.readAsDataURL(blob);
+          return;
+        }
+      }
+    });
+    zone.addEventListener('click', () => {
+      if (!zone.classList.contains('has-image')) { zone.focus(); }
+    });
+  });
+</script>
+
+</body>
+</html>

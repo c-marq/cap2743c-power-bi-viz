@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab 2 — Visual Selection Practice | CAP2743C</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 14pt; line-height: 1.6; color: #1a1a1a;
+    max-width: 950px; margin: 0 auto; padding: 30px 25px 60px;
+    background: #fafafa; text-align: left;
+  }
+  h1 { font-size: 26pt; margin: 0 0 6px; color: #1a3a5c; }
+  h2 { font-size: 20pt; margin: 36px 0 14px; color: #1a3a5c; border-bottom: 2px solid #1a3a5c; padding-bottom: 6px; }
+  h3 { font-size: 17pt; margin: 22px 0 10px; color: #2c3e50; }
+  h4 { font-size: 14pt; margin: 16px 0 8px; color: #34495e; }
+  p, li { font-size: 14pt; }
+  a { color: #2E86C1; }
+  code {
+    font-family: "Consolas", "Courier New", monospace;
+    background: #eef1f4; padding: 2px 6px; border-radius: 3px; font-size: 13pt;
+  }
+  hr { border: none; border-top: 1px solid #ccc; margin: 36px 0; }
+
+  .course-header {
+    background: #1a3a5c; color: white; padding: 18px 22px;
+    border-radius: 6px; margin-bottom: 24px;
+  }
+  .course-header .course-code { font-size: 12pt; opacity: 0.85; letter-spacing: 1px; }
+  .course-header .lab-title { font-size: 22pt; font-weight: bold; margin: 4px 0; }
+  .course-header .meta { font-size: 12pt; opacity: 0.85; }
+
+  .name-bar {
+    background: white; border: 1px solid #ccc; border-radius: 6px;
+    padding: 14px 18px; margin-bottom: 24px; display: flex; gap: 24px; flex-wrap: wrap;
+  }
+  .name-bar label { font-weight: bold; font-size: 13pt; display: block; margin-bottom: 4px; }
+  .name-bar input {
+    font-family: inherit; font-size: 14pt; padding: 6px 8px;
+    border: 1px solid #aaa; border-radius: 4px; min-width: 240px;
+  }
+  .name-bar .date-input input { min-width: 160px; }
+
+  .launch-pad {
+    background: white; border: 2px solid #1a3a5c; border-radius: 6px;
+    padding: 18px 22px; margin: 20px 0 30px;
+  }
+  .launch-pad h3 { margin-top: 0; color: #1a3a5c; }
+  .launch-pad table { width: 100%; border-collapse: collapse; }
+  .launch-pad td { padding: 6px 10px; vertical-align: top; font-size: 13pt; }
+  .launch-pad td:first-child { font-weight: bold; width: 200px; color: #1a3a5c; }
+
+  .udn-box {
+    padding: 14px 18px; margin: 14px 0; border-radius: 4px;
+    border-left: 5px solid; font-size: 13.5pt;
+  }
+  .udn-box strong.label {
+    display: block; font-size: 13pt; margin-bottom: 6px; letter-spacing: 0.5px;
+  }
+  .udn-box ol, .udn-box ul { margin: 6px 0 0 0; padding-left: 22px; }
+  .udn-box li { margin-bottom: 6px; }
+
+  .do-this        { background: #D5F5E3; border-color: #27AE60; }
+  .do-this .label { color: #1E8449; }
+  .why            { background: #D6EAF8; border-color: #2E86C1; }
+  .why .label     { color: #1A5276; }
+  .mistake        { background: #FEF9E7; border-color: #F1C40F; }
+  .mistake .label { color: #7D6608; }
+  .stop-check     { background: #FADBD8; border-color: #E74C3C; }
+  .stop-check .label { color: #922B21; }
+  .breath         { background: #E8DAEF; border-color: #8E44AD; }
+  .breath .label  { color: #6C3483; }
+
+  .phase-banner {
+    background: #34495e; color: white; padding: 12px 18px;
+    border-radius: 6px; margin: 30px 0 14px; font-size: 14pt;
+  }
+  .phase-banner .phase-num { font-weight: bold; font-size: 13pt; letter-spacing: 1px; opacity: 0.85; }
+  .phase-banner .phase-title { font-size: 18pt; font-weight: bold; }
+  .phase-banner .phase-time { font-size: 12pt; opacity: 0.85; }
+
+  .paste-zone {
+    border: 2px dashed #888; border-radius: 6px; padding: 30px 18px;
+    margin: 14px 0; min-height: 200px; text-align: center; background: #fcfcfc;
+    cursor: pointer; outline: none; position: relative;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .paste-zone:focus { border-color: #2E86C1; background: #f0f7fc; }
+  .paste-zone .placeholder { color: #666; font-size: 13pt; line-height: 1.5; }
+  .paste-zone .placeholder kbd {
+    background: #eee; border: 1px solid #aaa; border-radius: 3px;
+    padding: 2px 6px; font-family: monospace; font-size: 11pt;
+  }
+  .paste-zone.has-image {
+    border-style: solid; border-color: #27AE60; background: white;
+    padding: 8px; cursor: default; text-align: left;
+  }
+  .paste-zone img { max-width: 100%; display: block; margin: 0 auto; border-radius: 3px; }
+  .remove-btn {
+    position: absolute; top: 6px; right: 6px; background: #E74C3C;
+    color: white; border: none; border-radius: 3px; padding: 4px 10px;
+    font-size: 11pt; cursor: pointer; font-family: inherit;
+  }
+  .remove-btn:hover { background: #C0392B; }
+
+  .reflection-q { margin: 18px 0; }
+  .reflection-q label { display: block; font-weight: bold; margin-bottom: 8px; color: #34495e; }
+  .reflection-q textarea {
+    width: 100%; min-height: 120px; font-family: inherit; font-size: 13pt;
+    padding: 10px 12px; border: 1px solid #aaa; border-radius: 4px;
+    resize: vertical; line-height: 1.5;
+  }
+
+  /* answer-choice select for the question-matching tasks */
+  .visual-pick { margin: 10px 0; }
+  .visual-pick label { font-weight: bold; color: #34495e; display: block; margin-bottom: 4px; }
+  .visual-pick select {
+    font-family: inherit; font-size: 13pt; padding: 6px 8px;
+    border: 1px solid #aaa; border-radius: 4px; min-width: 280px;
+  }
+
+  .rubric-mini {
+    background: #fffbe6; border: 1px solid #d4b106; border-radius: 6px;
+    padding: 14px 18px; margin: 24px 0; font-size: 13pt;
+  }
+  .rubric-mini h4 { margin-top: 0; color: #7D6608; }
+  .rubric-mini ul { margin: 6px 0 0 0; }
+
+  .submit-section {
+    background: #1a3a5c; color: white; padding: 22px;
+    border-radius: 6px; margin: 30px 0 10px;
+  }
+  .submit-section h3 { color: white; margin-top: 0; }
+  .submit-section ol li { margin-bottom: 8px; }
+
+  @media print {
+    body { background: white; max-width: none; padding: 0.4in; font-size: 11pt; }
+    .remove-btn { display: none !important; }
+    .paste-zone { border: 1px solid #999; min-height: auto; padding: 8px; cursor: default; page-break-inside: avoid; }
+    .paste-zone .placeholder { display: none; }
+    .paste-zone:not(.has-image)::after { content: "[no screenshot pasted]"; color: #c0392b; font-style: italic; }
+    .udn-box, .phase-banner, .launch-pad, .rubric-mini, .submit-section { page-break-inside: avoid; }
+    .course-header { background: #1a3a5c !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .phase-banner { background: #34495e !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .submit-section { background: #1a3a5c !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    textarea { border: 1px solid #999; background: white; min-height: 60px; }
+    input, select { border: none; border-bottom: 1px solid #333; }
+    h2, h3 { page-break-after: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="course-header">
+  <div class="course-code">CAP2743C · POWER BI: DATA VISUALIZATION AND ANALYSIS</div>
+  <div class="lab-title">Lab 2 — Visual Selection Practice</div>
+  <div class="meta">In-Class Lab · 15 points · Week 2 · Chapter 2</div>
+</div>
+
+<!-- ===== NAME / DATE ===== -->
+<div class="name-bar">
+  <div>
+    <label for="student-name">Your Name</label>
+    <input type="text" id="student-name" placeholder="First Last">
+  </div>
+  <div class="date-input">
+    <label for="lab-date">Date</label>
+    <input type="text" id="lab-date" placeholder="MM / DD / YYYY">
+  </div>
+</div>
+
+<!-- ===== LAUNCH PAD ===== -->
+<div class="launch-pad">
+  <h3>🚀 Launch Pad — Read This First</h3>
+  <table>
+    <tr><td>What this lab is</td><td>You will be given five business questions. For each one, you decide which visual answers it best — then you build that visual in Power BI.</td></tr>
+    <tr><td>What you need</td><td>Power BI Desktop, open, with the AdventureWorks model loaded. Use your file from Lab 1, or the starter file.</td></tr>
+    <tr><td>Starter file</td><td>Open your saved <code>.pbix</code> from Lab 1. If you don't have it, download the starter from the Canvas assignment page.</td></tr>
+    <tr><td>What "done" looks like</td><td>A saved <code>.pbix</code> with five visuals — one per question — each one the right type, plus this worksheet completed.</td></tr>
+    <tr><td>Time</td><td>About 75 minutes. This is Block B work — no rush, work steadily.</td></tr>
+    <tr><td>How to submit</td><td>Save your <code>.pbix</code> as <code>LastName_FirstName_Lab02.pbix</code>. Submit it plus this worksheet as a PDF to the Canvas assignment.</td></tr>
+  </table>
+</div>
+
+<div class="udn-box why">
+  <strong class="label">💡 WHAT THIS LAB IS REALLY ABOUT</strong>
+  In the guided demo your instructor chose the visuals for you. This lab flips that. The skill Chapter 2 is built around is <strong>choosing</strong> — reading a business question and recognizing which visual it is asking for, the way a mechanic reads a job and reaches for the right tool. Five questions, five choices, five builds.
+</div>
+
+<p>This lab uses a different set of fields than the guided demo on purpose. The demo used Country, Month, and Subcategory. Here you will work with <strong>Reseller</strong>, <strong>Region</strong>, and <strong>Fiscal Year</strong>. Same skills — new specifics.</p>
+
+<hr>
+
+<!-- ================= PHASE 1 ================= -->
+<div class="phase-banner">
+  <span class="phase-num">PHASE 1</span><br>
+  <span class="phase-title">Warm-Up — Match the Question to the Family</span>
+  <span class="phase-time"> · about 10 minutes</span>
+</div>
+
+<p>Before you build anything, practice the choosing step. For each question below, pick the visual family from the dropdown. You are <em>not</em> building yet — just deciding.</p>
+
+<div class="visual-pick">
+  <label>Q-A. "Which of our resellers brought in the most sales?"</label>
+  <select>
+    <option value="">— choose the best visual —</option>
+    <option>Bar / column chart (comparison)</option>
+    <option>Line chart (change over time)</option>
+    <option>Pie chart (parts of a whole)</option>
+    <option>Card (one key number)</option>
+  </select>
+</div>
+
+<div class="visual-pick">
+  <label>Q-B. "How did total sales move across the fiscal years?"</label>
+  <select>
+    <option value="">— choose the best visual —</option>
+    <option>Bar / column chart (comparison)</option>
+    <option>Line chart (change over time)</option>
+    <option>Pie chart (parts of a whole)</option>
+    <option>Card (one key number)</option>
+  </select>
+</div>
+
+<div class="visual-pick">
+  <label>Q-C. "What is our single total sales figure for the whole company?"</label>
+  <select>
+    <option value="">— choose the best visual —</option>
+    <option>Bar / column chart (comparison)</option>
+    <option>Line chart (change over time)</option>
+    <option>Pie chart (parts of a whole)</option>
+    <option>Card (one key number)</option>
+  </select>
+</div>
+
+<div class="udn-box do-this">
+  <strong class="label">✅ DO THIS</strong>
+  Make a choice for all three. There is a defensible best answer for each — you'll see them confirmed as you build in Phase 2. If two feel close, ask: what is the <em>shape</em> of the answer? A ranked list, a moving line, or a single number?
+</div>
+
+<div class="udn-box mistake">
+  <strong class="label">⚠️ COMMON MISTAKE</strong>
+  Picking the visual that looks most impressive. Chapter 2 is blunt: the question comes first, the shape of the answer second, the visual third. A pie chart is not "better" than a card — it is just built for a different question.
+</div>
+
+<hr>
+
+<!-- ================= PHASE 2 ================= -->
+<div class="phase-banner">
+  <span class="phase-num">PHASE 2</span><br>
+  <span class="phase-title">Build — Five Questions, Five Visuals</span>
+  <span class="phase-time"> · about 50 minutes</span>
+</div>
+
+<p>Now build. Each task gives you a business question. Build the visual on a single report page. Work down the list — by the end you'll have five visuals on one canvas.</p>
+
+<h3>Task 1 — "Which resellers brought in the most sales?"</h3>
+
+<div class="udn-box do-this">
+  <strong class="label">✅ DO THIS</strong>
+  <ol>
+    <li>On a blank page, click the <strong>Clustered bar chart</strong> icon in the Visualizations pane (horizontal bars — reseller names need room).</li>
+    <li>Expand <code>Reseller</code> in the Data pane. Drag <code>Reseller</code> into the <strong>Y-axis</strong> field well.</li>
+    <li>From <code>Sales</code>, drag <code>Total Sales</code> into the <strong>X-axis</strong> field well.</li>
+    <li>Sort it: click the <strong>…</strong> menu on the visual → <strong>Sort axis</strong> → <strong>Total Sales</strong> → then <strong>Sort descending</strong>.</li>
+  </ol>
+</div>
+
+<div class="udn-box why">
+  <strong class="label">💡 WHY A BAR CHART</strong>
+  "Which brought in the most" is a comparison question — a ranked list. Bar charts encode value as position and length, the two channels the eye reads most accurately. The sort is what makes the ranking instant.
+</div>
+
+<div class="udn-box stop-check">
+  <strong class="label">🛑 STOP AND CHECK — Screenshot Required</strong>
+  Your bar chart should show resellers ranked longest-to-shortest. The top reseller's bar should be the longest. Take a screenshot and paste it below.
+</div>
+
+<div class="paste-zone" tabindex="0" data-zone="task1-bar">
+  <div class="placeholder">📷 <strong>Paste your Task 1 bar chart screenshot here</strong><br>
+  Click this box, then press <kbd>Ctrl</kbd> + <kbd>V</kbd></div>
+</div>
+
+<h3>Task 2 — "How did total sales move across the fiscal years?"</h3>
+
+<div class="udn-box do-this">
+  <strong class="label">✅ DO THIS</strong>
+  <ol>
+    <li>Click an empty area of the canvas to deselect Task 1.</li>
+    <li>Click the <strong>Line chart</strong> icon (the zigzag).</li>
+    <li>Expand <code>Date</code> in the Data pane. Drag <code>Fiscal Year</code> into the <strong>X-axis</strong> field well.</li>
+    <li>From <code>Sales</code>, drag <code>Total Sales</code> into the <strong>Y-axis</strong> field well.</li>
+  </ol>
+</div>
+
+<div class="udn-box why">
+  <strong class="label">💡 WHY A LINE CHART</strong>
+  "Move across the years" is a time question. The connecting line encodes the rate of change as slope — the eye reads a climb or a drop instantly. A line shows the whole trajectory as one shape.
+</div>
+
+<div class="udn-box mistake">
+  <strong class="label">⚠️ COMMON MISTAKE</strong>
+  If your line has only one or two points, check the X-axis — you want <code>Fiscal Year</code>, which gives one point per year. If you accidentally used the full <code>Date</code> field you'll get a dense daily line instead.
+</div>
+
+<div class="udn-box stop-check">
+  <strong class="label">🛑 STOP AND CHECK — Screenshot Required</strong>
+  Your line chart should show one point per fiscal year, connected into a line. Take a screenshot and paste it below.
+</div>
+
+<div class="paste-zone" tabindex="0" data-zone="task2-line">
+  <div class="placeholder">📷 <strong>Paste your Task 2 line chart screenshot here</strong><br>
+  Click this box, then press <kbd>Ctrl</kbd> + <kbd>V</kbd></div>
+</div>
+
+<div class="udn-box breath">
+  <strong class="label">💜 TAKE A BREATH</strong>
+  Two visuals down, three to go. Stand up, roll your shoulders, look at something across the room. The next three tasks are shorter. Come back when you're ready.
+</div>
+
+<h3>Task 3 — "What is our total sales figure for the whole company?"</h3>
+
+<div class="udn-box do-this">
+  <strong class="label">✅ DO THIS</strong>
+  <ol>
+    <li>Click an empty area of the canvas.</li>
+    <li>Click the <strong>Card</strong> icon — the rectangle with a small lightning bolt. (Power BI updated the card visual in late 2025; the lightning bolt just marks the current version.)</li>
+    <li>From <code>Sales</code>, drag <code>Total Sales</code> into the <strong>Data</strong> field well.</li>
+    <li>The card displays one large number — the company-wide total.</li>
+  </ol>
+</div>
+
+<div class="udn-box why">
+  <strong class="label">💡 WHY A CARD</strong>
+  "What is our total" is a one-number question. It doesn't need a chart — it needs to be big, clear, and unmissable. The card is the headline-number tool.
+</div>
+
+<div class="udn-box stop-check">
+  <strong class="label">🛑 STOP AND CHECK — Screenshot Required</strong>
+  Your card should show one large total with a label. Take a screenshot and paste it below.
+</div>
+
+<div class="paste-zone" tabindex="0" data-zone="task3-card">
+  <div class="placeholder">📷 <strong>Paste your Task 3 card screenshot here</strong><br>
+  Click this box, then press <kbd>Ctrl</kbd> + <kbd>V</kbd></div>
+</div>
+
+<h3>Task 4 — "How do sales compare across the sales regions?"</h3>
+
+<div class="udn-box do-this">
+  <strong class="label">✅ DO THIS</strong>
+  <ol>
+    <li>Click an empty area of the canvas.</li>
+    <li>This is a comparison question — build a <strong>Clustered column chart</strong> (vertical; region names are short).</li>
+    <li>From <code>Sales Territory</code>, drag <code>Region</code> into the <strong>X-axis</strong> field well.</li>
+    <li>From <code>Sales</code>, drag <code>Total Sales</code> into the <strong>Y-axis</strong> field well.</li>
+    <li>Sort it descending using the <strong>…</strong> menu, the way you did in Task 1.</li>
+  </ol>
+</div>
+
+<div class="udn-box why">
+  <strong class="label">💡 WHY A COLUMN CHART HERE</strong>
+  Same family as Task 1 — comparison — but Task 1 had many resellers with long names, so a horizontal bar fit better. Regions are few and short-named, so a vertical column works cleanly. The choice between bar and column is about how many categories and how long the labels are.
+</div>
+
+<div class="udn-box stop-check">
+  <strong class="label">🛑 STOP AND CHECK — Screenshot Required</strong>
+  Your column chart should show regions ranked tallest-to-shortest. Take a screenshot and paste it below.
+</div>
+
+<div class="paste-zone" tabindex="0" data-zone="task4-column">
+  <div class="placeholder">📷 <strong>Paste your Task 4 column chart screenshot here</strong><br>
+  Click this box, then press <kbd>Ctrl</kbd> + <kbd>V</kbd></div>
+</div>
+
+<h3>Task 5 — The Judgment Call</h3>
+
+<div class="udn-box do-this">
+  <strong class="label">✅ DO THIS</strong>
+  Marcus asks: <em>"Show me how our two sales channels — Reseller and Internet — split the total sales."</em> That is two categories. Build the visual you think fits best, then defend your choice in the reflection below. Build it from the <code>Channel</code> field in the <code>Sales Order</code> table and <code>Total Sales</code>.
+</div>
+
+<div class="udn-box why">
+  <strong class="label">💡 THINK IT THROUGH</strong>
+  Two categories, and the question is about how they split a whole. Chapter 2 says a pie chart is defensible when there are <strong>two or three slices of clearly different sizes</strong>. Is this one of the rare cases a pie works? Or would a bar still be the safer call? There is a reasonable answer either way — what matters is that you can defend it.
+</div>
+
+<div class="udn-box stop-check">
+  <strong class="label">🛑 STOP AND CHECK — Screenshot Required</strong>
+  Build your chosen visual and paste a screenshot below.
+</div>
+
+<div class="paste-zone" tabindex="0" data-zone="task5-judgment">
+  <div class="placeholder">📷 <strong>Paste your Task 5 visual screenshot here</strong><br>
+  Click this box, then press <kbd>Ctrl</kbd> + <kbd>V</kbd></div>
+</div>
+
+<hr>
+
+<!-- ================= PHASE 3 ================= -->
+<div class="phase-banner">
+  <span class="phase-num">PHASE 3</span><br>
+  <span class="phase-title">Reflect</span>
+  <span class="phase-time"> · about 15 minutes</span>
+</div>
+
+<div class="reflection-q">
+  <label>1. For Task 5, which visual did you choose for the two-channel split, and why? Use the words "shape of the answer" somewhere in your reasoning.</label>
+  <textarea></textarea>
+</div>
+
+<div class="reflection-q">
+  <label>2. Tasks 1 and 4 were both comparison questions, but you used a bar chart for one and a column chart for the other. Explain what made you pick differently.</label>
+  <textarea></textarea>
+</div>
+
+<div class="reflection-q">
+  <label>3. Pick any one of your five visuals. If you had been handed the WRONG visual for that question instead, what would the reader struggle to see?</label>
+  <textarea></textarea>
+</div>
+
+<!-- ===== RUBRIC ===== -->
+<div class="rubric-mini">
+  <h4>📋 How This Lab Is Graded — 15 points</h4>
+  <ul>
+    <li><strong>3 pts</strong> — Phase 1 warm-up: all three family choices made</li>
+    <li><strong>2 pts</strong> — Task 1: sorted bar chart of resellers by Total Sales</li>
+    <li><strong>2 pts</strong> — Task 2: line chart of Total Sales across fiscal years</li>
+    <li><strong>2 pts</strong> — Task 3: card showing company-wide Total Sales</li>
+    <li><strong>2 pts</strong> — Task 4: sorted column chart of regions by Total Sales</li>
+    <li><strong>2 pts</strong> — Task 5: a defensible visual built for the channel-split question</li>
+    <li><strong>2 pts</strong> — Phase 3: all three reflection questions answered thoughtfully</li>
+  </ul>
+</div>
+
+<!-- ===== SUBMIT ===== -->
+<div class="submit-section">
+  <h3>📤 How to Submit</h3>
+  <ol>
+    <li><strong>Save your Power BI file</strong> as <code>LastName_FirstName_Lab02.pbix</code>.</li>
+    <li><strong>Save this worksheet as a PDF</strong> — use your browser's Print function and choose "Save as PDF." Your pasted screenshots and typed answers are included automatically.</li>
+    <li><strong>Upload both files</strong> to the Lab 2 assignment in Canvas.</li>
+    <li>The 48-hour grace period applies — but submitting today, while the work is fresh, is always the better call.</li>
+  </ol>
+</div>
+
+<p style="text-align:center; color:#888; font-size:11pt; margin-top:30px;">
+CAP2743C · Lab 2 · Summer A 2026 · Prof. Marquez
+</p>
+
+<script>
+  document.querySelectorAll('.paste-zone').forEach(zone => {
+    zone.dataset.originalHtml = zone.innerHTML;
+    zone.addEventListener('paste', (e) => {
+      e.preventDefault();
+      const items = e.clipboardData && e.clipboardData.items;
+      if (!items) return;
+      for (const item of items) {
+        if (item.type && item.type.indexOf('image/') === 0) {
+          const blob = item.getAsFile();
+          const reader = new FileReader();
+          reader.onload = (evt) => {
+            zone.innerHTML = '';
+            const img = document.createElement('img');
+            img.src = evt.target.result;
+            img.alt = 'Pasted screenshot';
+            zone.appendChild(img);
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'remove-btn';
+            btn.textContent = '✕ Remove';
+            btn.addEventListener('click', (clickEvt) => {
+              clickEvt.stopPropagation();
+              zone.innerHTML = zone.dataset.originalHtml;
+              zone.classList.remove('has-image');
+            });
+            zone.appendChild(btn);
+            zone.classList.add('has-image');
+          };
+          reader.readAsDataURL(blob);
+          return;
+        }
+      }
+    });
+    zone.addEventListener('click', () => {
+      if (!zone.classList.contains('has-image')) { zone.focus(); }
+    });
+  });
+</script>
+
+</body>
+</html>
