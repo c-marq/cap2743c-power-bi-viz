@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Homework 1 — Visual Gallery | CAP2743C</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 14pt; line-height: 1.6; color: #1a1a1a;
+    max-width: 950px; margin: 0 auto; padding: 30px 25px 60px;
+    background: #fafafa; text-align: left;
+  }
+  h1 { font-size: 26pt; margin: 0 0 6px; color: #1a3a5c; }
+  h2 { font-size: 20pt; margin: 36px 0 14px; color: #1a3a5c; border-bottom: 2px solid #1a3a5c; padding-bottom: 6px; }
+  h3 { font-size: 17pt; margin: 22px 0 10px; color: #2c3e50; }
+  h4 { font-size: 14pt; margin: 16px 0 8px; color: #34495e; }
+  p, li { font-size: 14pt; }
+  a { color: #2E86C1; }
+  code {
+    font-family: "Consolas", "Courier New", monospace;
+    background: #eef1f4; padding: 2px 6px; border-radius: 3px; font-size: 13pt;
+  }
+  hr { border: none; border-top: 1px solid #ccc; margin: 36px 0; }
+
+  .course-header {
+    background: #1a3a5c; color: white; padding: 18px 22px;
+    border-radius: 6px; margin-bottom: 24px;
+  }
+  .course-header .course-code { font-size: 12pt; opacity: 0.85; letter-spacing: 1px; }
+  .course-header .lab-title { font-size: 22pt; font-weight: bold; margin: 4px 0; }
+  .course-header .meta { font-size: 12pt; opacity: 0.85; }
+
+  .name-bar {
+    background: white; border: 1px solid #ccc; border-radius: 6px;
+    padding: 14px 18px; margin-bottom: 24px; display: flex; gap: 24px; flex-wrap: wrap;
+  }
+  .name-bar label { font-weight: bold; font-size: 13pt; display: block; margin-bottom: 4px; }
+  .name-bar input {
+    font-family: inherit; font-size: 14pt; padding: 6px 8px;
+    border: 1px solid #aaa; border-radius: 4px; min-width: 240px;
+  }
+  .name-bar .date-input input { min-width: 160px; }
+
+  .launch-pad {
+    background: white; border: 2px solid #1a3a5c; border-radius: 6px;
+    padding: 18px 22px; margin: 20px 0 30px;
+  }
+  .launch-pad h3 { margin-top: 0; color: #1a3a5c; }
+  .launch-pad table { width: 100%; border-collapse: collapse; }
+  .launch-pad td { padding: 6px 10px; vertical-align: top; font-size: 13pt; }
+  .launch-pad td:first-child { font-weight: bold; width: 200px; color: #1a3a5c; }
+
+  .udn-box {
+    padding: 14px 18px; margin: 14px 0; border-radius: 4px;
+    border-left: 5px solid; font-size: 13.5pt;
+  }
+  .udn-box strong.label {
+    display: block; font-size: 13pt; margin-bottom: 6px; letter-spacing: 0.5px;
+  }
+  .udn-box ol, .udn-box ul { margin: 6px 0 0 0; padding-left: 22px; }
+  .udn-box li { margin-bottom: 6px; }
+
+  .do-this        { background: #D5F5E3; border-color: #27AE60; }
+  .do-this .label { color: #1E8449; }
+  .why            { background: #D6EAF8; border-color: #2E86C1; }
+  .why .label     { color: #1A5276; }
+  .mistake        { background: #FEF9E7; border-color: #F1C40F; }
+  .mistake .label { color: #7D6608; }
+  .stop-check     { background: #FADBD8; border-color: #E74C3C; }
+  .stop-check .label { color: #922B21; }
+  .breath         { background: #E8DAEF; border-color: #8E44AD; }
+  .breath .label  { color: #6C3483; }
+
+  .phase-banner {
+    background: #34495e; color: white; padding: 12px 18px;
+    border-radius: 6px; margin: 30px 0 14px; font-size: 14pt;
+  }
+  .phase-banner .phase-num { font-weight: bold; font-size: 13pt; letter-spacing: 1px; opacity: 0.85; }
+  .phase-banner .phase-title { font-size: 18pt; font-weight: bold; }
+  .phase-banner .phase-time { font-size: 12pt; opacity: 0.85; }
+
+  .paste-zone {
+    border: 2px dashed #888; border-radius: 6px; padding: 30px 18px;
+    margin: 14px 0; min-height: 200px; text-align: center; background: #fcfcfc;
+    cursor: pointer; outline: none; position: relative;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .paste-zone:focus { border-color: #2E86C1; background: #f0f7fc; }
+  .paste-zone .placeholder { color: #666; font-size: 13pt; line-height: 1.5; }
+  .paste-zone .placeholder kbd {
+    background: #eee; border: 1px solid #aaa; border-radius: 3px;
+    padding: 2px 6px; font-family: monospace; font-size: 11pt;
+  }
+  .paste-zone.has-image {
+    border-style: solid; border-color: #27AE60; background: white;
+    padding: 8px; cursor: default; text-align: left;
+  }
+  .paste-zone img { max-width: 100%; display: block; margin: 0 auto; border-radius: 3px; }
+  .remove-btn {
+    position: absolute; top: 6px; right: 6px; background: #E74C3C;
+    color: white; border: none; border-radius: 3px; padding: 4px 10px;
+    font-size: 11pt; cursor: pointer; font-family: inherit;
+  }
+  .remove-btn:hover { background: #C0392B; }
+
+  .reflection-q { margin: 18px 0; }
+  .reflection-q label { display: block; font-weight: bold; margin-bottom: 8px; color: #34495e; }
+  .reflection-q textarea {
+    width: 100%; min-height: 120px; font-family: inherit; font-size: 13pt;
+    padding: 10px 12px; border: 1px solid #aaa; border-radius: 4px;
+    resize: vertical; line-height: 1.5;
+  }
+
+  .rubric-mini {
+    background: #fffbe6; border: 1px solid #d4b106; border-radius: 6px;
+    padding: 14px 18px; margin: 24px 0; font-size: 13pt;
+  }
+  .rubric-mini h4 { margin-top: 0; color: #7D6608; }
+  .rubric-mini ul { margin: 6px 0 0 0; }
+
+  .submit-section {
+    background: #1a3a5c; color: white; padding: 22px;
+    border-radius: 6px; margin: 30px 0 10px;
+  }
+  .submit-section h3 { color: white; margin-top: 0; }
+  .submit-section ol li { margin-bottom: 8px; }
+
+  @media print {
+    body { background: white; max-width: none; padding: 0.4in; font-size: 11pt; }
+    .remove-btn { display: none !important; }
+    .paste-zone { border: 1px solid #999; min-height: auto; padding: 8px; cursor: default; page-break-inside: avoid; }
+    .paste-zone .placeholder { display: none; }
+    .paste-zone:not(.has-image)::after { content: "[no screenshot pasted]"; color: #c0392b; font-style: italic; }
+    .udn-box, .phase-banner, .launch-pad, .rubric-mini, .submit-section { page-break-inside: avoid; }
+    .course-header { background: #1a3a5c !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .phase-banner { background: #34495e !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .submit-section { background: #1a3a5c !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    textarea { border: 1px solid #999; background: white; min-height: 60px; }
+    input { border: none; border-bottom: 1px solid #333; }
+    h2, h3 { page-break-after: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="course-header">
+  <div class="course-code">CAP2743C · POWER BI: DATA VISUALIZATION AND ANALYSIS</div>
+  <div class="lab-title">Homework 1 — Visual Gallery</div>
+  <div class="meta">Individual Homework · 34 points · Week 2 · Chapter 2</div>
+</div>
+
+<!-- ===== NAME / DATE ===== -->
+<div class="name-bar">
+  <div>
+    <label for="student-name">Your Name</label>
+    <input type="text" id="student-name" placeholder="First Last">
+  </div>
+  <div class="date-input">
+    <label for="lab-date">Date</label>
+    <input type="text" id="lab-date" placeholder="MM / DD / YYYY">
+  </div>
+</div>
+
+<!-- ===== LAUNCH PAD ===== -->
+<div class="launch-pad">
+  <h3>🚀 Launch Pad — Read This First</h3>
+  <table>
+    <tr><td>What this homework is</td><td>Your first full gallery. You will build SIX different visual types — one of each major family from Chapter 2 — and arrange them into one organized report page.</td></tr>
+    <tr><td>This is individual work</td><td>Homework is done on your own, outside of class. You may use the chapter, the guided demos, and your lab worksheets for reference. You may not submit someone else's file.</td></tr>
+    <tr><td>What you need</td><td>Power BI Desktop with the AdventureWorks model. Internet connection for the map.</td></tr>
+    <tr><td>Starter file</td><td>Use your saved <code>.pbix</code> from Lab 3, or download the starter from the Canvas assignment page.</td></tr>
+    <tr><td>What "done" looks like</td><td>A saved <code>.pbix</code> with one page holding six visuals — bar, line, card, matrix, pie, map — plus this worksheet completed.</td></tr>
+    <tr><td>Time</td><td>About 2 to 3 hours. This is a weekend homework — spread it out, take breaks.</td></tr>
+    <tr><td>How to submit</td><td>Save your <code>.pbix</code> as <code>LastName_FirstName_HW1.pbix</code>. Submit it plus this worksheet as a PDF to the Canvas assignment.</td></tr>
+  </table>
+</div>
+
+<div class="udn-box why">
+  <strong class="label">💡 WHAT THIS HOMEWORK IS REALLY ABOUT</strong>
+  Chapter 2 walked you through seven question families. The labs practiced a few at a time. This homework brings it all together: you build one of every major visual type on a single page and, for each one, write down the question it answers. By the end you'll have a gallery — a reference page you built yourself — and proof that you can match any question to its visual.
+</div>
+
+<div class="udn-box do-this">
+  <strong class="label">✅ THE GOAL — Six Visuals, One Page</strong>
+  You are building all six on a single report page. Don't worry about making it beautiful — formatting is Chapter 3. Right now the goal is correct visual choice and a clean layout: each visual readable, nothing overlapping.
+</div>
+
+<hr>
+
+<!-- ================= PART 1 ================= -->
+<div class="phase-banner">
+  <span class="phase-num">PART 1</span><br>
+  <span class="phase-title">Build the Six Visuals</span>
+  <span class="phase-time"> · about 90 minutes</span>
+</div>
+
+<h3>Visual 1 — Comparison: Bar or Column Chart</h3>
+
+<div class="udn-box do-this">
+  <strong class="label">✅ DO THIS</strong>
+  <ol>
+    <li>Build a <strong>bar or column chart</strong> showing <code>Total Sales</code> by <code>Category</code> (from the <code>Product</code> table).</li>
+    <li><strong>Sort it descending</strong> by Total Sales using the <strong>…</strong> menu.</li>
+    <li>Place it on the page.</li>
+  </ol>
+</div>
+
+<div class="udn-box stop-check">
+  <strong class="label">🛑 SCREENSHOT — Visual 1</strong>
+  Paste a screenshot of your sorted comparison chart below.
+</div>
+
+<div class="paste-zone" tabindex="0" data-zone="hw-bar">
+  <div class="placeholder">📷 <strong>Paste Visual 1 (bar/column chart) here</strong><br>
+  Click this box, then press <kbd>Ctrl</kbd> + <kbd>V</kbd></div>
+</div>
+
+<h3>Visual 2 — Change Over Time: Line Chart</h3>
+
+<div class="udn-box do-this">
+  <strong class="label">✅ DO THIS</strong>
+  <ol>
+    <li>Build a <strong>line chart</strong> showing <code>Total Sales</code> over time.</li>
+    <li>Use <code>Month</code> or <code>Fiscal Year</code> from the <code>Date</code> table on the X-axis.</li>
+    <li>Place it on the page.</li>
+  </ol>
+</div>
+
+<div class="udn-box stop-check">
+  <strong class="label">🛑 SCREENSHOT — Visual 2</strong>
+  Paste a screenshot of your line chart below.
+</div>
+
+<div class="paste-zone" tabindex="0" data-zone="hw-line">
+  <div class="placeholder">📷 <strong>Paste Visual 2 (line chart) here</strong><br>
+  Click this box, then press <kbd>Ctrl</kbd> + <kbd>V</kbd></div>
+</div>
+
+<h3>Visual 3 — One Key Number: Card</h3>
+
+<div class="udn-box do-this">
+  <strong class="label">✅ DO THIS</strong>
+  <ol>
+    <li>Build a <strong>card</strong> (the lightning-bolt icon) showing a single headline number — your choice of <code>Total Sales</code>, <code>Order Quantity</code>, or another measure.</li>
+    <li>Place it on the page.</li>
+  </ol>
+</div>
+
+<div class="udn-box stop-check">
+  <strong class="label">🛑 SCREENSHOT — Visual 3</strong>
+  Paste a screenshot of your card below.
+</div>
+
+<div class="paste-zone" tabindex="0" data-zone="hw-card">
+  <div class="placeholder">📷 <strong>Paste Visual 3 (card) here</strong><br>
+  Click this box, then press <kbd>Ctrl</kbd> + <kbd>V</kbd></div>
+</div>
+
+<div class="udn-box breath">
+  <strong class="label">💜 TAKE A BREATH</strong>
+  Three of six done. This is a good place to stop if you're doing this over two sittings. Save your file, walk away, come back later. The next three are the matrix, pie, and map.
+</div>
+
+<h3>Visual 4 — Exact Numbers: Matrix</h3>
+
+<div class="udn-box do-this">
+  <strong class="label">✅ DO THIS</strong>
+  <ol>
+    <li>Build a <strong>matrix</strong>.</li>
+    <li>Put <code>Category</code> (from <code>Product</code>) in the <strong>Rows</strong> well.</li>
+    <li>Put <code>Year</code> (from <code>Date</code>) in the <strong>Columns</strong> well.</li>
+    <li>Put <code>Total Sales</code> in the <strong>Values</strong> well.</li>
+    <li>Place it on the page.</li>
+  </ol>
+</div>
+
+<div class="udn-box mistake">
+  <strong class="label">⚠️ COMMON MISTAKE</strong>
+  Building a <strong>table</strong> instead of a <strong>matrix</strong>. A table has no Columns well — it can't cross categories against years. Make sure you picked the matrix icon, which gives you both Rows and Columns.
+</div>
+
+<div class="udn-box stop-check">
+  <strong class="label">🛑 SCREENSHOT — Visual 4</strong>
+  Paste a screenshot of your matrix below.
+</div>
+
+<div class="paste-zone" tabindex="0" data-zone="hw-matrix">
+  <div class="placeholder">📷 <strong>Paste Visual 4 (matrix) here</strong><br>
+  Click this box, then press <kbd>Ctrl</kbd> + <kbd>V</kbd></div>
+</div>
+
+<h3>Visual 5 — Parts of a Whole: Pie Chart (Used Correctly)</h3>
+
+<div class="udn-box do-this">
+  <strong class="label">✅ DO THIS</strong>
+  <ol>
+    <li>Build a <strong>pie chart</strong> — but use it the way Chapter 2 says it CAN work.</li>
+    <li>Put a field with only a FEW categories in the <strong>Legend</strong> well — <code>Category</code> from Product (four categories) is a good fit.</li>
+    <li>Put <code>Total Sales</code> in the <strong>Values</strong> well.</li>
+    <li>Place it on the page.</li>
+  </ol>
+</div>
+
+<div class="udn-box why">
+  <strong class="label">💡 WHY THIS IS THE ONE TIME A PIE IS OK</strong>
+  Chapter 2 says a pie works when there are two or three (or a small handful of) categories with clearly different sizes. Four product categories, with Bikes clearly dominant, is right at the edge of where a pie still communicates. Do NOT use Subcategory here — that's ~37 slices, and the chapter showed exactly how that fails.
+</div>
+
+<div class="udn-box stop-check">
+  <strong class="label">🛑 SCREENSHOT — Visual 5</strong>
+  Paste a screenshot of your pie chart below.
+</div>
+
+<div class="paste-zone" tabindex="0" data-zone="hw-pie">
+  <div class="placeholder">📷 <strong>Paste Visual 5 (pie chart) here</strong><br>
+  Click this box, then press <kbd>Ctrl</kbd> + <kbd>V</kbd></div>
+</div>
+
+<h3>Visual 6 — Where: Filled Map</h3>
+
+<div class="udn-box do-this">
+  <strong class="label">✅ DO THIS</strong>
+  <ol>
+    <li>Build a <strong>filled map</strong>.</li>
+    <li>Put <code>Country</code> (from <code>Sales Territory</code>) in the <strong>Location</strong> well.</li>
+    <li>Put <code>Total Sales</code> in the <strong>Tooltips</strong> well so the map shades by sales.</li>
+    <li>Place it on the page.</li>
+  </ol>
+</div>
+
+<div class="udn-box stop-check">
+  <strong class="label">🛑 SCREENSHOT — Visual 6</strong>
+  Paste a screenshot of your filled map below.
+</div>
+
+<div class="paste-zone" tabindex="0" data-zone="hw-map">
+  <div class="placeholder">📷 <strong>Paste Visual 6 (filled map) here</strong><br>
+  Click this box, then press <kbd>Ctrl</kbd> + <kbd>V</kbd></div>
+</div>
+
+<hr>
+
+<!-- ================= PART 2 ================= -->
+<div class="phase-banner">
+  <span class="phase-num">PART 2</span><br>
+  <span class="phase-title">The Whole Gallery</span>
+  <span class="phase-time"> · about 20 minutes</span>
+</div>
+
+<div class="udn-box do-this">
+  <strong class="label">✅ DO THIS</strong>
+  Arrange all six visuals on the single page so nothing overlaps and every visual is readable. Then take ONE screenshot of the whole page and paste it below. This is your gallery.
+</div>
+
+<div class="udn-box stop-check">
+  <strong class="label">🛑 SCREENSHOT — The Full Gallery</strong>
+  Paste a screenshot of your complete six-visual page below.
+</div>
+
+<div class="paste-zone" tabindex="0" data-zone="hw-gallery">
+  <div class="placeholder">📷 <strong>Paste the full gallery page here</strong><br>
+  Click this box, then press <kbd>Ctrl</kbd> + <kbd>V</kbd></div>
+</div>
+
+<hr>
+
+<!-- ================= PART 3 ================= -->
+<div class="phase-banner">
+  <span class="phase-num">PART 3</span><br>
+  <span class="phase-title">The Gallery Label Card — Name Each Question</span>
+  <span class="phase-time"> · about 30 minutes</span>
+</div>
+
+<p>A gallery has labels. For each of your six visuals, write the business question it answers — one clear sentence, the kind a manager would actually ask. This is the question→visual skill in reverse: you have the visual, now name the question.</p>
+
+<div class="reflection-q">
+  <label>Visual 1 (bar/column) — what question does it answer?</label>
+  <textarea></textarea>
+</div>
+<div class="reflection-q">
+  <label>Visual 2 (line) — what question does it answer?</label>
+  <textarea></textarea>
+</div>
+<div class="reflection-q">
+  <label>Visual 3 (card) — what question does it answer?</label>
+  <textarea></textarea>
+</div>
+<div class="reflection-q">
+  <label>Visual 4 (matrix) — what question does it answer?</label>
+  <textarea></textarea>
+</div>
+<div class="reflection-q">
+  <label>Visual 5 (pie) — what question does it answer? And in one sentence: why is a pie acceptable here when it usually isn't?</label>
+  <textarea></textarea>
+</div>
+<div class="reflection-q">
+  <label>Visual 6 (map) — what question does it answer?</label>
+  <textarea></textarea>
+</div>
+
+<hr>
+
+<!-- ================= PART 4 ================= -->
+<div class="phase-banner">
+  <span class="phase-num">PART 4</span><br>
+  <span class="phase-title">Reflect</span>
+  <span class="phase-time"> · about 20 minutes</span>
+</div>
+
+<div class="reflection-q">
+  <label>1. Of your six visuals, which one do you think communicates its answer MOST clearly, and which communicates LEAST clearly? Use Chapter 1's encoding hierarchy (position, length, area, color) to explain why.</label>
+  <textarea></textarea>
+</div>
+
+<div class="reflection-q">
+  <label>2. Chapter 2 says four visuals — bar/column, line, matrix, card — do about 80% of the work in a real report. Looking at your gallery, do you agree? Which two of your six would you expect to use the LEAST in real work, and why?</label>
+  <textarea></textarea>
+</div>
+
+<div class="reflection-q">
+  <label>3. Imagine a manager looks at your gallery page and says "this is too much — give me just three of these." Which three would you keep, and what decision would those three help the manager make?</label>
+  <textarea></textarea>
+</div>
+
+<!-- ===== RUBRIC ===== -->
+<div class="rubric-mini">
+  <h4>📋 How This Homework Is Graded — 34 points</h4>
+  <ul>
+    <li><strong>3 pts each — 18 pts total</strong> — The six visuals, correctly built (bar/column, line, card, matrix, pie, map). 3 points per visual.</li>
+    <li><strong>4 pts</strong> — Part 2: all six arranged on one page, nothing overlapping, each readable</li>
+    <li><strong>6 pts</strong> — Part 3: a clear business question named for each of the six visuals (1 pt each)</li>
+    <li><strong>6 pts</strong> — Part 4: all three reflection questions answered thoughtfully, with chapter concepts used (2 pts each)</li>
+  </ul>
+  <p style="margin-top:10px;"><em>Grading tiers: Excellent / Good / Needs Work. If your homework lands below Good, you may redo it — see the course late-work and redo policy.</em></p>
+</div>
+
+<!-- ===== SUBMIT ===== -->
+<div class="submit-section">
+  <h3>📤 How to Submit</h3>
+  <ol>
+    <li><strong>Save your Power BI file</strong> as <code>LastName_FirstName_HW1.pbix</code>.</li>
+    <li><strong>Save this worksheet as a PDF</strong> — use your browser's Print function and choose "Save as PDF." Your pasted screenshots and typed answers are included automatically.</li>
+    <li><strong>Upload both files</strong> to the Homework 1 assignment in Canvas.</li>
+    <li>Due Sunday at 11:59 PM. The 48-hour grace period applies, then the late penalty begins — check the syllabus for details.</li>
+  </ol>
+</div>
+
+<p style="text-align:center; color:#888; font-size:11pt; margin-top:30px;">
+CAP2743C · Homework 1 · Summer A 2026 · Prof. Marquez
+</p>
+
+<script>
+  document.querySelectorAll('.paste-zone').forEach(zone => {
+    zone.dataset.originalHtml = zone.innerHTML;
+    zone.addEventListener('paste', (e) => {
+      e.preventDefault();
+      const items = e.clipboardData && e.clipboardData.items;
+      if (!items) return;
+      for (const item of items) {
+        if (item.type && item.type.indexOf('image/') === 0) {
+          const blob = item.getAsFile();
+          const reader = new FileReader();
+          reader.onload = (evt) => {
+            zone.innerHTML = '';
+            const img = document.createElement('img');
+            img.src = evt.target.result;
+            img.alt = 'Pasted screenshot';
+            zone.appendChild(img);
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'remove-btn';
+            btn.textContent = '✕ Remove';
+            btn.addEventListener('click', (clickEvt) => {
+              clickEvt.stopPropagation();
+              zone.innerHTML = zone.dataset.originalHtml;
+              zone.classList.remove('has-image');
+            });
+            zone.appendChild(btn);
+            zone.classList.add('has-image');
+          };
+          reader.readAsDataURL(blob);
+          return;
+        }
+      }
+    });
+    zone.addEventListener('click', () => {
+      if (!zone.classList.contains('has-image')) { zone.focus(); }
+    });
+  });
+</script>
+
+</body>
+</html>
