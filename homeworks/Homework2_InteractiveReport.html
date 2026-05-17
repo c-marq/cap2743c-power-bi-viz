@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Homework 2 — Interactive Report</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #222;
+    background: #f4f5f7;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 0 60px 0;
+  }
+
+  .course-header {
+    background: #1a3a5c;
+    color: #fff;
+    padding: 28px 40px 24px 40px;
+  }
+  .course-header .course-code {
+    font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.8;
+  }
+  .course-header .lab-title {
+    font-size: 26px; font-weight: 700; margin: 6px 0 4px 0;
+  }
+  .course-header .meta { font-size: 13px; opacity: 0.85; }
+
+  .name-bar {
+    background: #fff;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 16px 40px;
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  .name-bar label {
+    font-weight: 600; font-size: 12px; color: #666; display: block;
+    margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .name-bar input {
+    border: none; border-bottom: 2px solid #1a3a5c; font-size: 15px;
+    font-family: inherit; padding: 4px 2px; width: 260px; background: transparent;
+  }
+  .name-bar input:focus { outline: none; border-bottom-color: #C9A23A; }
+
+  .wrap { padding: 0 40px; }
+
+  h2 {
+    font-size: 20px; color: #1a3a5c; margin: 30px 0 12px 0;
+    padding-bottom: 6px; border-bottom: 2px solid #C9A23A;
+  }
+  h3 { font-size: 16px; color: #1a3a5c; margin: 22px 0 8px 0; }
+  p { margin: 10px 0; }
+  ol, ul { margin: 10px 0 10px 26px; }
+  li { margin-bottom: 6px; }
+  code {
+    background: #eef0f3; font-family: 'Consolas','Courier New',monospace;
+    font-size: 13px; padding: 2px 6px; border-radius: 3px; color: #1a3a5c;
+  }
+  hr { border: none; border-top: 1px solid #ddd; margin: 26px 0; }
+  strong { color: #1a1a1a; }
+
+  .launch-pad {
+    background: #eaf1f8; border: 1px solid #b9d2ea;
+    border-radius: 8px; padding: 18px 22px; margin: 22px 0;
+  }
+  .launch-pad h3 { margin-top: 0; color: #1a3a5c; }
+  .launch-pad table { width: 100%; border-collapse: collapse; }
+  .launch-pad td {
+    padding: 7px 10px; vertical-align: top;
+    border-bottom: 1px solid #d3e2f0; font-size: 13.5px;
+  }
+  .launch-pad td:first-child {
+    font-weight: 700; color: #1a3a5c; width: 165px; white-space: nowrap;
+  }
+  .launch-pad tr:last-child td { border-bottom: none; }
+
+  .phase-banner {
+    background: #34495e; color: #fff; padding: 10px 20px; border-radius: 6px;
+    margin: 30px 0 14px 0; font-size: 15px; font-weight: 700; letter-spacing: 0.5px;
+  }
+  .phase-banner span { opacity: 0.7; font-weight: 400; font-size: 13px; }
+
+  .udn-box {
+    padding: 14px 18px; margin: 14px 0; border-radius: 6px;
+    border-left: 5px solid; font-size: 13.5px;
+  }
+  .udn-box .label {
+    font-weight: 700; display: block; margin-bottom: 6px;
+    font-size: 13px; letter-spacing: 0.5px;
+  }
+  .udn-box ol, .udn-box ul { margin: 8px 0 4px 22px; }
+  .udn-box.do      { background: #D5F5E3; border-color: #27AE60; }
+  .udn-box.do      .label { color: #1E8449; }
+  .udn-box.why     { background: #D6EAF8; border-color: #2E86C1; }
+  .udn-box.why     .label { color: #1A5276; }
+  .udn-box.mistake { background: #FEF9E7; border-color: #F1C40F; }
+  .udn-box.mistake .label { color: #7D6608; }
+  .udn-box.stop    { background: #FADBD8; border-color: #E74C3C; }
+  .udn-box.stop    .label { color: #922B21; }
+  .udn-box.breath  { background: #E8DAEF; border-color: #8E44AD; }
+  .udn-box.breath  .label { color: #6C3483; }
+
+  .formula {
+    background: #1e2a3a; color: #e8edf2; font-family: 'Consolas','Courier New',monospace;
+    font-size: 13.5px; padding: 12px 16px; border-radius: 6px; margin: 12px 0;
+    line-height: 1.5; overflow-x: auto;
+  }
+  .formula .fn { color: #d9b34a; }
+  .formula .ref { color: #7fc9a8; }
+
+  .paste-label {
+    font-weight: 600; font-size: 13px; color: #495057;
+    display: block; margin: 16px 0 4px 0;
+  }
+  .paste-zone {
+    border: 2px dashed #b0bcc8; border-radius: 8px; min-height: 150px;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center; cursor: pointer; position: relative;
+    background: #fafbfc; transition: border-color 0.15s, background 0.15s;
+    padding: 12px;
+  }
+  .paste-zone:focus { outline: none; border-color: #2E86C1; background: #f0f7fd; }
+  .paste-zone.drag-over { border-color: #2E86C1; background: #eaf3fb; }
+  .paste-zone.has-image { border-style: solid; border-color: #27AE60; background: #fff; }
+  .paste-zone .placeholder { color: #8a97a4; font-size: 13px; }
+  .paste-zone .placeholder .icon { font-size: 26px; display: block; margin-bottom: 6px; }
+  .paste-zone img { max-width: 100%; border-radius: 4px; display: block; }
+  .remove-btn {
+    position: absolute; top: 6px; right: 6px; background: #E74C3C; color: #fff;
+    border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer;
+    font-size: 13px; line-height: 1; display: none;
+  }
+  .paste-zone.has-image .remove-btn { display: block; }
+
+  .response-label {
+    font-weight: 600; font-size: 13px; color: #495057;
+    display: block; margin: 16px 0 4px 0;
+  }
+  textarea {
+    width: 100%; border: 1px solid #c4ccd4; border-radius: 6px;
+    padding: 10px 12px; font-family: inherit; font-size: 13.5px;
+    line-height: 1.5; min-height: 80px; resize: vertical; background: #fff;
+  }
+  textarea:focus { outline: none; border-color: #2E86C1; }
+
+  .rubric-mini { margin: 20px 0; }
+  .rubric-mini table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .rubric-mini th, .rubric-mini td {
+    border: 1px solid #ccd4dc; padding: 8px 10px; text-align: left; vertical-align: top;
+  }
+  .rubric-mini th { background: #1a3a5c; color: #fff; font-weight: 600; }
+  .rubric-mini .pts { white-space: nowrap; font-weight: 700; color: #1a3a5c; }
+  .rubric-excellent td { background: #eafaf0; }
+  .rubric-good td { background: #fef9e7; }
+  .rubric-needs td { background: #fdedec; }
+
+  .submit-section {
+    background: #1a3a5c; color: #fff; border-radius: 8px;
+    padding: 20px 24px; margin: 30px 0 0 0;
+  }
+  .submit-section h3 { color: #fff; margin-top: 0; }
+  .submit-section ol { margin-left: 22px; }
+  .submit-section li { margin-bottom: 7px; }
+  .submit-section code { background: rgba(255,255,255,0.16); color: #ffe9b0; }
+
+  .footer-note {
+    text-align: center; color: #8a97a4; font-size: 12px; margin-top: 28px;
+  }
+
+  @media print {
+    body { background: #fff; max-width: none; padding: 0.4in; font-size: 11pt; }
+    .remove-btn { display: none !important; }
+    .paste-zone {
+      border: 1px solid #999; min-height: auto; padding: 8px;
+      cursor: default; page-break-inside: avoid;
+    }
+    .paste-zone .placeholder { display: none; }
+    .paste-zone:not(.has-image)::after {
+      content: "[no screenshot pasted]"; color: #c0392b; font-style: italic;
+    }
+    .udn-box, .phase-banner, .launch-pad, .rubric-mini, .submit-section, .formula {
+      page-break-inside: avoid;
+    }
+    .course-header, .phase-banner, .submit-section, .formula {
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+    .course-header { background: #1a3a5c !important; }
+    .phase-banner { background: #34495e !important; }
+    .submit-section { background: #1a3a5c !important; }
+    .formula { background: #1e2a3a !important; }
+    textarea { border: 1px solid #999; background: #fff; min-height: 60px; }
+    input { border: none; border-bottom: 1px solid #333; }
+    h2, h3 { page-break-after: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="course-header">
+  <div class="course-code">CAP2743C — POWER BI: DATA VISUALIZATION AND ANALYSIS</div>
+  <div class="lab-title">Homework 2 — Interactive Report</div>
+  <div class="meta">Take-Home Homework · Week 4 · 34 points · Chapters 4 &amp; 5 · Due Sunday, June 8</div>
+</div>
+
+<div class="name-bar">
+  <div>
+    <label for="student-name">Student Name</label>
+    <input type="text" id="student-name" name="student-name" placeholder="First Last">
+  </div>
+  <div>
+    <label for="hw-date">Date</label>
+    <input type="text" id="hw-date" name="hw-date" placeholder="June __, 2026">
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="launch-pad">
+  <h3>🚀 Launch Pad — Read This First</h3>
+  <table>
+    <tr><td>What you're building</td><td>An <strong>interactive analytical report</strong> that brings together both chapters of the week — Chapter 4's interactivity (a slicer, a bookmark, a drill-through) and Chapter 5's analytics layer (a forecast, a visual calculation, a narrative).</td></tr>
+    <tr><td>Tool</td><td>Power BI Desktop, with the AdventureWorks model loaded.</td></tr>
+    <tr><td>Starter file</td><td>Open the Homework 2 starter <code>.pbix</code> from the Canvas assignment page. It has the AdventureWorks model and one starter page.</td></tr>
+    <tr><td>Parts</td><td>3 parts — Interactivity (Ch 4) → Analytics (Ch 5) → Narrative &amp; Reflection.</td></tr>
+    <tr><td>Time</td><td>This is individual take-home work. Plan for about <strong>two to three hours</strong>, and spread it across the weekend rather than doing it in one sitting.</td></tr>
+    <tr><td>What "done" looks like</td><td>A saved <code>.pbix</code> with a slicer, a bookmark, a drill-through page, a forecast, a visual calculation, and a Smart Narrative — plus this worksheet completed.</td></tr>
+    <tr><td>How to submit</td><td>Save your <code>.pbix</code> as <code>LastName_FirstName_HW2.pbix</code>. Submit it <strong>plus this worksheet as a PDF</strong> to the Canvas assignment. Due Sunday at 11:59 PM; the 48-hour grace period applies, then the late penalty begins.</td></tr>
+  </table>
+</div>
+
+<div class="udn-box why">
+  <span class="label">💡 WHAT THIS HOMEWORK IS REALLY ABOUT</span>
+  This is the first homework that draws on <strong>two chapters at once.</strong> In the labs this week you practiced interactivity and analytics separately. Here you put them on one report, the way a real analyst does — a report the audience can both <em>question</em> (Chapter 4) and that <em>analyzes</em> for them (Chapter 5). You worked with Sales Territory and Reseller fields in the labs; this homework uses <strong>Product Subcategory and Category</strong>, so it is genuinely new practice, not a repeat.
+</div>
+
+<div class="udn-box breath">
+  <span class="label">💜 A NOTE BEFORE YOU START</span>
+  This homework is longer than a lab and it spans two chapters — that is normal for a take-home. Do not try to finish it in one sitting. The three parts are designed to be done in separate sessions: Part 1 one day, Part 2 another, Part 3 last. Save your file between sessions. Spreading it out is the intended way to do this, not a fallback.
+</div>
+
+<!-- ============ PART 1 ============ -->
+<div class="phase-banner">PART 1 — INTERACTIVITY <span>· Chapter 4 · about 1 hour</span></div>
+
+<h3>Step 1 — Set up the report page</h3>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS</span>
+  <ol>
+    <li>Open Power BI Desktop and open the Homework 2 starter <code>.pbix</code> from Canvas.</li>
+    <li>You should land in <strong>Report View</strong> on a page named <strong>Subcategory Report</strong>, with a <strong>column chart</strong> of Sales Amount by Product Subcategory and a <strong>line chart</strong> of Sales Amount by Date already on it.</li>
+    <li>Add a <strong>Slicer</strong>: from the Visualizations pane click the Slicer icon, then drag <code>Product → Category</code> into its Field well. The slicer fills with the four categories.</li>
+  </ol>
+</div>
+
+<div class="udn-box stop">
+  <span class="label">🛑 STOP AND CHECK</span>
+  Click <strong>Bikes</strong> in the slicer. Both charts should redraw to Bikes subcategories only. Clear the selection before continuing.
+</div>
+
+<h3>Step 2 — Build a drill-through detail page</h3>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS</span>
+  <ol>
+    <li>Add a new page (click the <strong>+</strong> by the page tabs) and rename it <strong>Subcategory Detail</strong>.</li>
+    <li>On it, build a <strong>Bar chart</strong> of Sales Amount by <code>Product → Product</code> (the individual product names), and a <strong>Card</strong> of Sales Amount.</li>
+    <li>Click empty canvas so no visual is selected. Drag <code>Product → Subcategory</code> into the <strong>Drill through</strong> well in the Visualizations pane. A Back button appears automatically.</li>
+    <li>Return to the <strong>Subcategory Report</strong> page, right-click a subcategory bar, and choose <strong>Drill through → Subcategory Detail</strong>.</li>
+  </ol>
+</div>
+
+<div class="udn-box mistake">
+  <span class="label">⚠️ COMMON MISTAKE</span>
+  If the detail page shows every subcategory, the field went into the page filter section instead of the <strong>Drill through</strong> well. They are different wells. Confirm <code>Subcategory</code> is in <strong>Drill through</strong>.
+</div>
+
+<h3>Step 3 — Add a bookmark</h3>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS</span>
+  <ol>
+    <li>On the Subcategory Report page, open the <strong>Bookmarks pane</strong> (View tab → Show panes → Bookmarks).</li>
+    <li>Set the slicer to <strong>Bikes</strong>.</li>
+    <li>Click <strong>Add</strong> in the Bookmarks pane and rename the new bookmark <strong>Bikes View</strong>.</li>
+    <li>Clear the slicer, click <strong>Add</strong> again, and name that bookmark <strong>All Categories</strong>.</li>
+  </ol>
+</div>
+
+<div class="udn-box stop">
+  <span class="label">🛑 STOP AND CHECK</span>
+  Click the <strong>Bikes View</strong> bookmark — the slicer and charts should snap to Bikes. Click <strong>All Categories</strong> — they return to the full picture. A bookmark saves the slicer state, so this should work cleanly.
+</div>
+
+<label class="paste-label">📸 Paste a screenshot of your Subcategory Report page with the slicer and both bookmarks visible:</label>
+<div class="paste-zone" id="paste-interact" tabindex="0">
+  <button class="remove-btn" title="Remove image">✕</button>
+  <div class="placeholder"><span class="icon">📋</span>Click here, then press <strong>Ctrl + V</strong> to paste your screenshot</div>
+</div>
+
+<!-- ============ PART 2 ============ -->
+<div class="phase-banner">PART 2 — ANALYTICS <span>· Chapter 5 · about 1 hour</span></div>
+
+<h3>Step 4 — Add a forecast</h3>
+
+<div class="udn-box why">
+  <span class="label">💡 WHY ARE WE DOING THIS?</span>
+  Part 1 made the report something the audience can <em>question</em>. Part 2 makes it <em>analyze</em>. A <strong>forecast</strong> answers "what comes next" — and its shaded confidence band is an honest statement of how uncertain the projection is.
+</div>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS</span>
+  <ol>
+    <li>On the Subcategory Report page, click the <strong>line chart</strong> of Sales Amount by Date.</li>
+    <li>In the Visualizations pane, open the <strong>Analytics</strong> tab (the magnifying-glass icon).</li>
+    <li>Open the <strong>Forecast</strong> section → <strong>Add</strong>. Set Forecast length to <strong>3</strong> and Confidence interval to <strong>95%</strong>.</li>
+    <li>Leave the confidence band visible.</li>
+  </ol>
+</div>
+
+<div class="udn-box mistake">
+  <span class="label">⚠️ COMMON MISTAKE</span>
+  Do not turn off the confidence band. The band is the honest part of a forecast — removing it makes the report overstate how sure it is.
+</div>
+
+<h3>Step 5 — Write a visual calculation</h3>
+
+<div class="udn-box why">
+  <span class="label">💡 WHY ARE WE DOING THIS?</span>
+  A <strong>visual calculation</strong> is DAX written on a visual, computed on the visual's own rows — one of the two skills new for the January 2026 PL-300 exam. A running total down the rows is a single line of DAX here.
+</div>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS</span>
+  <ol>
+    <li>Add a <strong>Table</strong> visual. Put <code>Product → Subcategory</code> and <code>Sales Amount</code> in it.</li>
+    <li>With the table selected, go to the <strong>Home</strong> tab and click <strong>New visual calculation</strong>.</li>
+    <li>In the formula bar, type this exactly:</li>
+  </ol>
+  <div class="formula"><span class="ref">Running Total</span> = <span class="fn">RUNNINGSUM</span>([Sales Amount])</div>
+  <ol start="4">
+    <li>Confirm the formula and close the edit screen. The table now has a Running Total column.</li>
+  </ol>
+</div>
+
+<label class="paste-label">📸 Paste a screenshot showing your line chart with the forecast AND your table with the Running Total column:</label>
+<div class="paste-zone" id="paste-analytics" tabindex="0">
+  <button class="remove-btn" title="Remove image">✕</button>
+  <div class="placeholder"><span class="icon">📋</span>Click here, then press <strong>Ctrl + V</strong> to paste your screenshot</div>
+</div>
+
+<div class="udn-box breath">
+  <span class="label">💜 TAKE A BREATH</span>
+  Two parts done. Your report can now be questioned by the audience and it analyzes the data for them. This is a good place to save your file and stop for the day if you have been working a while. Part 3 is short — the narrative and a written reflection — and is a fine thing to do in a fresh session.
+</div>
+
+<!-- ============ PART 3 ============ -->
+<div class="phase-banner">PART 3 — NARRATIVE &amp; REFLECTION <span>· about 40 minutes</span></div>
+
+<h3>Step 6 — Add a Smart Narrative and review it</h3>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS</span>
+  <ol>
+    <li>On the Subcategory Report page, click empty canvas so no visual is selected.</li>
+    <li>In the Visualizations pane, click the <strong>Smart narrative</strong> icon. Power BI generates a text summary of the page.</li>
+    <li><strong>Read every sentence carefully.</strong> Click into the text — it is editable.</li>
+    <li>Find at least one sentence you can improve — a number that needs context, or a claim that is too strong — and rewrite it in your own words.</li>
+  </ol>
+</div>
+
+<div class="udn-box mistake">
+  <span class="label">⚠️ COMMON MISTAKE</span>
+  Accepting the generated narrative without reading it. An auto-written summary can state a guess as confidently as a fact. The rule from the chapter: the narrative drafts, the analyst reviews and signs. You are the analyst here — read it, fix it, own it.
+</div>
+
+<label class="paste-label">📸 Paste a screenshot of your Smart Narrative text box on the page:</label>
+<div class="paste-zone" id="paste-narrative" tabindex="0">
+  <button class="remove-btn" title="Remove image">✕</button>
+  <div class="placeholder"><span class="icon">📋</span>Click here, then press <strong>Ctrl + V</strong> to paste your screenshot</div>
+</div>
+
+<label class="response-label">✍️ Step 7 — Which sentence in the Smart Narrative did you rewrite, and why? Quote the original sentence, then give your improved version.</label>
+<textarea placeholder="Original: ... &#10;My version: ... &#10;Why I changed it: ..."></textarea>
+
+<h3>Step 8 — Written Reflection</h3>
+
+<div class="udn-box why">
+  <span class="label">💡 WHY THESE QUESTIONS?</span>
+  This homework combined two chapters. These questions ask you to step back and connect them — the kind of thinking the capstone will expect. Answer in your own words, three or four sentences each.
+</div>
+
+<label class="response-label">✍️ Question 1 — This report does two different jobs: it lets the audience <strong>question</strong> the data (Chapter 4) and it <strong>analyzes</strong> the data for them (Chapter 5). In your own words, explain the difference between those two jobs, and name one feature from your report that does each.</label>
+<textarea placeholder="Write 3-4 sentences here..."></textarea>
+
+<label class="response-label">✍️ Question 2 — You built a forecast with a confidence band and a Smart Narrative that you had to correct. Both features make a claim about the data. Explain why a forecast's band and a careful read of a narrative are both about the same thing — being honest about what the report does and does not know.</label>
+<textarea placeholder="Write 3-4 sentences here..."></textarea>
+
+<label class="response-label">✍️ Question 3 — Of everything in this homework — slicer, drill-through, bookmark, forecast, visual calculation, narrative — which was the hardest to get working, and what did you do to figure it out?</label>
+<textarea placeholder="Write 3-4 sentences here..."></textarea>
+
+<!-- ===== MINI RUBRIC ===== -->
+<h2>How This Homework Is Graded — 34 Points</h2>
+<div class="rubric-mini">
+  <table>
+    <tr>
+      <th>Tier</th>
+      <th class="pts">Points</th>
+      <th>What it looks like</th>
+    </tr>
+    <tr class="rubric-excellent">
+      <td><strong>Excellent</strong></td>
+      <td class="pts">30–34</td>
+      <td>Part 1 complete — slicer, drill-through page, and two working bookmarks. Part 2 complete — forecast with band visible, and a correct Running Total visual calculation. Part 3 complete — Smart Narrative added and meaningfully revised. All three reflection questions answered thoughtfully and in the student's own words. All screenshots pasted.</td>
+    </tr>
+    <tr class="rubric-good">
+      <td><strong>Good</strong></td>
+      <td class="pts">20–29</td>
+      <td>Most of the report built correctly across both chapters. One or two features have minor errors. Narrative added. Reflection answered with minor gaps. Most screenshots pasted.</td>
+    </tr>
+    <tr class="rubric-needs">
+      <td><strong>Needs Work</strong></td>
+      <td class="pts">0–19</td>
+      <td>One whole part missing or largely incorrect. Several features missing or non-functional. Reflection missing or does not address the questions. <strong>Eligible for redo</strong> — revise and resubmit once for up to the Good tier.</td>
+    </tr>
+  </table>
+  <p style="font-size:12px; color:#666; margin-top:8px;"><strong>Late policy:</strong> 48-hour grace period, no penalty. After 48 hours: 10% per day, capped at 30% maximum reduction. <strong>Redo:</strong> if you score below Good, you may revise and resubmit once for up to 29 points.</p>
+</div>
+
+<!-- ===== SUBMIT ===== -->
+<div class="submit-section">
+  <h3>📤 How to Submit</h3>
+  <ol>
+    <li>In Power BI Desktop, press <strong>Ctrl + S</strong> to save.</li>
+    <li>Use <strong>File → Save As</strong> and name your file <code>LastName_FirstName_HW2.pbix</code>.</li>
+    <li>In this worksheet, fill in your name and date at the top, and confirm every paste zone has a screenshot and every textarea has an answer.</li>
+    <li>Print this worksheet to PDF: <strong>Ctrl + P</strong> → Destination <strong>Save as PDF</strong> → Save.</li>
+    <li>Go to the <strong>Homework 2</strong> assignment in Canvas. Upload <strong>two files</strong>: your <code>.pbix</code> and your worksheet PDF. Due Sunday, June 8 at 11:59 PM.</li>
+  </ol>
+</div>
+
+<p class="footer-note">CAP2743C — Power BI: Data Visualization and Analysis · Miami Dade College · Homework 2 · Week 4</p>
+
+</div><!-- end wrap -->
+
+<script>
+document.querySelectorAll('.paste-zone').forEach(function(zone) {
+  function setImage(dataUrl) {
+    var existing = zone.querySelector('img');
+    if (existing) existing.remove();
+    var img = document.createElement('img');
+    img.src = dataUrl;
+    zone.appendChild(img);
+    zone.classList.add('has-image');
+  }
+  zone.addEventListener('paste', function(e) {
+    var items = e.clipboardData.items;
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image') !== -1) {
+        e.preventDefault();
+        var reader = new FileReader();
+        reader.onload = function(ev) { setImage(ev.target.result); };
+        reader.readAsDataURL(items[i].getAsFile());
+        break;
+      }
+    }
+  });
+  zone.addEventListener('click', function(e) {
+    if (!e.target.classList.contains('remove-btn')) zone.focus();
+  });
+  zone.querySelector('.remove-btn').addEventListener('click', function(e) {
+    e.stopPropagation();
+    var img = zone.querySelector('img');
+    if (img) img.remove();
+    zone.classList.remove('has-image');
+  });
+  zone.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    zone.classList.add('drag-over');
+  });
+  zone.addEventListener('dragleave', function() {
+    zone.classList.remove('drag-over');
+  });
+  zone.addEventListener('drop', function(e) {
+    e.preventDefault();
+    zone.classList.remove('drag-over');
+    var files = e.dataTransfer.files;
+    if (files.length > 0 && files[0].type.indexOf('image') !== -1) {
+      var reader = new FileReader();
+      reader.onload = function(ev) { setImage(ev.target.result); };
+      reader.readAsDataURL(files[0]);
+    }
+  });
+});
+</script>
+
+</body>
+</html>
