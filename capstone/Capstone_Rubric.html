@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capstone Rubric — AdventureWorks Executive Report</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #222;
+    background: #f4f5f7;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 0 60px 0;
+  }
+  .course-header {
+    background: #1a3a5c;
+    color: #fff;
+    padding: 30px 40px 26px 40px;
+  }
+  .course-header .course-code {
+    font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.8;
+  }
+  .course-header .doc-title {
+    font-size: 27px; font-weight: 700; margin: 8px 0 4px 0;
+  }
+  .course-header .meta { font-size: 13px; opacity: 0.85; }
+  .points-flag {
+    display: inline-block;
+    background: #C9A23A;
+    color: #1a2a3a;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    padding: 4px 12px;
+    border-radius: 12px;
+    margin-top: 10px;
+  }
+  .wrap { padding: 0 40px; }
+  h2 {
+    font-size: 21px; color: #1a3a5c; margin: 32px 0 12px 0;
+    padding-bottom: 6px; border-bottom: 2px solid #C9A23A;
+  }
+  h3 {
+    font-size: 16px; color: #1a3a5c; margin: 26px 0 6px 0;
+  }
+  h3 .comp-pts {
+    background: #1a3a5c; color: #fff; font-size: 12px; font-weight: 700;
+    padding: 3px 10px; border-radius: 10px; margin-left: 8px;
+    vertical-align: middle;
+  }
+  p { margin: 10px 0; }
+  ul { margin: 10px 0 10px 24px; }
+  li { margin-bottom: 6px; }
+  code {
+    background: #eef0f3; font-family: 'Consolas','Courier New',monospace;
+    font-size: 13px; padding: 2px 6px; border-radius: 3px; color: #1a3a5c;
+  }
+  strong { color: #1a1a1a; }
+
+  .udn-box {
+    padding: 15px 19px; margin: 16px 0; border-radius: 6px;
+    border-left: 5px solid; font-size: 13.5px;
+  }
+  .udn-box .label {
+    font-weight: 700; display: block; margin-bottom: 6px;
+    font-size: 13px; letter-spacing: 0.5px;
+  }
+  .udn-box.why    { background: #D6EAF8; border-color: #2E86C1; }
+  .udn-box.why    .label { color: #1A5276; }
+  .udn-box.do     { background: #D5F5E3; border-color: #27AE60; }
+  .udn-box.do     .label { color: #1E8449; }
+  .udn-box.breath { background: #E8DAEF; border-color: #8E44AD; }
+  .udn-box.breath .label { color: #6C3483; }
+
+  .rubric-table {
+    width: 100%; border-collapse: collapse; margin: 10px 0 6px 0; font-size: 12.5px;
+  }
+  .rubric-table th, .rubric-table td {
+    border: 1px solid #ccd4dc; padding: 9px 11px; text-align: left; vertical-align: top;
+  }
+  .rubric-table th {
+    background: #1a3a5c; color: #fff; font-weight: 600; text-align: center;
+  }
+  .rubric-table .tier {
+    font-weight: 700; white-space: nowrap; text-align: center; width: 130px;
+  }
+  .tier-exc { background: #eafaf0; }
+  .tier-exc .tier { color: #1E8449; }
+  .tier-good { background: #fef9e7; }
+  .tier-good .tier { color: #7D6608; }
+  .tier-needs { background: #fdedec; }
+  .tier-needs .tier { color: #922B21; }
+
+  .summary-table {
+    width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 13px;
+  }
+  .summary-table th, .summary-table td {
+    border: 1px solid #ccd4dc; padding: 9px 11px; text-align: left;
+  }
+  .summary-table th { background: #1a3a5c; color: #fff; font-weight: 600; }
+  .summary-table td.pts { text-align: center; font-weight: 700; color: #1a3a5c; }
+  .summary-table tr.total td { background: #eaf1f8; font-weight: 700; }
+
+  .footer-note {
+    text-align: center; color: #8a97a4; font-size: 12px; margin-top: 30px;
+  }
+
+  @media print {
+    body { background: #fff; max-width: none; padding: 0.35in; font-size: 10.5pt; }
+    .rubric-table, .summary-table, .udn-box { page-break-inside: avoid; }
+    .course-header { background: #1a3a5c !important;
+      -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .rubric-table th, .summary-table th {
+      -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    h2, h3 { page-break-after: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="course-header">
+  <div class="course-code">CAP2743C — POWER BI: DATA VISUALIZATION AND ANALYSIS</div>
+  <div class="doc-title">Capstone Rubric — AdventureWorks Executive Report</div>
+  <div class="meta">Capstone Project · How your capstone is graded</div>
+  <div class="points-flag">200 POINTS TOTAL</div>
+</div>
+
+<div class="wrap">
+
+<h2>How to Use This Rubric</h2>
+
+<p>This rubric grades the six components of your capstone. Read it <strong>early</strong> — on reveal day, alongside the Brief. For each component there are three tiers: <strong>Excellent</strong>, <strong>Good</strong>, and <strong>Needs Work</strong>. The tier descriptions tell you exactly what each level looks like, so there is no guessing what "good enough" means.</p>
+
+<div class="udn-box why">
+  <span class="label">💡 WHY READ THE RUBRIC FIRST, NOT LAST</span>
+  A rubric read after you submit is a report card. A rubric read before you build is a map. Everything in the Excellent column is a thing you can deliberately do — apply a theme, write alt text, set an interaction. Read the Excellent descriptions now, keep them next to you while you assemble in Session 11, and check your report against them before you submit.
+</div>
+
+<h3>Point Summary <span class="comp-pts">200 pts</span></h3>
+<table class="summary-table">
+  <tr><th>Component</th><th style="text-align:center;">Points</th><th>What it grades</th></tr>
+  <tr><td>1. Report structure &amp; data story</td><td class="pts">35</td><td>Multi-page narrative, ordered to be read</td></tr>
+  <tr><td>2. Visual selection</td><td class="pts">35</td><td>Six+ visuals, each fit to its question</td></tr>
+  <tr><td>3. Formatting &amp; branding</td><td class="pts">30</td><td>Custom theme, conditional formatting, polish</td></tr>
+  <tr><td>4. Interactivity</td><td class="pts">35</td><td>Slicers, interactions, drill or tooltip</td></tr>
+  <tr><td>5. Accessibility</td><td class="pts">20</td><td>The four accessibility checks pass</td></tr>
+  <tr><td>6. Presentation or walkthrough</td><td class="pts">45</td><td>Data story told, interactivity shown, reflection</td></tr>
+  <tr class="total"><td>Total</td><td class="pts">200</td><td></td></tr>
+</table>
+
+<!-- ===================== COMPONENT 1 ===================== -->
+<h3>Component 1 — Report Structure &amp; Data Story <span class="comp-pts">35 pts</span></h3>
+<p>Does the report have a clear narrative across its pages, ordered the way the story should be read?</p>
+<table class="rubric-table">
+  <tr><th>Tier</th><th>Points</th><th>What it looks like</th></tr>
+  <tr class="tier-exc">
+    <td class="tier">Excellent</td><td class="tier">31–35</td>
+    <td>The report has an overview page that answers the headline business question immediately, plus at least one detail page that goes deeper. Pages are clearly named and ordered so the story reads top to bottom. A first-time viewer understands the structure without being told.</td>
+  </tr>
+  <tr class="tier-good">
+    <td class="tier">Good</td><td class="tier">22–30</td>
+    <td>The report has multiple pages with a recognizable structure. The overview/detail split is present but the narrative order is slightly unclear, or a page is unnamed or out of sequence.</td>
+  </tr>
+  <tr class="tier-needs">
+    <td class="tier">Needs Work</td><td class="tier">0–21</td>
+    <td>The report is a single page, or the pages have no clear order or relationship. There is no discernible data story — visuals are placed without a narrative.</td>
+  </tr>
+</table>
+
+<!-- ===================== COMPONENT 2 ===================== -->
+<h3>Component 2 — Visual Selection <span class="comp-pts">35 pts</span></h3>
+<p>Are there at least six visuals, and is each one the right chart for the question it answers?</p>
+<table class="rubric-table">
+  <tr><th>Tier</th><th>Points</th><th>What it looks like</th></tr>
+  <tr class="tier-exc">
+    <td class="tier">Excellent</td><td class="tier">31–35</td>
+    <td>At least six visuals across the report. Each visual is clearly chosen for its question — a map for "where," a card for the headline number, the right chart family for comparisons and trends. Includes at least one map and at least one card. No visual feels random.</td>
+  </tr>
+  <tr class="tier-good">
+    <td class="tier">Good</td><td class="tier">22–30</td>
+    <td>At least six visuals, including a map and a card. Most fit their question well, but one or two are a weaker choice — a pie where a bar would read better, or a chart whose purpose is unclear.</td>
+  </tr>
+  <tr class="tier-needs">
+    <td class="tier">Needs Work</td><td class="tier">0–21</td>
+    <td>Fewer than six visuals, or the map or card is missing. Several visuals are poorly matched to their questions, making the report hard to read.</td>
+  </tr>
+</table>
+
+<!-- ===================== COMPONENT 3 ===================== -->
+<h3>Component 3 — Formatting &amp; Branding <span class="comp-pts">30 pts</span></h3>
+<p>Does the report look convincing — a custom theme applied consistently, conditional formatting where it earns its place?</p>
+<table class="rubric-table">
+  <tr><th>Tier</th><th>Points</th><th>What it looks like</th></tr>
+  <tr class="tier-exc">
+    <td class="tier">Excellent</td><td class="tier">27–30</td>
+    <td>A custom theme is applied and consistent across every page. Conditional formatting is used at least once, on a visual where it genuinely helps the reader. The report looks like a deliberate, branded piece of work — not Power BI defaults.</td>
+  </tr>
+  <tr class="tier-good">
+    <td class="tier">Good</td><td class="tier">19–26</td>
+    <td>A theme is applied (built-in or custom) and mostly consistent. Conditional formatting is present but applied where it adds little, or formatting is uneven across pages.</td>
+  </tr>
+  <tr class="tier-needs">
+    <td class="tier">Needs Work</td><td class="tier">0–18</td>
+    <td>The report uses Power BI defaults throughout, or formatting is inconsistent enough to distract. No conditional formatting is used.</td>
+  </tr>
+</table>
+
+<div class="udn-box breath">
+  <span class="label">💜 TAKE A BREATH</span>
+  Three components down on this page, three to go. Notice the pattern: every tier is described in terms of things you can <em>see</em> and <em>do</em> — apply a theme, place a map, set a rule. None of it is mysterious. The rubric is long because it is precise, not because the capstone is hard.
+</div>
+
+<!-- ===================== COMPONENT 4 ===================== -->
+<h3>Component 4 — Interactivity <span class="comp-pts">35 pts</span></h3>
+<p>Does the report answer back — slicers, deliberate editing interactions, and at least one of drill-down, drill-through, or a custom tooltip?</p>
+<table class="rubric-table">
+  <tr><th>Tier</th><th>Points</th><th>What it looks like</th></tr>
+  <tr class="tier-exc">
+    <td class="tier">Excellent</td><td class="tier">31–35</td>
+    <td>At least two working slicers. Editing interactions are set deliberately — a total card set to None, charts that filter each other sensibly. At least one of drill-down, drill-through, or a custom tooltip is built and works. The audience can explore the report without the analyst.</td>
+  </tr>
+  <tr class="tier-good">
+    <td class="tier">Good</td><td class="tier">22–30</td>
+    <td>Two slicers are present and work. Interactivity is mostly there, but interactions are left on defaults rather than set deliberately, or the drill/tooltip feature is present but partly broken.</td>
+  </tr>
+  <tr class="tier-needs">
+    <td class="tier">Needs Work</td><td class="tier">0–21</td>
+    <td>Fewer than two slicers, or no slicers. No deliberate interaction decisions. No drill-down, drill-through, or tooltip. The report is static — it cannot answer a follow-up question.</td>
+  </tr>
+</table>
+
+<!-- ===================== COMPONENT 5 ===================== -->
+<h3>Component 5 — Accessibility <span class="comp-pts">20 pts</span></h3>
+<p>Do the four accessibility checks pass — alt text, tab order, contrast, descriptive titles?</p>
+<table class="rubric-table">
+  <tr><th>Tier</th><th>Points</th><th>What it looks like</th></tr>
+  <tr class="tier-exc">
+    <td class="tier">Excellent</td><td class="tier">18–20</td>
+    <td>All four checks pass. Every visual has descriptive alt text. Tab order follows the narrative. Colors meet WCAG AA contrast. Every visual has a descriptive title a screen reader can announce.</td>
+  </tr>
+  <tr class="tier-good">
+    <td class="tier">Good</td><td class="tier">13–17</td>
+    <td>Three of the four checks pass. One check is incomplete — some visuals lack alt text, or tab order was not set, or one color pair falls below contrast.</td>
+  </tr>
+  <tr class="tier-needs">
+    <td class="tier">Needs Work</td><td class="tier">0–12</td>
+    <td>Two or fewer checks pass. Accessibility was largely skipped — no alt text, default tab order, untested contrast, or blank titles.</td>
+  </tr>
+</table>
+
+<!-- ===================== COMPONENT 6 ===================== -->
+<h3>Component 6 — Presentation or Walkthrough <span class="comp-pts">45 pts</span></h3>
+<p>Live or recorded — does the student explain the data story, show the interactivity working, and reflect honestly?</p>
+<table class="rubric-table">
+  <tr><th>Tier</th><th>Points</th><th>What it looks like</th></tr>
+  <tr class="tier-exc">
+    <td class="tier">Excellent</td><td class="tier">40–45</td>
+    <td>The presentation or recording clearly tells the report's data story — what the headline question is and what the answer is. The interactivity is shown working live (slicers clicked, a drill or tooltip demonstrated). The written reflection answers all three questions thoughtfully and honestly.</td>
+  </tr>
+  <tr class="tier-good">
+    <td class="tier">Good</td><td class="tier">28–39</td>
+    <td>The presentation covers the report and shows some interactivity, but the data story is told unevenly or the interactivity demo is incomplete. The reflection is present but thin on one or two questions.</td>
+  </tr>
+  <tr class="tier-needs">
+    <td class="tier">Needs Work</td><td class="tier">0–27</td>
+    <td>No presentation or recording submitted, or it does not explain the report. The reflection is missing or does not address the three questions.</td>
+  </tr>
+</table>
+
+<div class="udn-box why">
+  <span class="label">💡 LIVE AND RECORDED ARE GRADED THE SAME</span>
+  Component 6 does not award points for the act of standing in front of the class. It awards points for <strong>telling the story clearly</strong> and <strong>showing the report working</strong>. A recorded walkthrough that does both earns exactly what a live presentation that does both earns. Choose the format that lets you communicate best.
+</div>
+
+<h2>Grading Policies</h2>
+
+<div class="udn-box do">
+  <span class="label">✅ THE POLICIES THAT PROTECT YOU</span>
+  <ul>
+    <li><strong>Partial credit is always available.</strong> Each component is graded on its own. A report strong in four components and weaker in two still earns the four. Build what you can build well — never skip a whole component because it feels hard.</li>
+    <li><strong>Late policy:</strong> 48-hour grace period with no penalty. After 48 hours, 10% per day, capped at a 30% maximum reduction. A late, imperfect capstone always beats a zero.</li>
+    <li><strong>Redo:</strong> if your capstone scores below the Good tier overall, you may revise and resubmit once, for up to the Good tier score — the same redo policy as every lab this term.</li>
+  </ul>
+</div>
+
+<h2>Self-Check Before You Submit</h2>
+
+<p>Walk this list against your finished report. If you can tick all of it, you are in Excellent territory across the board:</p>
+
+<table class="rubric-table">
+  <tr><th style="width:40px;">✓</th><th>Check</th></tr>
+  <tr><td style="text-align:center;">☐</td><td>The report has an overview page and at least one detail page, named and ordered.</td></tr>
+  <tr><td style="text-align:center;">☐</td><td>There are at least six visuals, including at least one map and one card.</td></tr>
+  <tr><td style="text-align:center;">☐</td><td>A custom theme is applied and looks consistent on every page.</td></tr>
+  <tr><td style="text-align:center;">☐</td><td>Conditional formatting is used at least once, where it helps the reader.</td></tr>
+  <tr><td style="text-align:center;">☐</td><td>At least two slicers work, and editing interactions are set deliberately.</td></tr>
+  <tr><td style="text-align:center;">☐</td><td>At least one of drill-down, drill-through, or a custom tooltip is built and works.</td></tr>
+  <tr><td style="text-align:center;">☐</td><td>All four accessibility checks pass — alt text, tab order, contrast, titles.</td></tr>
+  <tr><td style="text-align:center;">☐</td><td>The file is saved as <code>LastName_FirstName_Capstone.pbix</code>.</td></tr>
+  <tr><td style="text-align:center;">☐</td><td>The presentation or recorded walkthrough is ready, and the three-question reflection is written.</td></tr>
+</table>
+
+<p class="footer-note">CAP2743C — Power BI: Data Visualization and Analysis · Miami Dade College · Capstone Rubric</p>
+
+</div><!-- end wrap -->
+
+</body>
+</html>

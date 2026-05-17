@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capstone Brief — AdventureWorks Executive Report</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 1.65;
+    color: #222;
+    background: #f4f5f7;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 0 60px 0;
+  }
+  .course-header {
+    background: #1a3a5c;
+    color: #fff;
+    padding: 30px 40px 26px 40px;
+  }
+  .course-header .course-code {
+    font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.8;
+  }
+  .course-header .doc-title {
+    font-size: 27px; font-weight: 700; margin: 8px 0 4px 0;
+  }
+  .course-header .meta { font-size: 13px; opacity: 0.85; }
+  .points-flag {
+    display: inline-block;
+    background: #C9A23A;
+    color: #1a2a3a;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    padding: 4px 12px;
+    border-radius: 12px;
+    margin-top: 10px;
+  }
+  .wrap { padding: 0 40px; }
+  h2 {
+    font-size: 21px; color: #1a3a5c; margin: 32px 0 12px 0;
+    padding-bottom: 6px; border-bottom: 2px solid #C9A23A;
+  }
+  h3 { font-size: 16px; color: #1a3a5c; margin: 22px 0 8px 0; }
+  p { margin: 10px 0; }
+  ol, ul { margin: 10px 0 10px 26px; }
+  li { margin-bottom: 7px; }
+  code {
+    background: #eef0f3; font-family: 'Consolas','Courier New',monospace;
+    font-size: 13px; padding: 2px 6px; border-radius: 3px; color: #1a3a5c;
+  }
+  strong { color: #1a1a1a; }
+  hr { border: none; border-top: 1px solid #ddd; margin: 26px 0; }
+
+  .udn-box {
+    padding: 15px 19px; margin: 16px 0; border-radius: 6px;
+    border-left: 5px solid; font-size: 13.5px;
+  }
+  .udn-box .label {
+    font-weight: 700; display: block; margin-bottom: 6px;
+    font-size: 13px; letter-spacing: 0.5px;
+  }
+  .udn-box ol, .udn-box ul { margin: 8px 0 4px 22px; }
+  .udn-box.do      { background: #D5F5E3; border-color: #27AE60; }
+  .udn-box.do      .label { color: #1E8449; }
+  .udn-box.why     { background: #D6EAF8; border-color: #2E86C1; }
+  .udn-box.why     .label { color: #1A5276; }
+  .udn-box.mistake { background: #FEF9E7; border-color: #F1C40F; }
+  .udn-box.mistake .label { color: #7D6608; }
+  .udn-box.stop    { background: #FADBD8; border-color: #E74C3C; }
+  .udn-box.stop    .label { color: #922B21; }
+  .udn-box.breath  { background: #E8DAEF; border-color: #8E44AD; }
+  .udn-box.breath  .label { color: #6C3483; }
+
+  .scenario {
+    background: #fff;
+    border: 1px solid #d8dee5;
+    border-left: 5px solid #1a3a5c;
+    border-radius: 6px;
+    padding: 18px 22px;
+    margin: 18px 0;
+    font-size: 14px;
+  }
+  .scenario .from { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  table {
+    width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 13px;
+  }
+  th, td {
+    border: 1px solid #ccd4dc; padding: 9px 11px; text-align: left; vertical-align: top;
+  }
+  th { background: #1a3a5c; color: #fff; font-weight: 600; }
+  td.pts { white-space: nowrap; font-weight: 700; color: #1a3a5c; text-align: center; }
+  tr:nth-child(even) td { background: #f6f8fa; }
+
+  .timeline {
+    background: #eaf1f8; border: 1px solid #b9d2ea;
+    border-radius: 8px; padding: 18px 22px; margin: 18px 0;
+  }
+  .timeline table td { border: none; border-bottom: 1px solid #d3e2f0; padding: 8px 10px; }
+  .timeline table tr:last-child td { border-bottom: none; }
+  .timeline table td:first-child {
+    font-weight: 700; color: #1a3a5c; white-space: nowrap; width: 150px;
+  }
+  .timeline table tr:nth-child(even) td { background: transparent; }
+
+  .footer-note {
+    text-align: center; color: #8a97a4; font-size: 12px; margin-top: 30px;
+  }
+
+  @media print {
+    body { background: #fff; max-width: none; padding: 0.4in; font-size: 11pt; }
+    .udn-box, .scenario, .timeline, table { page-break-inside: avoid; }
+    .course-header { background: #1a3a5c !important;
+      -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    h2, h3 { page-break-after: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="course-header">
+  <div class="course-code">CAP2743C — POWER BI: DATA VISUALIZATION AND ANALYSIS</div>
+  <div class="doc-title">Capstone Final — AdventureWorks Executive Report</div>
+  <div class="meta">Capstone Project · Revealed Thursday, May 28, 2026 · Due Thursday, June 18, 2026</div>
+  <div class="points-flag">200 POINTS · 40% OF YOUR COURSE GRADE</div>
+</div>
+
+<div class="wrap">
+
+<h2>What This Document Is</h2>
+
+<p>This is your <strong>capstone brief</strong> — the single project that brings the whole course together. Read it once now, on reveal day. You do not start building today. You start building when the labs give you the pieces, and this brief is the picture of what those pieces add up to.</p>
+
+<div class="udn-box why">
+  <span class="label">💡 READ THIS FIRST — THE CAPSTONE IS NOT A NEW PROJECT</span>
+  The capstone is <strong>assembled from work you are already doing in the labs.</strong> Every lab from Week 3 onward builds a piece of it — a themed report, slicers, bookmarks, an analytics layer, a published report. By the time you reach Week 6, most of the capstone already exists across your saved <code>.pbix</code> files. The capstone is the day you bring the best of that work into <strong>one polished report</strong> and tell its story. It is not a cold start. There is a separate <strong>Capstone Checklist</strong> that shows you exactly which lab feeds which capstone piece — use it.
+</div>
+
+<h2>The Scenario</h2>
+
+<div class="scenario">
+  <div class="from">Memo — to the BI team</div>
+  <p style="margin-top:8px;"><strong>Subject: AdventureWorks year-end executive report</strong></p>
+  <p>The AdventureWorks leadership team meets at the end of the fiscal year to review company sales performance and decide where next year's investment goes — which product categories, which regions, which sales channels.</p>
+  <p>They do not want a spreadsheet. They do not want five separate reports. They want <strong>one Power BI report</strong> they can open in the meeting, read in a few minutes, and ask their own follow-up questions of while everyone is looking at the screen.</p>
+  <p>Build that report. Make it look like the conclusions matter, and make it answer back when someone in the room asks "what about bikes only?" or "what did Europe do?"</p>
+  <p style="margin-bottom:0;">You are the analyst presenting it.</p>
+</div>
+
+<p>That scenario is the whole assignment. Everything below is the specification for delivering it well.</p>
+
+<h2>What You Will Build</h2>
+
+<p>One Power BI report (<code>.pbix</code>), built on the <strong>AdventureWorks</strong> dataset you have used all term, with the following components. Each one maps to labs you will have already completed — see the Capstone Checklist for the exact mapping.</p>
+
+<table>
+  <tr>
+    <th>Component</th>
+    <th class="pts">Points</th>
+    <th>What it means</th>
+  </tr>
+  <tr>
+    <td><strong>Report structure &amp; data story</strong></td>
+    <td class="pts">35</td>
+    <td>A multi-page report with a clear narrative — an overview page that answers the headline question, and at least one detail page. The pages are ordered the way the story should be read.</td>
+  </tr>
+  <tr>
+    <td><strong>Visual selection</strong></td>
+    <td class="pts">35</td>
+    <td>At least six visuals across the report, each one chosen because it fits the question it answers — the right chart family for the job, not a chart picked at random. Includes at least one map and at least one card.</td>
+  </tr>
+  <tr>
+    <td><strong>Formatting &amp; branding</strong></td>
+    <td class="pts">30</td>
+    <td>A custom theme applied consistently. Conditional formatting used at least once where it earns its place. The report looks convincing, not default.</td>
+  </tr>
+  <tr>
+    <td><strong>Interactivity</strong></td>
+    <td class="pts">35</td>
+    <td>The report answers back: at least two slicers, deliberate editing interactions, and at least one of drill-down, drill-through, or a custom tooltip. The audience can explore without you.</td>
+  </tr>
+  <tr>
+    <td><strong>Accessibility</strong></td>
+    <td class="pts">20</td>
+    <td>The four checks pass: alt text on every visual, a sensible tab order, WCAG AA color contrast, and descriptive visual titles.</td>
+  </tr>
+  <tr>
+    <td><strong>Presentation or walkthrough</strong></td>
+    <td class="pts">45</td>
+    <td>You present the report — live in class, or as a recorded screen walkthrough. You explain the data story, show the interactivity working, and name the hardest part of building it.</td>
+  </tr>
+  <tr>
+    <td style="font-weight:700;">Total</td>
+    <td class="pts">200</td>
+    <td></td>
+  </tr>
+</table>
+
+<div class="udn-box why">
+  <span class="label">💡 WHY THESE SIX COMPONENTS</span>
+  Each component is one chapter of the course made visible. Structure and visual selection are Chapters 1–2. Formatting is Chapter 3. Interactivity is Chapter 4. Accessibility is Chapter 3 again. The presentation is you doing what an analyst actually does — standing next to the report and making it matter. If you did the labs, you have done all six already. The capstone just asks for them in one place, polished.
+</div>
+
+<h2>Two Ways to Present — You Choose</h2>
+
+<p>The presentation component (45 points) can be delivered two ways. <strong>Both are worth the same.</strong> There is no penalty for either choice — pick the one that lets you do your best work.</p>
+
+<table>
+  <tr><th>Option</th><th>What it looks like</th></tr>
+  <tr>
+    <td><strong>Live presentation</strong></td>
+    <td>You present your report to the class in Session 12 (Thursday, June 18). About 4–5 minutes. You walk the data story, click through the interactivity, and answer a question or two.</td>
+  </tr>
+  <tr>
+    <td><strong>Recorded walkthrough</strong></td>
+    <td>You record your screen (2–3 minutes) walking through the same thing — the data story, the interactivity, the hardest part. You submit the recording instead of presenting live. Any screen recorder works; the Power BI window plus your voice is all that is needed.</td>
+  </tr>
+</table>
+
+<div class="udn-box do">
+  <span class="label">✅ HOW TO DECIDE</span>
+  Presenting live is good practice for a real analyst job, and the room is friendly — it is your own class. But if presenting live would take cognitive energy away from building a strong report, record the walkthrough instead and put that energy into the work. The report is what is being graded. The presentation is how you narrate it. Choose the format that protects the report.
+</div>
+
+<h2>What You Submit</h2>
+
+<div class="udn-box do">
+  <span class="label">✅ SUBMIT THESE TO THE CANVAS CAPSTONE ASSIGNMENT</span>
+  <ol>
+    <li>Your finished report file, saved as <code>LastName_FirstName_Capstone.pbix</code>.</li>
+    <li><strong>Either</strong> — nothing else, if you are presenting live in Session 12; <strong>or</strong> — your recorded walkthrough video file, if you chose the recorded option.</li>
+    <li>A short written reflection (a few sentences — see below). This can be typed into the Canvas submission comment box or attached as a short document.</li>
+  </ol>
+</div>
+
+<h3>The Reflection</h3>
+
+<p>Along with the file, write a short reflection. Three questions, two or three sentences each:</p>
+
+<ol>
+  <li>What was the <strong>hardest part</strong> of building this report?</li>
+  <li>What would you <strong>do differently</strong> if you built it again?</li>
+  <li>What is the <strong>one thing you are most proud of</strong> in the finished report?</li>
+</ol>
+
+<p>The reflection is part of the presentation/walkthrough component. It is not a trick — there are no wrong answers. It is the analyst's habit of looking back at the work honestly.</p>
+
+<h2>Timeline</h2>
+
+<div class="timeline">
+  <table>
+    <tr><td>Thu May 28</td><td><strong>Capstone revealed</strong> (today). Read this brief. Save the Checklist. Do not start building yet — the labs are not all done.</td></tr>
+    <tr><td>Weeks 3–5</td><td>Keep doing the labs. Each one completes a Checklist item. Save every <code>.pbix</code> — those files are your capstone parts.</td></tr>
+    <tr><td>Tue Jun 16</td><td><strong>Capstone work time</strong> built into Session 11. Bring your lab files. This is when you assemble.</td></tr>
+    <tr><td>Thu Jun 18</td><td><strong>Capstone due.</strong> Session 12 is presentations and course close. Submit to Canvas.</td></tr>
+  </table>
+</div>
+
+<div class="udn-box mistake">
+  <span class="label">⚠️ THE ONE MISTAKE TO AVOID</span>
+  Do not ignore the capstone until June 16 and then try to build it all in one session. That is the exact panic this structure is designed to prevent. If you save your lab files and check off the Checklist as you go, Session 11 is an <em>assembly and polish</em> session — calm work, not a scramble. The students who struggle are the ones who let the lab files scatter and lose track. Keep them in one folder. Name them clearly.
+</div>
+
+<h2>Grading</h2>
+
+<p>The capstone is graded against the <strong>Capstone Rubric</strong> — a separate document with Excellent / Good / Needs Work tiers for each of the six components. Read the rubric early; it tells you precisely what "Excellent" looks like for every piece, so there are no surprises.</p>
+
+<ul>
+  <li><strong>Late policy:</strong> 48-hour grace period with no penalty. After 48 hours, 10% per day, capped at a 30% maximum reduction.</li>
+  <li><strong>Redo:</strong> if the capstone scores below the Good tier, you may revise and resubmit once, for up to the Good tier score — the same redo policy as the labs.</li>
+  <li><strong>Partial credit</strong> is always available. A report that is strong in four components and weak in two still earns the four. Build what you can build well.</li>
+</ul>
+
+<div class="udn-box breath">
+  <span class="label">💜 ONE LAST THING</span>
+  This is the last project of the last course in the certification. It can feel large because the point total is large. But look again at what it asks for — a themed report, some good visuals, slicers, the accessibility checks. You have built every one of those in a lab already, with a worksheet guiding you step by step. The capstone is not harder than the labs. It is the labs, gathered up and polished, with your name on the front. You are ready for it.
+</div>
+
+<p class="footer-note">CAP2743C — Power BI: Data Visualization and Analysis · Miami Dade College · Capstone Brief</p>
+
+</div><!-- end wrap -->
+
+</body>
+</html>

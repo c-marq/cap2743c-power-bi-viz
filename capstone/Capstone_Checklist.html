@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capstone Checklist — AdventureWorks Executive Report</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #222;
+    background: #f4f5f7;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 0 60px 0;
+  }
+  .course-header {
+    background: #1a3a5c;
+    color: #fff;
+    padding: 30px 40px 26px 40px;
+  }
+  .course-header .course-code {
+    font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.8;
+  }
+  .course-header .doc-title {
+    font-size: 27px; font-weight: 700; margin: 8px 0 4px 0;
+  }
+  .course-header .meta { font-size: 13px; opacity: 0.85; }
+
+  .name-bar {
+    background: #fff;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 16px 40px;
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  .name-bar label {
+    font-weight: 600; font-size: 12px; color: #666; display: block;
+    margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .name-bar input {
+    border: none; border-bottom: 2px solid #1a3a5c; font-size: 15px;
+    font-family: inherit; padding: 4px 2px; width: 260px; background: transparent;
+  }
+  .name-bar input:focus { outline: none; border-bottom-color: #C9A23A; }
+
+  .wrap { padding: 0 40px; }
+  h2 {
+    font-size: 21px; color: #1a3a5c; margin: 32px 0 12px 0;
+    padding-bottom: 6px; border-bottom: 2px solid #C9A23A;
+  }
+  h3 { font-size: 16px; color: #1a3a5c; margin: 24px 0 8px 0; }
+  p { margin: 10px 0; }
+  ul { margin: 10px 0 10px 24px; }
+  li { margin-bottom: 6px; }
+  code {
+    background: #eef0f3; font-family: 'Consolas','Courier New',monospace;
+    font-size: 13px; padding: 2px 6px; border-radius: 3px; color: #1a3a5c;
+  }
+  strong { color: #1a1a1a; }
+
+  .udn-box {
+    padding: 15px 19px; margin: 16px 0; border-radius: 6px;
+    border-left: 5px solid; font-size: 13.5px;
+  }
+  .udn-box .label {
+    font-weight: 700; display: block; margin-bottom: 6px;
+    font-size: 13px; letter-spacing: 0.5px;
+  }
+  .udn-box.why     { background: #D6EAF8; border-color: #2E86C1; }
+  .udn-box.why     .label { color: #1A5276; }
+  .udn-box.do      { background: #D5F5E3; border-color: #27AE60; }
+  .udn-box.do      .label { color: #1E8449; }
+  .udn-box.mistake { background: #FEF9E7; border-color: #F1C40F; }
+  .udn-box.mistake .label { color: #7D6608; }
+  .udn-box.breath  { background: #E8DAEF; border-color: #8E44AD; }
+  .udn-box.breath  .label { color: #6C3483; }
+
+  /* checklist groups */
+  .check-group {
+    background: #fff;
+    border: 1px solid #d8dee5;
+    border-radius: 8px;
+    margin: 16px 0;
+    overflow: hidden;
+  }
+  .check-group-head {
+    background: #34495e;
+    color: #fff;
+    padding: 10px 18px;
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .check-group-head .when {
+    float: right; font-weight: 400; font-size: 12px; opacity: 0.8;
+  }
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 18px;
+    border-bottom: 1px solid #eef0f3;
+  }
+  .check-item:last-child { border-bottom: none; }
+  .check-item input[type="checkbox"] {
+    width: 20px; height: 20px; margin-top: 1px; flex-shrink: 0; cursor: pointer;
+    accent-color: #27AE60;
+  }
+  .check-item .text { font-size: 13.5px; }
+  .check-item .text .feeds {
+    display: block; margin-top: 3px; font-size: 12px; color: #1A5276;
+  }
+  .check-item .text .feeds strong { color: #1A5276; }
+
+  /* progress note */
+  .progress-note {
+    background: #eaf1f8; border: 1px solid #b9d2ea; border-radius: 8px;
+    padding: 14px 20px; margin: 18px 0; font-size: 13.5px;
+  }
+
+  table {
+    width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px;
+  }
+  th, td {
+    border: 1px solid #ccd4dc; padding: 9px 11px; text-align: left; vertical-align: top;
+  }
+  th { background: #1a3a5c; color: #fff; font-weight: 600; }
+  tr:nth-child(even) td { background: #f6f8fa; }
+
+  .footer-note {
+    text-align: center; color: #8a97a4; font-size: 12px; margin-top: 30px;
+  }
+
+  @media print {
+    body { background: #fff; max-width: none; padding: 0.4in; font-size: 11pt; }
+    .udn-box, .check-group, .progress-note, table { page-break-inside: avoid; }
+    .course-header { background: #1a3a5c !important;
+      -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .check-group-head { background: #34495e !important;
+      -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    input { border: none; border-bottom: 1px solid #333; }
+    input[type="checkbox"] { border: 1px solid #333; }
+    h2, h3 { page-break-after: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="course-header">
+  <div class="course-code">CAP2743C — POWER BI: DATA VISUALIZATION AND ANALYSIS</div>
+  <div class="doc-title">Capstone Checklist — Your Build Map</div>
+  <div class="meta">Capstone Project · Track your pieces from Week 3 to submission</div>
+</div>
+
+<div class="name-bar">
+  <div>
+    <label for="student-name">Student Name</label>
+    <input type="text" id="student-name" placeholder="First Last">
+  </div>
+  <div>
+    <label for="cap-folder">My capstone folder location</label>
+    <input type="text" id="cap-folder" placeholder="e.g. Documents / CAP2743C / Capstone">
+  </div>
+</div>
+
+<div class="wrap">
+
+<h2>What This Checklist Is For</h2>
+
+<p>This is the document that keeps the capstone calm. The capstone is <strong>assembled from your labs</strong> — and this checklist shows you exactly which lab builds which capstone piece. Every time you finish a lab, you come back here, tick a box or two, and watch the capstone fill in on its own.</p>
+
+<div class="udn-box why">
+  <span class="label">💡 WHY A CHECKLIST AND NOT JUST THE BRIEF</span>
+  The Brief tells you <em>what</em> the capstone is. This Checklist tells you <em>where each piece comes from</em> and <em>when</em>. The capstone has six big components and that can feel like a lot to hold in your head. You should not hold it in your head. That is what this list is for — it is the working memory of the project, written down, so your attention goes to building instead of remembering.
+</div>
+
+<h2>Step Zero — Make a Capstone Folder Today</h2>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS — once, right now, on reveal day</span>
+  <ul>
+    <li>Make one folder on your computer named <code>CAP2743C_Capstone</code>.</li>
+    <li>Write where it is in the box at the top of this page, so you never lose it.</li>
+    <li>From now on, every time a lab tells you to save a <code>.pbix</code>, <strong>also save a copy into this folder.</strong></li>
+    <li>Name the copies clearly — <code>Lab04_themed.pbix</code>, <code>Lab05_interactive.pbix</code>, and so on.</li>
+  </ul>
+</div>
+
+<div class="udn-box mistake">
+  <span class="label">⚠️ THE MISTAKE THIS PREVENTS</span>
+  The students who scramble at the end are not the ones who found the capstone hard. They are the ones whose lab files ended up scattered across a Downloads folder, a Desktop, and a USB stick — and who spent Session 11 hunting for files instead of assembling them. One folder. One place. That single habit is the difference between a calm Session 11 and a stressful one.
+</div>
+
+<h2>The Build Map — Lab by Lab</h2>
+
+<p>Work through these in order, as the labs happen. Each item names the <strong>capstone component it feeds</strong>. Tick the box when the lab is done and its <code>.pbix</code> is saved in your capstone folder.</p>
+
+<!-- ===== WEEK 3 ===== -->
+<div class="check-group">
+  <div class="check-group-head">From Week 3 — Formatting &amp; Interactivity <span class="when">Labs 4 &amp; 5</span></div>
+  <label class="check-item">
+    <input type="checkbox">
+    <span class="text">Lab 4 done — a report with a <strong>custom theme</strong> applied and <strong>conditional formatting</strong> used.
+      <span class="feeds">▸ Feeds <strong>Component 3: Formatting &amp; Branding</strong></span></span>
+  </label>
+  <label class="check-item">
+    <input type="checkbox">
+    <span class="text">Lab 4 done — the <strong>four accessibility checks</strong> run on a report (alt text, tab order, contrast, titles).
+      <span class="feeds">▸ Feeds <strong>Component 5: Accessibility</strong></span></span>
+  </label>
+  <label class="check-item">
+    <input type="checkbox">
+    <span class="text">Lab 4 done — a <strong>small-multiples</strong> chart built (a strong visual choice for the capstone).
+      <span class="feeds">▸ Feeds <strong>Component 2: Visual Selection</strong></span></span>
+  </label>
+  <label class="check-item">
+    <input type="checkbox">
+    <span class="text">Lab 5 done — <strong>slicers</strong> built and <strong>synced</strong> across pages.
+      <span class="feeds">▸ Feeds <strong>Component 4: Interactivity</strong></span></span>
+  </label>
+  <label class="check-item">
+    <input type="checkbox">
+    <span class="text">Lab 5 done — <strong>editing interactions</strong> set deliberately, and a <strong>drill-down</strong> hierarchy built.
+      <span class="feeds">▸ Feeds <strong>Component 4: Interactivity</strong></span></span>
+  </label>
+</div>
+
+<!-- ===== WEEK 4 ===== -->
+<div class="check-group">
+  <div class="check-group-head">From Week 4 — Interactive Apps &amp; Analytics <span class="when">Labs 6 &amp; 7</span></div>
+  <label class="check-item">
+    <input type="checkbox">
+    <span class="text">Lab 6 done — <strong>bookmarks</strong> and <strong>navigation buttons</strong> built into a report.
+      <span class="feeds">▸ Feeds <strong>Component 1: Report Structure</strong> and <strong>Component 4: Interactivity</strong></span></span>
+  </label>
+  <label class="check-item">
+    <input type="checkbox">
+    <span class="text">Lab 7 done — an <strong>analytics layer</strong> added (reference lines, forecasting, or a narrative visual).
+      <span class="feeds">▸ Feeds <strong>Component 2: Visual Selection</strong></span></span>
+  </label>
+</div>
+
+<!-- ===== WEEK 5 ===== -->
+<div class="check-group">
+  <div class="check-group-head">From Week 5 — AI &amp; Distribution <span class="when">Labs 8 &amp; 9</span></div>
+  <label class="check-item">
+    <input type="checkbox">
+    <span class="text">Lab 8 done — comfortable building visuals and an <strong>AI / Copilot</strong> element (optional polish for the capstone).
+      <span class="feeds">▸ Optional extension for <strong>Component 2: Visual Selection</strong></span></span>
+  </label>
+  <label class="check-item">
+    <input type="checkbox">
+    <span class="text">Lab 9 done — practiced <strong>publishing</strong> a report and a <strong>mobile layout</strong> (good to know for showing the capstone).
+      <span class="feeds">▸ Supports <strong>Component 6: Presentation</strong></span></span>
+  </label>
+</div>
+
+<!-- ===== ASSEMBLY ===== -->
+<div class="check-group">
+  <div class="check-group-head">Assembly — Session 11, Tuesday June 16 <span class="when">Capstone work time</span></div>
+  <label class="check-item">
+    <input type="checkbox">
+    <span class="text">Started a fresh <code>.pbix</code> for the capstone, on the AdventureWorks dataset.</span>
+  </label>
+  <label class="check-item">
+    <input type="checkbox">
+    <span class="text">Built the <strong>overview page</strong> — the headline question, answered at a glance.
+      <span class="feeds">▸ Component 1: Report Structure</span></span>
+  </label>
+  <label class="check-item">
+    <input type="checkbox">
+    <span class="text">Built at least one <strong>detail page</strong>, named and ordered after the overview.
+      <span class="feeds">▸ Component 1: Report Structure</span></span>
+  </label>
+  <label class="check-item">
+    <input type="checkbox">
+    <span class="text">At least <strong>six visuals</strong> placed, including a <strong>map</strong> and a <strong>card</strong>, each fit to its question.
+      <span class="feeds">▸ Component 2: Visual Selection</span></span>
+  </label>
+  <label class="check-item">
+    <input type="checkbox">
+    <span class="text">A <strong>custom theme</strong> applied consistently; <strong>conditional formatting</strong> used at least once.
+      <span class="feeds">▸ Component 3: Formatting &amp; Branding</span></span>
+  </label>
+  <label class="check-item">
+    <input type="checkbox">
+    <span class="text">At least <strong>two slicers</strong>; interactions set deliberately; one <strong>drill-down, drill-through, or tooltip</strong> working.
+      <span class="feeds">▸ Component 4: Interactivity</span></span>
+  </label>
+  <label class="check-item">
+    <input type="checkbox">
+    <span class="text">All <strong>four accessibility checks</strong> run on the finished report.
+      <span class="feeds">▸ Component 5: Accessibility</span></span>
+  </label>
+</div>
+
+<!-- ===== SUBMISSION ===== -->
+<div class="check-group">
+  <div class="check-group-head">Before You Submit — Thursday June 18 <span class="when">Capstone due</span></div>
+  <label class="check-item">
+    <input type="checkbox">
+    <span class="text">File saved as <code>LastName_FirstName_Capstone.pbix</code>.</span>
+  </label>
+  <label class="check-item">
+    <input type="checkbox">
+    <span class="text">Chosen a presentation format — <strong>live in Session 12</strong>, or a <strong>recorded walkthrough</strong>.
+      <span class="feeds">▸ Component 6: Presentation</span></span>
+  </label>
+  <label class="check-item">
+    <input type="checkbox">
+    <span class="text">If recording: the <strong>walkthrough video</strong> is recorded and ready to upload.</span>
+  </label>
+  <label class="check-item">
+    <input type="checkbox">
+    <span class="text">The <strong>three-question reflection</strong> is written — hardest part, what you'd do differently, what you're proud of.
+      <span class="feeds">▸ Component 6: Presentation</span></span>
+  </label>
+  <label class="check-item">
+    <input type="checkbox">
+    <span class="text">Checked the finished report against the <strong>Capstone Rubric</strong> self-check list.</span>
+  </label>
+  <label class="check-item">
+    <input type="checkbox">
+    <span class="text">Submitted to the <strong>Canvas Capstone assignment</strong> — file, reflection, and recording (if recorded).</span>
+  </label>
+</div>
+
+<div class="progress-note">
+  <strong>How to read your progress:</strong> when every box in the Week 3, 4, and 5 groups is ticked, you arrive at Session 11 with every capstone piece already built somewhere in your lab files. Assembly day becomes exactly that — assembly, not building from nothing. That is the whole design.
+</div>
+
+<h2>The Six Components — Quick Reference</h2>
+
+<p>If you ever lose track of what the capstone is asking for, this is the short version. The full descriptions are in the <strong>Capstone Brief</strong>, and the grading tiers are in the <strong>Capstone Rubric</strong>.</p>
+
+<table>
+  <tr><th>Component</th><th style="text-align:center;">Points</th><th>One-line reminder</th></tr>
+  <tr><td>1. Report structure &amp; data story</td><td style="text-align:center;">35</td><td>Multi-page, ordered to be read</td></tr>
+  <tr><td>2. Visual selection</td><td style="text-align:center;">35</td><td>Six+ visuals, each fit to its question, with a map and a card</td></tr>
+  <tr><td>3. Formatting &amp; branding</td><td style="text-align:center;">30</td><td>Custom theme, conditional formatting, looks convincing</td></tr>
+  <tr><td>4. Interactivity</td><td style="text-align:center;">35</td><td>Slicers, interactions, one drill or tooltip</td></tr>
+  <tr><td>5. Accessibility</td><td style="text-align:center;">20</td><td>The four checks pass</td></tr>
+  <tr><td>6. Presentation or walkthrough</td><td style="text-align:center;">45</td><td>Tell the story, show it working, reflect honestly</td></tr>
+</table>
+
+<div class="udn-box breath">
+  <span class="label">💜 A NOTE FOR REVEAL DAY</span>
+  Two hundred points is a big number and it is meant to feel important — it is the last project of the certification. But this checklist exists so the number never feels like pressure. Every box on this page is small. You tick them one lab at a time, across three weeks. Do that, keep your files in one folder, and the capstone is built before you ever sit down to "build the capstone." That is the plan. Trust it and work the list.
+</div>
+
+<p class="footer-note">CAP2743C — Power BI: Data Visualization and Analysis · Miami Dade College · Capstone Checklist</p>
+
+</div><!-- end wrap -->
+
+</body>
+</html>
