@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab 6 — Bookmark-Driven Report App</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #222;
+    background: #f4f5f7;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 0 60px 0;
+  }
+
+  .course-header {
+    background: #1a3a5c;
+    color: #fff;
+    padding: 28px 40px 24px 40px;
+  }
+  .course-header .course-code {
+    font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.8;
+  }
+  .course-header .lab-title {
+    font-size: 26px; font-weight: 700; margin: 6px 0 4px 0;
+  }
+  .course-header .meta { font-size: 13px; opacity: 0.85; }
+
+  .name-bar {
+    background: #fff;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 16px 40px;
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  .name-bar label {
+    font-weight: 600; font-size: 12px; color: #666; display: block;
+    margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .name-bar input {
+    border: none; border-bottom: 2px solid #1a3a5c; font-size: 15px;
+    font-family: inherit; padding: 4px 2px; width: 260px; background: transparent;
+  }
+  .name-bar input:focus { outline: none; border-bottom-color: #C9A23A; }
+
+  .wrap { padding: 0 40px; }
+
+  h2 {
+    font-size: 20px; color: #1a3a5c; margin: 30px 0 12px 0;
+    padding-bottom: 6px; border-bottom: 2px solid #C9A23A;
+  }
+  h3 { font-size: 16px; color: #1a3a5c; margin: 22px 0 8px 0; }
+  p { margin: 10px 0; }
+  ol, ul { margin: 10px 0 10px 26px; }
+  li { margin-bottom: 6px; }
+  code {
+    background: #eef0f3; font-family: 'Consolas','Courier New',monospace;
+    font-size: 13px; padding: 2px 6px; border-radius: 3px; color: #1a3a5c;
+  }
+  hr { border: none; border-top: 1px solid #ddd; margin: 26px 0; }
+  strong { color: #1a1a1a; }
+
+  .launch-pad {
+    background: #eaf1f8; border: 1px solid #b9d2ea;
+    border-radius: 8px; padding: 18px 22px; margin: 22px 0;
+  }
+  .launch-pad h3 { margin-top: 0; color: #1a3a5c; }
+  .launch-pad table { width: 100%; border-collapse: collapse; }
+  .launch-pad td {
+    padding: 7px 10px; vertical-align: top;
+    border-bottom: 1px solid #d3e2f0; font-size: 13.5px;
+  }
+  .launch-pad td:first-child {
+    font-weight: 700; color: #1a3a5c; width: 165px; white-space: nowrap;
+  }
+  .launch-pad tr:last-child td { border-bottom: none; }
+
+  .phase-banner {
+    background: #34495e; color: #fff; padding: 10px 20px; border-radius: 6px;
+    margin: 30px 0 14px 0; font-size: 15px; font-weight: 700; letter-spacing: 0.5px;
+  }
+  .phase-banner span { opacity: 0.7; font-weight: 400; font-size: 13px; }
+
+  .udn-box {
+    padding: 14px 18px; margin: 14px 0; border-radius: 6px;
+    border-left: 5px solid; font-size: 13.5px;
+  }
+  .udn-box .label {
+    font-weight: 700; display: block; margin-bottom: 6px;
+    font-size: 13px; letter-spacing: 0.5px;
+  }
+  .udn-box ol, .udn-box ul { margin: 8px 0 4px 22px; }
+  .udn-box.do      { background: #D5F5E3; border-color: #27AE60; }
+  .udn-box.do      .label { color: #1E8449; }
+  .udn-box.why     { background: #D6EAF8; border-color: #2E86C1; }
+  .udn-box.why     .label { color: #1A5276; }
+  .udn-box.mistake { background: #FEF9E7; border-color: #F1C40F; }
+  .udn-box.mistake .label { color: #7D6608; }
+  .udn-box.stop    { background: #FADBD8; border-color: #E74C3C; }
+  .udn-box.stop    .label { color: #922B21; }
+  .udn-box.breath  { background: #E8DAEF; border-color: #8E44AD; }
+  .udn-box.breath  .label { color: #6C3483; }
+
+  .paste-label {
+    font-weight: 600; font-size: 13px; color: #495057;
+    display: block; margin: 16px 0 4px 0;
+  }
+  .paste-zone {
+    border: 2px dashed #b0bcc8; border-radius: 8px; min-height: 150px;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center; cursor: pointer; position: relative;
+    background: #fafbfc; transition: border-color 0.15s, background 0.15s;
+    padding: 12px;
+  }
+  .paste-zone:focus { outline: none; border-color: #2E86C1; background: #f0f7fd; }
+  .paste-zone.drag-over { border-color: #2E86C1; background: #eaf3fb; }
+  .paste-zone.has-image { border-style: solid; border-color: #27AE60; background: #fff; }
+  .paste-zone .placeholder { color: #8a97a4; font-size: 13px; }
+  .paste-zone .placeholder .icon { font-size: 26px; display: block; margin-bottom: 6px; }
+  .paste-zone img { max-width: 100%; border-radius: 4px; display: block; }
+  .remove-btn {
+    position: absolute; top: 6px; right: 6px; background: #E74C3C; color: #fff;
+    border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer;
+    font-size: 13px; line-height: 1; display: none;
+  }
+  .paste-zone.has-image .remove-btn { display: block; }
+
+  .response-label {
+    font-weight: 600; font-size: 13px; color: #495057;
+    display: block; margin: 16px 0 4px 0;
+  }
+  textarea {
+    width: 100%; border: 1px solid #c4ccd4; border-radius: 6px;
+    padding: 10px 12px; font-family: inherit; font-size: 13.5px;
+    line-height: 1.5; min-height: 80px; resize: vertical; background: #fff;
+  }
+  textarea:focus { outline: none; border-color: #2E86C1; }
+
+  .rubric-mini { margin: 20px 0; }
+  .rubric-mini table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .rubric-mini th, .rubric-mini td {
+    border: 1px solid #ccd4dc; padding: 8px 10px; text-align: left; vertical-align: top;
+  }
+  .rubric-mini th { background: #1a3a5c; color: #fff; font-weight: 600; }
+  .rubric-mini .pts { white-space: nowrap; font-weight: 700; color: #1a3a5c; }
+  .rubric-excellent td { background: #eafaf0; }
+  .rubric-good td { background: #fef9e7; }
+  .rubric-needs td { background: #fdedec; }
+
+  .submit-section {
+    background: #1a3a5c; color: #fff; border-radius: 8px;
+    padding: 20px 24px; margin: 30px 0 0 0;
+  }
+  .submit-section h3 { color: #fff; margin-top: 0; }
+  .submit-section ol { margin-left: 22px; }
+  .submit-section li { margin-bottom: 7px; }
+  .submit-section code { background: rgba(255,255,255,0.16); color: #ffe9b0; }
+
+  .footer-note {
+    text-align: center; color: #8a97a4; font-size: 12px; margin-top: 28px;
+  }
+
+  @media print {
+    body { background: #fff; max-width: none; padding: 0.4in; font-size: 11pt; }
+    .remove-btn { display: none !important; }
+    .paste-zone {
+      border: 1px solid #999; min-height: auto; padding: 8px;
+      cursor: default; page-break-inside: avoid;
+    }
+    .paste-zone .placeholder { display: none; }
+    .paste-zone:not(.has-image)::after {
+      content: "[no screenshot pasted]"; color: #c0392b; font-style: italic;
+    }
+    .udn-box, .phase-banner, .launch-pad, .rubric-mini, .submit-section {
+      page-break-inside: avoid;
+    }
+    .course-header, .phase-banner, .submit-section {
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+    .course-header { background: #1a3a5c !important; }
+    .phase-banner { background: #34495e !important; }
+    .submit-section { background: #1a3a5c !important; }
+    textarea { border: 1px solid #999; background: #fff; min-height: 60px; }
+    input { border: none; border-bottom: 1px solid #333; }
+    h2, h3 { page-break-after: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="course-header">
+  <div class="course-code">CAP2743C — POWER BI: DATA VISUALIZATION AND ANALYSIS</div>
+  <div class="lab-title">Lab 6 — Bookmark-Driven Report App</div>
+  <div class="meta">In-Class Lab · Session 7 · Tuesday, June 2, 2026 · 15 points · Chapter 4</div>
+</div>
+
+<div class="name-bar">
+  <div>
+    <label for="student-name">Student Name</label>
+    <input type="text" id="student-name" name="student-name" placeholder="First Last">
+  </div>
+  <div>
+    <label for="lab-date">Date</label>
+    <input type="text" id="lab-date" name="lab-date" placeholder="June 2, 2026">
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="launch-pad">
+  <h3>🚀 Launch Pad — Read This First</h3>
+  <table>
+    <tr><td>What you're building</td><td>You will turn a plain report into a small <strong>app</strong> — two saved views the audience switches between with buttons, plus a drill-through detail page they reach with a right-click.</td></tr>
+    <tr><td>Tool</td><td>Power BI Desktop, with the AdventureWorks model loaded.</td></tr>
+    <tr><td>Starter file</td><td>Open the Lab 6 starter <code>.pbix</code> from the Canvas assignment page. It has the AdventureWorks model and one page already built with visuals.</td></tr>
+    <tr><td>Phases</td><td>4 phases — Setup → Build → Configure → Verify.</td></tr>
+    <tr><td>Time</td><td>About 75 minutes. Block B work — steady pace, no rush.</td></tr>
+    <tr><td>What "done" looks like</td><td>A saved <code>.pbix</code> with two bookmarks, two navigation buttons that switch between them, and a working drill-through detail page — plus this worksheet completed.</td></tr>
+    <tr><td>How to submit</td><td>Save your <code>.pbix</code> as <code>LastName_FirstName_Lab06.pbix</code>. Submit it <strong>plus this worksheet as a PDF</strong> to the Canvas assignment.</td></tr>
+  </table>
+</div>
+
+<div class="udn-box why">
+  <span class="label">💡 WHAT THIS LAB IS REALLY ABOUT</span>
+  In the demo you watched a report become an app on a Reseller page. This lab is the same set of moves on <strong>different fields</strong> — a Sales Territory bookmark app, a Customer drill-through page. A report app means one file serves several audiences: an overview state, a focused state, and a detail page — all in one <code>.pbix</code>, no copies to maintain.
+</div>
+
+<!-- ============ PHASE 1 ============ -->
+<div class="phase-banner">PHASE 1 — SETUP <span>· about 10 minutes</span></div>
+
+<h3>Step 1 — Open the starter file and tour the page</h3>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS</span>
+  <ol>
+    <li>Open Power BI Desktop.</li>
+    <li>Open the Lab 6 starter <code>.pbix</code> you downloaded from Canvas.</li>
+    <li>You should land in <strong>Report View</strong>. Look at the <strong>page tab</strong> at the bottom — there is one page named <strong>Sales Overview</strong>.</li>
+    <li>The Sales Overview page has three visuals: a <strong>column chart</strong> of Sales Amount by Sales Territory Country, a <strong>line chart</strong> of Sales Amount by Date, and a <strong>table</strong> of Sales Amount by Region.</li>
+  </ol>
+</div>
+
+<div class="udn-box stop">
+  <span class="label">🛑 STOP AND CHECK — Where Am I?</span>
+  Confirm you can see the <strong>Sales Overview</strong> page tab at the bottom and all three visuals on it. Every step in this lab tells you which page to be on. If the visuals are missing, re-download the starter from Canvas.
+</div>
+
+<!-- ============ PHASE 2 ============ -->
+<div class="phase-banner">PHASE 2 — BUILD <span>· about 20 minutes</span></div>
+
+<h3>Step 2 — Build the drill-through detail page</h3>
+
+<div class="udn-box why">
+  <span class="label">💡 WHY ARE WE DOING THIS?</span>
+  <strong>Drill-through</strong> lets the audience right-click a data point and jump to a separate page built to show detail about exactly that point. You build the destination page <em>first</em>, then wire the trip to it. It is the opposite order from how it feels — but it is the order that works.
+</div>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS — build the detail page</span>
+  <ol>
+    <li>At the bottom of the screen, click the <strong>+</strong> next to the page tabs to add a new page. Double-click its name and rename it <strong>Customer Detail</strong>.</li>
+    <li>On the new page, add a <strong>Bar chart</strong>: drag <code>Customer</code> to the axis and <code>Sales Amount</code> to values.</li>
+    <li>Add a <strong>Card</strong>: drag <code>Sales Amount</code> into it.</li>
+    <li>Add a <strong>Table</strong>: <code>Customer</code> and <code>Sales Amount</code>.</li>
+  </ol>
+</div>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS — wire the Drill through well</span>
+  <ol>
+    <li>Still on the <strong>Customer Detail</strong> page, click an empty part of the canvas so no visual is selected.</li>
+    <li>In the Visualizations pane, find the field wells for the <em>page itself</em>. One is the <strong>Drill through</strong> well.</li>
+    <li>From the Data pane, drag <code>Sales Territory → Country</code> into the <strong>Drill through</strong> well.</li>
+    <li>Power BI automatically adds a <strong>Back</strong> button to the corner of the page.</li>
+  </ol>
+</div>
+
+<div class="udn-box mistake">
+  <span class="label">⚠️ COMMON MISTAKE</span>
+  The <strong>Drill through</strong> well is a different well from the page filter section — they sit near each other. If your detail page later shows every country instead of just one, the field went into the wrong well. Confirm <code>Country</code> is in <strong>Drill through</strong>.
+</div>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS — take the trip</span>
+  <ol>
+    <li>Go back to the <strong>Sales Overview</strong> page.</li>
+    <li><strong>Right-click</strong> any country's bar in the column chart.</li>
+    <li>In the menu, choose <strong>Drill through → Customer Detail</strong>.</li>
+    <li>The Customer Detail page opens, every visual filtered to that one country.</li>
+  </ol>
+</div>
+
+<div class="udn-box stop">
+  <span class="label">🛑 STOP AND CHECK</span>
+  Arrive at Customer Detail by right-clicking one country — for example, <strong>United States</strong>. Every visual on the detail page should now show that country only, and you should see the <strong>Back</strong> button in the corner. Click Back to confirm it returns you to Sales Overview.
+</div>
+
+<label class="paste-label">📸 Paste a screenshot of your Customer Detail page (after drilling through to one country):</label>
+<div class="paste-zone" id="paste-drill" tabindex="0">
+  <button class="remove-btn" title="Remove image">✕</button>
+  <div class="placeholder"><span class="icon">📋</span>Click here, then press <strong>Ctrl + V</strong> to paste your screenshot</div>
+</div>
+
+<div class="udn-box breath">
+  <span class="label">💜 TAKE A BREATH</span>
+  You built a drill-through — one of the most useful interactions in Power BI. Stand up, stretch, look away from the screen. The next phase builds the bookmark app: two saved views and the buttons that switch between them. You are past the trickiest part.
+</div>
+
+<!-- ============ PHASE 3 ============ -->
+<div class="phase-banner">PHASE 3 — CONFIGURE <span>· about 25 minutes</span></div>
+
+<h3>Step 3 — Create two bookmarks</h3>
+
+<div class="udn-box why">
+  <span class="label">💡 WHY ARE WE DOING THIS?</span>
+  A <strong>bookmark</strong> is a saved snapshot of the report's state — including which visuals are shown or hidden. With two bookmarks you can give one page two looks: a full <em>Overview</em> state and a focused state with the detail table hidden. The audience switches between them — one page, two views.
+</div>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS — open the panes you need</span>
+  <ol>
+    <li>Go to the <strong>Sales Overview</strong> page.</li>
+    <li>Click <strong>View</strong> tab → <strong>Show panes</strong> group → <strong>Selection</strong>. The Selection pane opens — it lists every visual with an eye icon.</li>
+    <li>Click <strong>View</strong> tab → <strong>Show panes</strong> group → <strong>Bookmarks</strong>. The Bookmarks pane opens.</li>
+  </ol>
+</div>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS — capture the first bookmark</span>
+  <ol>
+    <li>Make sure all three visuals are visible (all eye icons "open" in the Selection pane). This is the full <strong>Overview</strong> state.</li>
+    <li>In the Bookmarks pane, click <strong>Add</strong>.</li>
+    <li>Double-click the new bookmark's name and rename it <strong>Overview</strong>.</li>
+  </ol>
+</div>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS — capture the second bookmark</span>
+  <ol>
+    <li>In the <strong>Selection pane</strong>, click the eye icon next to the <strong>table</strong> visual to <strong>hide</strong> it. The table disappears from the canvas.</li>
+    <li>In the Bookmarks pane, click <strong>Add</strong> again.</li>
+    <li>Rename this new bookmark <strong>Focus</strong>.</li>
+  </ol>
+</div>
+
+<div class="udn-box mistake">
+  <span class="label">⚠️ COMMON MISTAKE</span>
+  A bookmark captures the state <strong>at the moment you click Add</strong> — not before. If you click Add <em>first</em> and hide the table <em>after</em>, the bookmark will not hide the table. Always set the page the way you want it, <em>then</em> click Add. (If you got the order wrong, right-click the bookmark and choose <strong>Update</strong>.)
+</div>
+
+<div class="udn-box stop">
+  <span class="label">🛑 STOP AND CHECK</span>
+  In the Bookmarks pane, click <strong>Overview</strong> — all three visuals appear. Click <strong>Focus</strong> — the table disappears. If both bookmarks show the same thing, one was captured at the wrong moment; fix it with right-click → Update.
+</div>
+
+<h3>Step 4 — Add navigation buttons</h3>
+
+<div class="udn-box why">
+  <span class="label">💡 WHY ARE WE DOING THIS?</span>
+  Bookmarks are saved states, but the audience needs a way to <em>trigger</em> them. A <strong>navigation button</strong> is what they press. Two buttons — one per bookmark — turn your two saved states into a report the audience can actually drive.
+</div>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS — add the first button</span>
+  <ol>
+    <li>On the Sales Overview page, click <strong>Insert</strong> tab → <strong>Buttons</strong> → <strong>Blank</strong>. A button appears on the canvas.</li>
+    <li>With the button selected, open the <strong>Format pane</strong> → find <strong>Action</strong> → turn it <strong>On</strong>.</li>
+    <li>Set <strong>Type</strong> to <strong>Bookmark</strong>, and set <strong>Bookmark</strong> to <strong>Overview</strong>.</li>
+    <li>In the Format pane, find the button's <strong>Text</strong> setting and type <code>Overview</code> so the button is labeled.</li>
+  </ol>
+</div>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS — add the second button</span>
+  <ol>
+    <li>Insert tab → Buttons → Blank again, to add a second button.</li>
+    <li>Format pane → Action → On → Type <strong>Bookmark</strong> → Bookmark <strong>Focus</strong>.</li>
+    <li>Set its Text to <code>Focus</code>.</li>
+    <li>Position the two buttons side by side near the top of the page.</li>
+  </ol>
+</div>
+
+<div class="udn-box mistake">
+  <span class="label">⚠️ COMMON MISTAKE</span>
+  In Power BI <strong>Desktop</strong>, a button does not fire on a normal click — that just selects the button for editing. To test it, <strong>hold Ctrl and click</strong> the button. (When the report is published, the audience just clicks normally.)
+</div>
+
+<div class="udn-box stop">
+  <span class="label">🛑 STOP AND CHECK</span>
+  Hold <strong>Ctrl</strong> and click your <strong>Focus</strong> button — the table should disappear. Ctrl-click <strong>Overview</strong> — the table comes back. Your report now switches between two views with buttons. That is a report app.
+</div>
+
+<label class="paste-label">📸 Paste a screenshot of your Sales Overview page with both navigation buttons visible:</label>
+<div class="paste-zone" id="paste-app" tabindex="0">
+  <button class="remove-btn" title="Remove image">✕</button>
+  <div class="placeholder"><span class="icon">📋</span>Click here, then press <strong>Ctrl + V</strong> to paste your screenshot</div>
+</div>
+
+<!-- ============ PHASE 4 ============ -->
+<div class="phase-banner">PHASE 4 — VERIFY <span>· about 20 minutes</span></div>
+
+<h3>Step 5 — Final check and written response</h3>
+
+<div class="udn-box stop">
+  <span class="label">🛑 STOP AND CHECK — Your finished report app</span>
+  Before you answer the questions, confirm your report has all of this:
+  <br><br>
+  ✅ A <strong>Customer Detail</strong> page with <code>Country</code> in the <strong>Drill through</strong> well<br>
+  ✅ Drill-through works — right-clicking a country on Sales Overview opens the detail page filtered to it<br>
+  ✅ Two <strong>bookmarks</strong> — Overview (all visuals) and Focus (table hidden)<br>
+  ✅ Two <strong>navigation buttons</strong> wired to those bookmarks<br>
+  ✅ Ctrl-clicking the buttons switches the page between the two states
+</div>
+
+<label class="paste-label">📸 Paste a screenshot showing the Focus state active (table hidden, buttons visible):</label>
+<div class="paste-zone" id="paste-focus" tabindex="0">
+  <button class="remove-btn" title="Remove image">✕</button>
+  <div class="placeholder"><span class="icon">📋</span>Click here, then press <strong>Ctrl + V</strong> to paste your screenshot</div>
+</div>
+
+<h3>Written Response</h3>
+
+<div class="udn-box why">
+  <span class="label">💡 WHY THESE QUESTIONS?</span>
+  The screenshots show <em>that</em> you did the work. These two questions show that you understood <em>why</em>. Answer in your own words — two or three sentences each is plenty.
+</div>
+
+<label class="response-label">✍️ Question 1 — Chapter 4 covers two similarly-named features: <strong>drill-down</strong> and <strong>drill-through</strong>. In your own words, explain the difference — what does each one do, and how is "same page" versus "new page" the key to telling them apart?</label>
+<textarea placeholder="Write 2-3 sentences here..."></textarea>
+
+<label class="response-label">✍️ Question 2 — A bookmark captures the state of the report "at the moment you click Add." Explain what would go wrong if you clicked <strong>Add</strong> first and <em>then</em> hid the table — and what the Selection pane has to do with making a bookmark hide a visual.</label>
+<textarea placeholder="Write 2-3 sentences here..."></textarea>
+
+<!-- ===== MINI RUBRIC ===== -->
+<h2>How This Lab Is Graded</h2>
+<div class="rubric-mini">
+  <table>
+    <tr>
+      <th>Tier</th>
+      <th class="pts">Points</th>
+      <th>What it looks like</th>
+    </tr>
+    <tr class="rubric-excellent">
+      <td><strong>Excellent</strong></td>
+      <td class="pts">13–15</td>
+      <td>Customer Detail page built with <code>Country</code> correctly in the Drill through well. Drill-through works. Two bookmarks capture distinct states (Overview and Focus). Two navigation buttons wired correctly and switch the page. Both written responses are accurate and in the student's own words. All screenshots pasted.</td>
+    </tr>
+    <tr class="rubric-good">
+      <td><strong>Good</strong></td>
+      <td class="pts">9–12</td>
+      <td>Drill-through and bookmarks mostly correct. Buttons built with a minor wiring error, or one bookmark captured imperfectly. Written responses show understanding with minor gaps. Most screenshots pasted.</td>
+    </tr>
+    <tr class="rubric-needs">
+      <td><strong>Needs Work</strong></td>
+      <td class="pts">0–8</td>
+      <td>Drill-through missing or non-functional. Bookmarks missing or identical. Buttons not wired to bookmarks. Written responses missing or do not address the question. <strong>Eligible for redo</strong> — revise and resubmit once for up to the Good tier.</td>
+    </tr>
+  </table>
+  <p style="font-size:12px; color:#666; margin-top:8px;"><strong>Late policy:</strong> 48-hour grace period, no penalty. After 48 hours: 10% per day, capped at 30% maximum reduction. <strong>Redo:</strong> if you score below Good, you may revise and resubmit once for up to 12 points.</p>
+</div>
+
+<!-- ===== SUBMIT ===== -->
+<div class="submit-section">
+  <h3>📤 How to Submit</h3>
+  <ol>
+    <li>In Power BI Desktop, press <strong>Ctrl + S</strong> to save.</li>
+    <li>Use <strong>File → Save As</strong> and name your file <code>LastName_FirstName_Lab06.pbix</code>.</li>
+    <li>In this worksheet, fill in your name and date at the top, and confirm every paste zone has a screenshot and every textarea has an answer.</li>
+    <li>Print this worksheet to PDF: <strong>Ctrl + P</strong> → Destination <strong>Save as PDF</strong> → Save.</li>
+    <li>Go to the <strong>Lab 6</strong> assignment in Canvas. Upload <strong>two files</strong>: your <code>.pbix</code> and your worksheet PDF.</li>
+  </ol>
+</div>
+
+<p class="footer-note">CAP2743C — Power BI: Data Visualization and Analysis · Miami Dade College · Lab 6 · Week 4</p>
+
+</div><!-- end wrap -->
+
+<script>
+document.querySelectorAll('.paste-zone').forEach(function(zone) {
+  function setImage(dataUrl) {
+    var existing = zone.querySelector('img');
+    if (existing) existing.remove();
+    var img = document.createElement('img');
+    img.src = dataUrl;
+    zone.appendChild(img);
+    zone.classList.add('has-image');
+  }
+  zone.addEventListener('paste', function(e) {
+    var items = e.clipboardData.items;
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image') !== -1) {
+        e.preventDefault();
+        var reader = new FileReader();
+        reader.onload = function(ev) { setImage(ev.target.result); };
+        reader.readAsDataURL(items[i].getAsFile());
+        break;
+      }
+    }
+  });
+  zone.addEventListener('click', function(e) {
+    if (!e.target.classList.contains('remove-btn')) zone.focus();
+  });
+  zone.querySelector('.remove-btn').addEventListener('click', function(e) {
+    e.stopPropagation();
+    var img = zone.querySelector('img');
+    if (img) img.remove();
+    zone.classList.remove('has-image');
+  });
+  zone.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    zone.classList.add('drag-over');
+  });
+  zone.addEventListener('dragleave', function() {
+    zone.classList.remove('drag-over');
+  });
+  zone.addEventListener('drop', function(e) {
+    e.preventDefault();
+    zone.classList.remove('drag-over');
+    var files = e.dataTransfer.files;
+    if (files.length > 0 && files[0].type.indexOf('image') !== -1) {
+      var reader = new FileReader();
+      reader.onload = function(ev) { setImage(ev.target.result); };
+      reader.readAsDataURL(files[0]);
+    }
+  });
+});
+</script>
+
+</body>
+</html>

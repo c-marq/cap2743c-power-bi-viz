@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab 7 — Analytics &amp; Narrative Layer</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #222;
+    background: #f4f5f7;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 0 60px 0;
+  }
+
+  .course-header {
+    background: #1a3a5c;
+    color: #fff;
+    padding: 28px 40px 24px 40px;
+  }
+  .course-header .course-code {
+    font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.8;
+  }
+  .course-header .lab-title {
+    font-size: 26px; font-weight: 700; margin: 6px 0 4px 0;
+  }
+  .course-header .meta { font-size: 13px; opacity: 0.85; }
+
+  .name-bar {
+    background: #fff;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 16px 40px;
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  .name-bar label {
+    font-weight: 600; font-size: 12px; color: #666; display: block;
+    margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .name-bar input {
+    border: none; border-bottom: 2px solid #1a3a5c; font-size: 15px;
+    font-family: inherit; padding: 4px 2px; width: 260px; background: transparent;
+  }
+  .name-bar input:focus { outline: none; border-bottom-color: #C9A23A; }
+
+  .wrap { padding: 0 40px; }
+
+  h2 {
+    font-size: 20px; color: #1a3a5c; margin: 30px 0 12px 0;
+    padding-bottom: 6px; border-bottom: 2px solid #C9A23A;
+  }
+  h3 { font-size: 16px; color: #1a3a5c; margin: 22px 0 8px 0; }
+  p { margin: 10px 0; }
+  ol, ul { margin: 10px 0 10px 26px; }
+  li { margin-bottom: 6px; }
+  code {
+    background: #eef0f3; font-family: 'Consolas','Courier New',monospace;
+    font-size: 13px; padding: 2px 6px; border-radius: 3px; color: #1a3a5c;
+  }
+  hr { border: none; border-top: 1px solid #ddd; margin: 26px 0; }
+  strong { color: #1a1a1a; }
+
+  .launch-pad {
+    background: #eaf1f8; border: 1px solid #b9d2ea;
+    border-radius: 8px; padding: 18px 22px; margin: 22px 0;
+  }
+  .launch-pad h3 { margin-top: 0; color: #1a3a5c; }
+  .launch-pad table { width: 100%; border-collapse: collapse; }
+  .launch-pad td {
+    padding: 7px 10px; vertical-align: top;
+    border-bottom: 1px solid #d3e2f0; font-size: 13.5px;
+  }
+  .launch-pad td:first-child {
+    font-weight: 700; color: #1a3a5c; width: 165px; white-space: nowrap;
+  }
+  .launch-pad tr:last-child td { border-bottom: none; }
+
+  .phase-banner {
+    background: #34495e; color: #fff; padding: 10px 20px; border-radius: 6px;
+    margin: 30px 0 14px 0; font-size: 15px; font-weight: 700; letter-spacing: 0.5px;
+  }
+  .phase-banner span { opacity: 0.7; font-weight: 400; font-size: 13px; }
+
+  .udn-box {
+    padding: 14px 18px; margin: 14px 0; border-radius: 6px;
+    border-left: 5px solid; font-size: 13.5px;
+  }
+  .udn-box .label {
+    font-weight: 700; display: block; margin-bottom: 6px;
+    font-size: 13px; letter-spacing: 0.5px;
+  }
+  .udn-box ol, .udn-box ul { margin: 8px 0 4px 22px; }
+  .udn-box.do      { background: #D5F5E3; border-color: #27AE60; }
+  .udn-box.do      .label { color: #1E8449; }
+  .udn-box.why     { background: #D6EAF8; border-color: #2E86C1; }
+  .udn-box.why     .label { color: #1A5276; }
+  .udn-box.mistake { background: #FEF9E7; border-color: #F1C40F; }
+  .udn-box.mistake .label { color: #7D6608; }
+  .udn-box.stop    { background: #FADBD8; border-color: #E74C3C; }
+  .udn-box.stop    .label { color: #922B21; }
+  .udn-box.breath  { background: #E8DAEF; border-color: #8E44AD; }
+  .udn-box.breath  .label { color: #6C3483; }
+
+  /* code/formula block */
+  .formula {
+    background: #1e2a3a; color: #e8edf2; font-family: 'Consolas','Courier New',monospace;
+    font-size: 13.5px; padding: 12px 16px; border-radius: 6px; margin: 12px 0;
+    line-height: 1.5; overflow-x: auto;
+  }
+  .formula .fn { color: #d9b34a; }
+  .formula .ref { color: #7fc9a8; }
+
+  .paste-label {
+    font-weight: 600; font-size: 13px; color: #495057;
+    display: block; margin: 16px 0 4px 0;
+  }
+  .paste-zone {
+    border: 2px dashed #b0bcc8; border-radius: 8px; min-height: 150px;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center; cursor: pointer; position: relative;
+    background: #fafbfc; transition: border-color 0.15s, background 0.15s;
+    padding: 12px;
+  }
+  .paste-zone:focus { outline: none; border-color: #2E86C1; background: #f0f7fd; }
+  .paste-zone.drag-over { border-color: #2E86C1; background: #eaf3fb; }
+  .paste-zone.has-image { border-style: solid; border-color: #27AE60; background: #fff; }
+  .paste-zone .placeholder { color: #8a97a4; font-size: 13px; }
+  .paste-zone .placeholder .icon { font-size: 26px; display: block; margin-bottom: 6px; }
+  .paste-zone img { max-width: 100%; border-radius: 4px; display: block; }
+  .remove-btn {
+    position: absolute; top: 6px; right: 6px; background: #E74C3C; color: #fff;
+    border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer;
+    font-size: 13px; line-height: 1; display: none;
+  }
+  .paste-zone.has-image .remove-btn { display: block; }
+
+  .response-label {
+    font-weight: 600; font-size: 13px; color: #495057;
+    display: block; margin: 16px 0 4px 0;
+  }
+  textarea {
+    width: 100%; border: 1px solid #c4ccd4; border-radius: 6px;
+    padding: 10px 12px; font-family: inherit; font-size: 13.5px;
+    line-height: 1.5; min-height: 80px; resize: vertical; background: #fff;
+  }
+  textarea:focus { outline: none; border-color: #2E86C1; }
+
+  .rubric-mini { margin: 20px 0; }
+  .rubric-mini table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .rubric-mini th, .rubric-mini td {
+    border: 1px solid #ccd4dc; padding: 8px 10px; text-align: left; vertical-align: top;
+  }
+  .rubric-mini th { background: #1a3a5c; color: #fff; font-weight: 600; }
+  .rubric-mini .pts { white-space: nowrap; font-weight: 700; color: #1a3a5c; }
+  .rubric-excellent td { background: #eafaf0; }
+  .rubric-good td { background: #fef9e7; }
+  .rubric-needs td { background: #fdedec; }
+
+  .submit-section {
+    background: #1a3a5c; color: #fff; border-radius: 8px;
+    padding: 20px 24px; margin: 30px 0 0 0;
+  }
+  .submit-section h3 { color: #fff; margin-top: 0; }
+  .submit-section ol { margin-left: 22px; }
+  .submit-section li { margin-bottom: 7px; }
+  .submit-section code { background: rgba(255,255,255,0.16); color: #ffe9b0; }
+
+  .footer-note {
+    text-align: center; color: #8a97a4; font-size: 12px; margin-top: 28px;
+  }
+
+  @media print {
+    body { background: #fff; max-width: none; padding: 0.4in; font-size: 11pt; }
+    .remove-btn { display: none !important; }
+    .paste-zone {
+      border: 1px solid #999; min-height: auto; padding: 8px;
+      cursor: default; page-break-inside: avoid;
+    }
+    .paste-zone .placeholder { display: none; }
+    .paste-zone:not(.has-image)::after {
+      content: "[no screenshot pasted]"; color: #c0392b; font-style: italic;
+    }
+    .udn-box, .phase-banner, .launch-pad, .rubric-mini, .submit-section, .formula {
+      page-break-inside: avoid;
+    }
+    .course-header, .phase-banner, .submit-section, .formula {
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+    .course-header { background: #1a3a5c !important; }
+    .phase-banner { background: #34495e !important; }
+    .submit-section { background: #1a3a5c !important; }
+    .formula { background: #1e2a3a !important; }
+    textarea { border: 1px solid #999; background: #fff; min-height: 60px; }
+    input { border: none; border-bottom: 1px solid #333; }
+    h2, h3 { page-break-after: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="course-header">
+  <div class="course-code">CAP2743C — POWER BI: DATA VISUALIZATION AND ANALYSIS</div>
+  <div class="lab-title">Lab 7 — Analytics &amp; Narrative Layer</div>
+  <div class="meta">In-Class Lab · Session 8 · Thursday, June 4, 2026 · 15 points · Chapter 5</div>
+</div>
+
+<div class="name-bar">
+  <div>
+    <label for="student-name">Student Name</label>
+    <input type="text" id="student-name" name="student-name" placeholder="First Last">
+  </div>
+  <div>
+    <label for="lab-date">Date</label>
+    <input type="text" id="lab-date" name="lab-date" placeholder="June 4, 2026">
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="launch-pad">
+  <h3>🚀 Launch Pad — Read This First</h3>
+  <table>
+    <tr><td>What you're building</td><td>You will add the <strong>analytics layer</strong> to a report — have Power BI explain a change, rank the top resellers, project a forecast, write a visual calculation, and let the report draft its own summary.</td></tr>
+    <tr><td>Tool</td><td>Power BI Desktop, with the AdventureWorks model loaded.</td></tr>
+    <tr><td>Starter file</td><td>Open the Lab 7 starter <code>.pbix</code> from the Canvas assignment page. It has the AdventureWorks model and one page with charts already built.</td></tr>
+    <tr><td>Phases</td><td>4 phases — Setup → Explain → Build → Verify.</td></tr>
+    <tr><td>Time</td><td>About 75 minutes. Block B work — this lab covers the heaviest chapter, so take it steady.</td></tr>
+    <tr><td>What "done" looks like</td><td>A saved <code>.pbix</code> with an Analyze result, a Top N reseller chart, a forecast, a visual calculation, and a Smart Narrative — plus this worksheet completed.</td></tr>
+    <tr><td>How to submit</td><td>Save your <code>.pbix</code> as <code>LastName_FirstName_Lab07.pbix</code>. Submit it <strong>plus this worksheet as a PDF</strong> to the Canvas assignment.</td></tr>
+  </table>
+</div>
+
+<div class="udn-box why">
+  <span class="label">💡 WHAT THIS LAB IS REALLY ABOUT</span>
+  A report that only <em>shows</em> leaves three questions unanswered — <strong>is this normal, why did it change, what comes next.</strong> This lab adds the layer that answers them. In the demo you watched these moves on Sales-by-Month fields; here you do them yourself on <strong>different fields</strong> — Sales by Quarter, Reseller rankings. This is the heaviest chapter of the course, so the lab gives you four phases and an extra breath. Steady pace wins.
+</div>
+
+<!-- ============ PHASE 1 ============ -->
+<div class="phase-banner">PHASE 1 — SETUP <span>· about 8 minutes</span></div>
+
+<h3>Step 1 — Open the starter file</h3>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS</span>
+  <ol>
+    <li>Open Power BI Desktop.</li>
+    <li>Open the Lab 7 starter <code>.pbix</code> you downloaded from Canvas.</li>
+    <li>You should land in <strong>Report View</strong> on a page named <strong>Analytics</strong>. It has three visuals already built: a <strong>column chart</strong> of Sales Amount by Quarter, a <strong>line chart</strong> of Sales Amount by Date, and a <strong>bar chart</strong> of Sales Amount by Reseller.</li>
+  </ol>
+</div>
+
+<div class="udn-box stop">
+  <span class="label">🛑 STOP AND CHECK — Where Am I?</span>
+  Confirm you can see the <strong>Analytics</strong> page with all three visuals. You will work on each of them in turn. If the visuals are missing, re-download the starter from Canvas.
+</div>
+
+<!-- ============ PHASE 2 ============ -->
+<div class="phase-banner">PHASE 2 — EXPLAIN <span>· about 18 minutes</span></div>
+
+<h3>Step 2 — Use the Analyze feature to explain a change</h3>
+
+<div class="udn-box why">
+  <span class="label">💡 WHY ARE WE DOING THIS?</span>
+  The <strong>Analyze feature</strong> answers <em>why did it change.</em> Right-click a data point and Power BI runs a machine-learning pass across the related tables and ranks the factors that moved the number. It does the first pass of an investigation that used to take days.
+</div>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS</span>
+  <ol>
+    <li>On the <strong>column chart</strong> of Sales Amount by Quarter, look for a quarter where the value <strong>dropped</strong> compared to the quarter before it.</li>
+    <li><strong>Right-click</strong> that quarter's column.</li>
+    <li>In the menu, hover <strong>Analyze</strong>, then choose <strong>Explain the decrease</strong>.</li>
+    <li>A pop-up opens with candidate explanations drawn as charts. Page through them with the arrows.</li>
+    <li>When a chart looks like a real explanation, click the small <strong>+</strong> in its corner to add that chart to your report page.</li>
+  </ol>
+</div>
+
+<div class="udn-box mistake">
+  <span class="label">⚠️ COMMON MISTAKE</span>
+  Treating the Analyze result as <strong>proven cause</strong>. Analyze reports statistical <em>contribution</em> — what the drop <em>coincided with</em>, not why it happened. It narrows the search; it does not close the case. In your written response you will be asked to explain this distinction, so notice it now.
+</div>
+
+<div class="udn-box stop">
+  <span class="label">🛑 STOP AND CHECK</span>
+  You should now have an extra chart on your page — the explanation chart you added with the <strong>+</strong>. If the Analyze pop-up said it could not find an explanation, pick a different quarter with a clearer drop and try again.
+</div>
+
+<label class="paste-label">📸 Paste a screenshot of the explanation chart the Analyze feature added to your page:</label>
+<div class="paste-zone" id="paste-analyze" tabindex="0">
+  <button class="remove-btn" title="Remove image">✕</button>
+  <div class="placeholder"><span class="icon">📋</span>Click here, then press <strong>Ctrl + V</strong> to paste your screenshot</div>
+</div>
+
+<h3>Step 3 — Add a Top N filter to the reseller chart</h3>
+
+<div class="udn-box why">
+  <span class="label">💡 WHY ARE WE DOING THIS?</span>
+  A reseller bar chart with every reseller on it is unreadable. A <strong>Top N filter</strong> keeps only the highest few — the top 10 — and re-ranks itself whenever a slicer changes. This is the fast, code-free route to a ranking that lives on one visual.
+</div>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS</span>
+  <ol>
+    <li>Click the <strong>bar chart</strong> of Sales Amount by Reseller to select it.</li>
+    <li>Open the <strong>Filter pane</strong> on the right. Find the <strong>Reseller</strong> field in the <em>Filters on this visual</em> section and expand it.</li>
+    <li>Change the <strong>Filter type</strong> dropdown to <strong>Top N</strong>.</li>
+    <li>Set <em>Show items</em> to <strong>Top</strong> and type <strong>10</strong>.</li>
+    <li>Drag <code>Sales Amount</code> from the Data pane into the <strong>By value</strong> well.</li>
+    <li>Click <strong>Apply filter</strong>.</li>
+  </ol>
+</div>
+
+<div class="udn-box stop">
+  <span class="label">🛑 STOP AND CHECK</span>
+  Your reseller bar chart should now show exactly <strong>10 bars</strong> — the ten highest resellers by Sales Amount. If it still shows every reseller, confirm the Filter type is set to Top N and that you clicked <strong>Apply filter</strong>.
+</div>
+
+<div class="udn-box breath">
+  <span class="label">💜 TAKE A BREATH</span>
+  Two analytics features done — you had Power BI explain a change and rank the top resellers. This is the heaviest chapter in the course, so this break is real: stand up, look away from the screen, get some water. The next phase has the forecast and the visual calculation — the new exam skill. You are doing well.
+</div>
+
+<!-- ============ PHASE 3 ============ -->
+<div class="phase-banner">PHASE 3 — BUILD <span>· about 28 minutes</span></div>
+
+<h3>Step 4 — Add a forecast to the line chart</h3>
+
+<div class="udn-box why">
+  <span class="label">💡 WHY ARE WE DOING THIS?</span>
+  A <strong>forecast</strong> answers <em>what comes next.</em> The Analytics pane projects a line chart forward — and draws a shaded <strong>confidence band</strong> around the projection. That band is the honest part: like a hurricane forecast cone, it widens the further out it reaches, because uncertainty grows with distance.
+</div>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS</span>
+  <ol>
+    <li>Click the <strong>line chart</strong> of Sales Amount by Date to select it.</li>
+    <li>In the Visualizations pane, click the third tab — the <strong>Analytics</strong> pane (its icon is a magnifying glass over a line).</li>
+    <li>Find the <strong>Forecast</strong> section and click <strong>Add</strong>.</li>
+    <li>Set <em>Forecast length</em> to <strong>3</strong> months and <em>Confidence interval</em> to <strong>95%</strong>.</li>
+    <li>The chart extends with a projected line inside a shaded band. <strong>Leave the band visible</strong> — do not turn it off.</li>
+  </ol>
+</div>
+
+<div class="udn-box mistake">
+  <span class="label">⚠️ COMMON MISTAKE</span>
+  Turning off the confidence band to make the forecast "look more confident." That is backwards — removing the band makes the report <em>overstate</em> how sure it is. A forecast is always presented <strong>with</strong> its band. Keep it.
+</div>
+
+<label class="paste-label">📸 Paste a screenshot of your line chart with the forecast and its confidence band:</label>
+<div class="paste-zone" id="paste-forecast" tabindex="0">
+  <button class="remove-btn" title="Remove image">✕</button>
+  <div class="placeholder"><span class="icon">📋</span>Click here, then press <strong>Ctrl + V</strong> to paste your screenshot</div>
+</div>
+
+<h3>Step 5 — Write a visual calculation</h3>
+
+<div class="udn-box why">
+  <span class="label">💡 WHY ARE WE DOING THIS?</span>
+  A <strong>visual calculation</strong> is DAX written directly <em>on a visual</em> — computed on the visual's own grid of rows, after the visual is drawn. Because it can see the rows in order, it can do row-aware math a measure finds awkward: a running total down the rows is a single line. This is one of the two skills new for the January 2026 PL-300 exam.
+</div>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS — add a table, then the calculation</span>
+  <ol>
+    <li>Click an empty part of the canvas, then add a <strong>Table</strong> visual from the Visualizations pane.</li>
+    <li>Drag <code>Date</code> (set to the <strong>Quarter</strong> level) and <code>Sales Amount</code> into the table.</li>
+    <li>With the table selected, go to the <strong>Home</strong> tab on the ribbon and click <strong>New visual calculation</strong>. An edit screen opens, showing the table's data as a grid with a formula bar above it.</li>
+    <li>In the formula bar, type this exactly:</li>
+  </ol>
+  <div class="formula"><span class="ref">Running Total</span> = <span class="fn">RUNNINGSUM</span>([Sales Amount])</div>
+  <ol start="5">
+    <li>Confirm the formula, then close the edit screen. The table now carries a <strong>Running Total</strong> column that accumulates down the quarters.</li>
+  </ol>
+</div>
+
+<div class="udn-box mistake">
+  <span class="label">⚠️ COMMON MISTAKE</span>
+  Expecting the visual calculation to show up in the Data pane so other visuals can use it. It will not. A visual calculation belongs to the <em>one visual</em> it was written on — no other visual can use it, no measure can reference it. If a result needs to travel, it has to be a measure instead.
+</div>
+
+<label class="paste-label">📸 Paste a screenshot of your table showing the Running Total column:</label>
+<div class="paste-zone" id="paste-viscalc" tabindex="0">
+  <button class="remove-btn" title="Remove image">✕</button>
+  <div class="placeholder"><span class="icon">📋</span>Click here, then press <strong>Ctrl + V</strong> to paste your screenshot</div>
+</div>
+
+<h3>Step 6 — Add a Smart Narrative</h3>
+
+<div class="udn-box why">
+  <span class="label">💡 WHY ARE WE DOING THIS?</span>
+  A chart shows a number; it does not say a sentence. <strong>Smart Narrative</strong> is a built-in visual that writes a plain-prose summary of the page — totals, trends, highs and lows — with values that update when the page is filtered. It drafts the summary; you, the analyst, review and own it.
+</div>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS</span>
+  <ol>
+    <li>Click an empty part of the canvas so no visual is selected.</li>
+    <li>In the Visualizations pane, find and click the <strong>Smart narrative</strong> icon (it shows text lines or a speech bubble).</li>
+    <li>Power BI generates a text box summarizing the current page.</li>
+    <li><strong>Read every sentence.</strong> Click into the text — it is editable. If any sentence is inaccurate or unclear, rewrite it in your own words.</li>
+  </ol>
+</div>
+
+<div class="udn-box mistake">
+  <span class="label">⚠️ COMMON MISTAKE</span>
+  Trusting the generated text without reading it. Auto-written narratives can phrase a guess as confidently as a fact — especially the word <em>because</em>. The rule is simple: the narrative drafts, the analyst reviews and signs. Read every sentence before you accept it.
+</div>
+
+<!-- ============ PHASE 4 ============ -->
+<div class="phase-banner">PHASE 4 — VERIFY <span>· about 16 minutes</span></div>
+
+<h3>Step 7 — Final check and written response</h3>
+
+<div class="udn-box stop">
+  <span class="label">🛑 STOP AND CHECK — Your finished report</span>
+  Before you answer the questions, confirm your report has all of this:
+  <br><br>
+  ✅ An <strong>Analyze</strong> explanation chart added to the page<br>
+  ✅ The reseller bar chart filtered to <strong>Top 10</strong> by Sales Amount<br>
+  ✅ A <strong>forecast</strong> on the line chart, with its confidence band visible<br>
+  ✅ A <strong>table with a Running Total</strong> visual calculation<br>
+  ✅ A <strong>Smart Narrative</strong> text box, read and corrected if needed
+</div>
+
+<label class="paste-label">📸 Paste a screenshot of your full finished Analytics page:</label>
+<div class="paste-zone" id="paste-final" tabindex="0">
+  <button class="remove-btn" title="Remove image">✕</button>
+  <div class="placeholder"><span class="icon">📋</span>Click here, then press <strong>Ctrl + V</strong> to paste your screenshot</div>
+</div>
+
+<h3>Written Response</h3>
+
+<div class="udn-box why">
+  <span class="label">💡 WHY THESE QUESTIONS?</span>
+  The screenshots show <em>that</em> you did the work. These two questions show that you understood <em>why</em>. Answer in your own words — two or three sentences each is plenty.
+</div>
+
+<label class="response-label">✍️ Question 1 — The Analyze feature gave you a chart "explaining" the quarter's decrease. In your own words, why is it more accurate to say Analyze found a <strong>contributing factor</strong> than to say it found the <strong>cause</strong>? What does a human still have to do after Analyze runs?</label>
+<textarea placeholder="Write 2-3 sentences here..."></textarea>
+
+<label class="response-label">✍️ Question 2 — You wrote a Running Total as a <strong>visual calculation</strong>. The chapter says the deciding question between a visual calculation and a measure is: "does the result need to leave the visual?" Explain what that means — and give one example of a result that <em>should</em> be a measure instead.</label>
+<textarea placeholder="Write 2-3 sentences here..."></textarea>
+
+<!-- ===== MINI RUBRIC ===== -->
+<h2>How This Lab Is Graded</h2>
+<div class="rubric-mini">
+  <table>
+    <tr>
+      <th>Tier</th>
+      <th class="pts">Points</th>
+      <th>What it looks like</th>
+    </tr>
+    <tr class="rubric-excellent">
+      <td><strong>Excellent</strong></td>
+      <td class="pts">13–15</td>
+      <td>Analyze explanation chart added. Reseller chart correctly filtered to Top 10. Forecast added with confidence band visible. Running Total visual calculation written correctly. Smart Narrative added and reviewed. Both written responses are accurate and in the student's own words. All screenshots pasted.</td>
+    </tr>
+    <tr class="rubric-good">
+      <td><strong>Good</strong></td>
+      <td class="pts">9–12</td>
+      <td>Most analytics features built correctly. One feature has a minor error — Top N count wrong, band turned off, or visual calculation slightly off. Written responses show understanding with minor gaps. Most screenshots pasted.</td>
+    </tr>
+    <tr class="rubric-needs">
+      <td><strong>Needs Work</strong></td>
+      <td class="pts">0–8</td>
+      <td>Multiple analytics features missing or incorrect. Visual calculation missing or not functional. Written responses missing or do not address the question. <strong>Eligible for redo</strong> — revise and resubmit once for up to the Good tier.</td>
+    </tr>
+  </table>
+  <p style="font-size:12px; color:#666; margin-top:8px;"><strong>Late policy:</strong> 48-hour grace period, no penalty. After 48 hours: 10% per day, capped at 30% maximum reduction. <strong>Redo:</strong> if you score below Good, you may revise and resubmit once for up to 12 points.</p>
+</div>
+
+<!-- ===== SUBMIT ===== -->
+<div class="submit-section">
+  <h3>📤 How to Submit</h3>
+  <ol>
+    <li>In Power BI Desktop, press <strong>Ctrl + S</strong> to save.</li>
+    <li>Use <strong>File → Save As</strong> and name your file <code>LastName_FirstName_Lab07.pbix</code>.</li>
+    <li>In this worksheet, fill in your name and date at the top, and confirm every paste zone has a screenshot and every textarea has an answer.</li>
+    <li>Print this worksheet to PDF: <strong>Ctrl + P</strong> → Destination <strong>Save as PDF</strong> → Save.</li>
+    <li>Go to the <strong>Lab 7</strong> assignment in Canvas. Upload <strong>two files</strong>: your <code>.pbix</code> and your worksheet PDF.</li>
+  </ol>
+</div>
+
+<p class="footer-note">CAP2743C — Power BI: Data Visualization and Analysis · Miami Dade College · Lab 7 · Week 4</p>
+
+</div><!-- end wrap -->
+
+<script>
+document.querySelectorAll('.paste-zone').forEach(function(zone) {
+  function setImage(dataUrl) {
+    var existing = zone.querySelector('img');
+    if (existing) existing.remove();
+    var img = document.createElement('img');
+    img.src = dataUrl;
+    zone.appendChild(img);
+    zone.classList.add('has-image');
+  }
+  zone.addEventListener('paste', function(e) {
+    var items = e.clipboardData.items;
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image') !== -1) {
+        e.preventDefault();
+        var reader = new FileReader();
+        reader.onload = function(ev) { setImage(ev.target.result); };
+        reader.readAsDataURL(items[i].getAsFile());
+        break;
+      }
+    }
+  });
+  zone.addEventListener('click', function(e) {
+    if (!e.target.classList.contains('remove-btn')) zone.focus();
+  });
+  zone.querySelector('.remove-btn').addEventListener('click', function(e) {
+    e.stopPropagation();
+    var img = zone.querySelector('img');
+    if (img) img.remove();
+    zone.classList.remove('has-image');
+  });
+  zone.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    zone.classList.add('drag-over');
+  });
+  zone.addEventListener('dragleave', function() {
+    zone.classList.remove('drag-over');
+  });
+  zone.addEventListener('drop', function(e) {
+    e.preventDefault();
+    zone.classList.remove('drag-over');
+    var files = e.dataTransfer.files;
+    if (files.length > 0 && files[0].type.indexOf('image') !== -1) {
+      var reader = new FileReader();
+      reader.onload = function(ev) { setImage(ev.target.result); };
+      reader.readAsDataURL(files[0]);
+    }
+  });
+});
+</script>
+
+</body>
+</html>
