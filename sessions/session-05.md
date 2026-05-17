@@ -23,7 +23,7 @@ This session runs in two blocks with a long break between them.
 
 ## Before class
 
-- [ ] Read **Chapter 3: Formatting & Accessibility** — [open the chapter]([https://github.com/c-marq/cap2743c-power-bi-viz/blob/main/textbook/ch03-formatting-accessibility.md](https://c-marq.github.io/power-bi-data-viz-pl300/ch03-formatting-conditional-custom-visuals/))
+- [ ] Read **Chapter 3: Formatting & Accessibility** — [open the chapter]([https://github.com/c-marq/cap2743c-power-bi-viz/blob/main/textbook/ch03-formatting-accessibility.md](https://c-marq.github.io/power-bi-data-viz-pl300/ch03-formatting-conditional-custom-visuals/)
 - [ ] Have Power BI Desktop open and ready
 - [ ] Bring your `.pbix` file from the previous session
 
