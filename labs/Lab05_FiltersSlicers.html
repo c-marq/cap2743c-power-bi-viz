@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab 5 — Filters &amp; Slicers</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #222;
+    background: #f4f5f7;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 0 60px 0;
+  }
+
+  /* ---------- HEADER ---------- */
+  .course-header {
+    background: #1a3a5c;
+    color: #fff;
+    padding: 28px 40px 24px 40px;
+  }
+  .course-header .course-code {
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    opacity: 0.8;
+  }
+  .course-header .lab-title {
+    font-size: 26px;
+    font-weight: 700;
+    margin: 6px 0 4px 0;
+  }
+  .course-header .meta { font-size: 13px; opacity: 0.85; }
+
+  /* ---------- NAME BAR ---------- */
+  .name-bar {
+    background: #fff;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 16px 40px;
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  .name-bar label {
+    font-weight: 600;
+    font-size: 12px;
+    color: #666;
+    display: block;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .name-bar input {
+    border: none;
+    border-bottom: 2px solid #1a3a5c;
+    font-size: 15px;
+    font-family: inherit;
+    padding: 4px 2px;
+    width: 260px;
+    background: transparent;
+  }
+  .name-bar input:focus { outline: none; border-bottom-color: #C9A23A; }
+
+  /* ---------- CONTENT WRAP ---------- */
+  .wrap { padding: 0 40px; }
+
+  h2 {
+    font-size: 20px;
+    color: #1a3a5c;
+    margin: 30px 0 12px 0;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #C9A23A;
+  }
+  h3 { font-size: 16px; color: #1a3a5c; margin: 22px 0 8px 0; }
+  p { margin: 10px 0; }
+  ol, ul { margin: 10px 0 10px 26px; }
+  li { margin-bottom: 6px; }
+  code {
+    background: #eef0f3;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 13px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: #1a3a5c;
+  }
+  hr { border: none; border-top: 1px solid #ddd; margin: 26px 0; }
+  strong { color: #1a1a1a; }
+
+  /* ---------- LAUNCH PAD ---------- */
+  .launch-pad {
+    background: #eaf1f8;
+    border: 1px solid #b9d2ea;
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin: 22px 0;
+  }
+  .launch-pad h3 { margin-top: 0; color: #1a3a5c; }
+  .launch-pad table { width: 100%; border-collapse: collapse; }
+  .launch-pad td {
+    padding: 7px 10px;
+    vertical-align: top;
+    border-bottom: 1px solid #d3e2f0;
+    font-size: 13.5px;
+  }
+  .launch-pad td:first-child {
+    font-weight: 700;
+    color: #1a3a5c;
+    width: 165px;
+    white-space: nowrap;
+  }
+  .launch-pad tr:last-child td { border-bottom: none; }
+
+  /* ---------- PHASE BANNER ---------- */
+  .phase-banner {
+    background: #34495e;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 6px;
+    margin: 30px 0 14px 0;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .phase-banner span { opacity: 0.7; font-weight: 400; font-size: 13px; }
+
+  /* ---------- UDN BOXES ---------- */
+  .udn-box {
+    padding: 14px 18px;
+    margin: 14px 0;
+    border-radius: 6px;
+    border-left: 5px solid;
+    font-size: 13.5px;
+  }
+  .udn-box .label {
+    font-weight: 700;
+    display: block;
+    margin-bottom: 6px;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+  }
+  .udn-box ol, .udn-box ul { margin: 8px 0 4px 22px; }
+  .udn-box.do      { background: #D5F5E3; border-color: #27AE60; }
+  .udn-box.do      .label { color: #1E8449; }
+  .udn-box.why     { background: #D6EAF8; border-color: #2E86C1; }
+  .udn-box.why     .label { color: #1A5276; }
+  .udn-box.mistake { background: #FEF9E7; border-color: #F1C40F; }
+  .udn-box.mistake .label { color: #7D6608; }
+  .udn-box.stop    { background: #FADBD8; border-color: #E74C3C; }
+  .udn-box.stop    .label { color: #922B21; }
+  .udn-box.breath  { background: #E8DAEF; border-color: #8E44AD; }
+  .udn-box.breath  .label { color: #6C3483; }
+
+  /* ---------- PASTE ZONE ---------- */
+  .paste-label {
+    font-weight: 600;
+    font-size: 13px;
+    color: #495057;
+    display: block;
+    margin: 16px 0 4px 0;
+  }
+  .paste-zone {
+    border: 2px dashed #b0bcc8;
+    border-radius: 8px;
+    min-height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    background: #fafbfc;
+    transition: border-color 0.15s, background 0.15s;
+    padding: 12px;
+  }
+  .paste-zone:focus { outline: none; border-color: #2E86C1; background: #f0f7fd; }
+  .paste-zone.drag-over { border-color: #2E86C1; background: #eaf3fb; }
+  .paste-zone.has-image { border-style: solid; border-color: #27AE60; background: #fff; }
+  .paste-zone .placeholder { color: #8a97a4; font-size: 13px; }
+  .paste-zone .placeholder .icon { font-size: 26px; display: block; margin-bottom: 6px; }
+  .paste-zone img { max-width: 100%; border-radius: 4px; display: block; }
+  .remove-btn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: #E74C3C;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    font-size: 13px;
+    line-height: 1;
+    display: none;
+  }
+  .paste-zone.has-image .remove-btn { display: block; }
+
+  /* ---------- TEXTAREA ---------- */
+  .response-label {
+    font-weight: 600;
+    font-size: 13px;
+    color: #495057;
+    display: block;
+    margin: 16px 0 4px 0;
+  }
+  textarea {
+    width: 100%;
+    border: 1px solid #c4ccd4;
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-family: inherit;
+    font-size: 13.5px;
+    line-height: 1.5;
+    min-height: 80px;
+    resize: vertical;
+    background: #fff;
+  }
+  textarea:focus { outline: none; border-color: #2E86C1; }
+
+  /* ---------- MINI RUBRIC ---------- */
+  .rubric-mini { margin: 20px 0; }
+  .rubric-mini table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .rubric-mini th, .rubric-mini td {
+    border: 1px solid #ccd4dc;
+    padding: 8px 10px;
+    text-align: left;
+    vertical-align: top;
+  }
+  .rubric-mini th { background: #1a3a5c; color: #fff; font-weight: 600; }
+  .rubric-mini .pts { white-space: nowrap; font-weight: 700; color: #1a3a5c; }
+  .rubric-excellent td { background: #eafaf0; }
+  .rubric-good td { background: #fef9e7; }
+  .rubric-needs td { background: #fdedec; }
+
+  /* ---------- SUBMIT SECTION ---------- */
+  .submit-section {
+    background: #1a3a5c;
+    color: #fff;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 30px 0 0 0;
+  }
+  .submit-section h3 { color: #fff; margin-top: 0; }
+  .submit-section ol { margin-left: 22px; }
+  .submit-section li { margin-bottom: 7px; }
+  .submit-section code { background: rgba(255,255,255,0.16); color: #ffe9b0; }
+
+  .footer-note {
+    text-align: center;
+    color: #8a97a4;
+    font-size: 12px;
+    margin-top: 28px;
+  }
+
+  /* ---------- PRINT ---------- */
+  @media print {
+    body { background: #fff; max-width: none; padding: 0.4in; font-size: 11pt; }
+    .remove-btn { display: none !important; }
+    .paste-zone {
+      border: 1px solid #999;
+      min-height: auto;
+      padding: 8px;
+      cursor: default;
+      page-break-inside: avoid;
+    }
+    .paste-zone .placeholder { display: none; }
+    .paste-zone:not(.has-image)::after {
+      content: "[no screenshot pasted]";
+      color: #c0392b;
+      font-style: italic;
+    }
+    .udn-box, .phase-banner, .launch-pad, .rubric-mini, .submit-section {
+      page-break-inside: avoid;
+    }
+    .course-header, .phase-banner, .submit-section {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .course-header { background: #1a3a5c !important; }
+    .phase-banner { background: #34495e !important; }
+    .submit-section { background: #1a3a5c !important; }
+    textarea { border: 1px solid #999; background: #fff; min-height: 60px; }
+    input { border: none; border-bottom: 1px solid #333; }
+    h2, h3 { page-break-after: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="course-header">
+  <div class="course-code">CAP2743C — POWER BI: DATA VISUALIZATION AND ANALYSIS</div>
+  <div class="lab-title">Lab 5 — Filters &amp; Slicers</div>
+  <div class="meta">In-Class Lab · Session 6 · Thursday, May 28, 2026 · 15 points · Chapter 4</div>
+</div>
+
+<!-- ===== NAME / DATE ===== -->
+<div class="name-bar">
+  <div>
+    <label for="student-name">Student Name</label>
+    <input type="text" id="student-name" name="student-name" placeholder="First Last">
+  </div>
+  <div>
+    <label for="lab-date">Date</label>
+    <input type="text" id="lab-date" name="lab-date" placeholder="May 28, 2026">
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- ===== LAUNCH PAD ===== -->
+<div class="launch-pad">
+  <h3>🚀 Launch Pad — Read This First</h3>
+  <table>
+    <tr><td>What you're building</td><td>You will turn a static two-page report into one the audience can <strong>question</strong> — a report filter, two slicers synced across pages, a deliberate editing interaction, and a drill-down through a hierarchy.</td></tr>
+    <tr><td>Tool</td><td>Power BI Desktop, with the AdventureWorks model loaded.</td></tr>
+    <tr><td>Starter file</td><td>Open the Lab 5 starter <code>.pbix</code> from the Canvas assignment page. It has the AdventureWorks model and two pages already built with visuals.</td></tr>
+    <tr><td>Phases</td><td>4 phases — Setup → Build → Configure → Verify.</td></tr>
+    <tr><td>Time</td><td>About 75 minutes. Block B work — steady pace, no rush.</td></tr>
+    <tr><td>What "done" looks like</td><td>A saved <code>.pbix</code> with a report filter, two synced slicers, one visual set to a deliberate interaction, and a working drill-down — plus this worksheet completed.</td></tr>
+    <tr><td>How to submit</td><td>Save your <code>.pbix</code> as <code>LastName_FirstName_Lab05.pbix</code>. Submit it <strong>plus this worksheet as a PDF</strong> to the Canvas assignment.</td></tr>
+  </table>
+</div>
+
+<div class="udn-box why">
+  <span class="label">💡 WHAT THIS LAB IS REALLY ABOUT</span>
+  In the demo you watched a static report learn to answer back — on a Customer chart and a Year slicer. This lab is the same set of moves on <strong>different fields</strong> — Product Category and Country slicers, a Sales Territory drill-down. A static report tells the audience one story. An interactive report lets them ask their own follow-up questions while they are looking at it. You build the paths once; the audience walks them.
+</div>
+
+<!-- ============ PHASE 1 ============ -->
+<div class="phase-banner">PHASE 1 — SETUP <span>· about 10 minutes</span></div>
+
+<h3>Step 1 — Open the starter file and tour the two pages</h3>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS</span>
+  <ol>
+    <li>Open Power BI Desktop.</li>
+    <li>Open the Lab 5 starter <code>.pbix</code> you downloaded from Canvas.</li>
+    <li>You should land in <strong>Report View</strong>. Look at the <strong>page tabs</strong> along the bottom of the screen — there are two: <strong>Overview</strong> and <strong>Detail</strong>.</li>
+    <li>Click the <strong>Overview</strong> tab. It has a column chart of <strong>Sales Amount by Product Category</strong> and a card showing total <strong>Sales Amount</strong>.</li>
+    <li>Click the <strong>Detail</strong> tab. It has a table of <strong>Sales Amount by Country</strong>.</li>
+  </ol>
+</div>
+
+<div class="udn-box stop">
+  <span class="label">🛑 STOP AND CHECK — Where Am I?</span>
+  Before continuing, confirm you can see <strong>two page tabs at the bottom</strong> — Overview and Detail. Every step in this lab will tell you which page to be on. If you only see one tab, you have the wrong starter file — re-download from Canvas.
+</div>
+
+<!-- ============ PHASE 2 ============ -->
+<div class="phase-banner">PHASE 2 — BUILD <span>· about 20 minutes</span></div>
+
+<h3>Step 2 — Add a report filter</h3>
+
+<div class="udn-box why">
+  <span class="label">💡 WHY ARE WE DOING THIS?</span>
+  A filter has a <strong>scope</strong> — how much of the report it reaches. The three layers are <em>Filters on this visual</em>, <em>Filters on this page</em>, and <em>Filters on all pages</em>. The widest one — <em>Filters on all pages</em> — is the <strong>report filter</strong>. It cleans every page at once. You will use it to keep one year's data in view across both pages.
+</div>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS</span>
+  <ol>
+    <li>Make sure you are on the <strong>Overview</strong> page (check the tab at the bottom).</li>
+    <li><strong>See it.</strong> The <strong>Filter pane</strong> is the vertical panel on the right of Report View. It has three grey section headers.</li>
+    <li><strong>Find it.</strong> If the pane is closed: <strong>View</strong> tab → <strong>Show panes</strong> group → <strong>Filters</strong>.</li>
+    <li><strong>Do it.</strong> Locate the bottom section, <strong>Filters on all pages</strong>. From the Data pane, drag <code>Year</code> into that section.</li>
+    <li>In the filter, tick a single year — <strong>2020</strong>.</li>
+  </ol>
+</div>
+
+<div class="udn-box mistake">
+  <span class="label">⚠️ COMMON MISTAKE</span>
+  Use the plain calendar <code>Year</code> field — <strong>not</strong> Fiscal Year. Also: be sure you dropped <code>Year</code> into <strong>Filters on all pages</strong>, not <em>Filters on this page</em>. A filter at the wrong scope is silent — Power BI will not warn you. If only one page changed, you used the page-level section by mistake. Drag the field out and try again in the right section.
+</div>
+
+<div class="udn-box stop">
+  <span class="label">🛑 STOP AND CHECK</span>
+  Click between the <strong>Overview</strong> and <strong>Detail</strong> tabs. <strong>Both</strong> pages should now show 2020 data only — and you never touched a single visual. That is the report filter working.
+</div>
+
+<h3>Step 3 — Add two slicers to the Overview page</h3>
+
+<div class="udn-box why">
+  <span class="label">💡 WHY ARE WE DOING THIS?</span>
+  The Filter pane is the analyst's tool — your audience will not open it. A <strong>slicer</strong> is a filter promoted to a visual on the canvas, in plain sight, that the audience can click. This is how a manager pulls "Bikes only" out of the report without calling you.
+</div>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS — slicer 1: Product Category</span>
+  <ol>
+    <li>Make sure you are on the <strong>Overview</strong> page.</li>
+    <li>Click an empty part of the canvas so no visual is selected.</li>
+    <li><strong>See it.</strong> In the Visualizations pane, find the icon shaped like a small funnel — the <strong>Slicer</strong>.</li>
+    <li><strong>Do it.</strong> Click the Slicer icon. A blank slicer appears on the canvas.</li>
+    <li>From the Data pane, drag <code>Product → Category</code> into the slicer's <strong>Field</strong> well.</li>
+    <li>The slicer fills with four items: Accessories, Bikes, Clothing, Components.</li>
+  </ol>
+</div>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS — slicer 2: Country</span>
+  <ol>
+    <li>Still on the <strong>Overview</strong> page, click an empty part of the canvas again.</li>
+    <li>Click the <strong>Slicer</strong> icon to add a second slicer.</li>
+    <li>From the Data pane, drag <code>Sales Territory → Country</code> into its Field well.</li>
+  </ol>
+</div>
+
+<div class="udn-box stop">
+  <span class="label">🛑 STOP AND CHECK</span>
+  Click <strong>Bikes</strong> in the Category slicer. Every other visual on the Overview page should redraw to Bikes only, and <strong>Bikes</strong> should show a filled, selected state. If nothing changed, confirm the slicer has a field in its well — an empty slicer draws on the canvas but filters nothing. Clear the selection again before the next step.
+</div>
+
+<label class="paste-label">📸 Paste a screenshot of your Overview page with both slicers below:</label>
+<div class="paste-zone" id="paste-slicers" tabindex="0">
+  <button class="remove-btn" title="Remove image">✕</button>
+  <div class="placeholder"><span class="icon">📋</span>Click here, then press <strong>Ctrl + V</strong> to paste your screenshot</div>
+</div>
+
+<div class="udn-box breath">
+  <span class="label">💜 TAKE A BREATH</span>
+  You have built a report filter and two slicers. The report can already answer questions it could not answer ten minutes ago. Stand up, stretch, look away from the screen. The next phase is the part that makes the slicers behave properly across both pages — and one careful interaction decision. You are doing well.
+</div>
+
+<!-- ============ PHASE 3 ============ -->
+<div class="phase-banner">PHASE 3 — CONFIGURE <span>· about 25 minutes</span></div>
+
+<h3>Step 4 — Sync the slicers across both pages</h3>
+
+<div class="udn-box why">
+  <span class="label">💡 WHY ARE WE DOING THIS?</span>
+  A slicer filters <strong>its own page only</strong>, unless you tell it otherwise. If a manager sets the Category slicer on Overview and clicks to Detail, the Detail page still shows every category — because Detail does not have that slicer. <strong>Sync slicers</strong> links one slicer's selection across pages, so a choice on one page follows the audience everywhere.
+</div>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS</span>
+  <ol>
+    <li>On the <strong>Overview</strong> page, click the <strong>Category</strong> slicer once to select it.</li>
+    <li><strong>Find it.</strong> Click the <strong>View</strong> tab → <strong>Show panes</strong> group → <strong>Sync slicers</strong>.</li>
+    <li>The Sync slicers pane opens. It shows a row for each page — Overview and Detail — with two checkboxes: <strong>sync</strong> and <strong>visible</strong>.</li>
+    <li>For the <strong>Detail</strong> row, tick the <strong>sync</strong> checkbox. (Leave <em>visible</em> unticked — the Detail page does not need the slicer drawn on it, only obeyed.)</li>
+    <li>Now click the <strong>Country</strong> slicer and repeat: tick <strong>sync</strong> for the Detail row.</li>
+  </ol>
+</div>
+
+<div class="udn-box stop">
+  <span class="label">🛑 STOP AND CHECK</span>
+  On the Overview page, click <strong>Bikes</strong> in the Category slicer. Now click the <strong>Detail</strong> page tab. The Detail table should show Bikes data only — even though there is no slicer drawn on the Detail page. That is sync slicers working. Clear the selection when done.
+</div>
+
+<h3>Step 5 — Set one editing interaction</h3>
+
+<div class="udn-box why">
+  <span class="label">💡 WHY ARE WE DOING THIS?</span>
+  Every visual on a page is clickable, and by default a click changes the <em>other</em> visuals. <strong>Editing interactions</strong> lets you control that — <strong>Filter</strong> (the other visual refilters), <strong>Highlight</strong> (it dims the non-matching part), or <strong>None</strong> (it ignores the click). A card showing the company total is on the page to be a fixed reference — it should not move when someone clicks a bar.
+</div>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS</span>
+  <ol>
+    <li>Go to the <strong>Overview</strong> page.</li>
+    <li>Click the <strong>column chart</strong> (Sales Amount by Category) to select it.</li>
+    <li><strong>Find it.</strong> A contextual <strong>Format</strong> tab appears on the ribbon while a visual is selected. On that tab, in the Interactions group, click <strong>Edit interactions</strong>.</li>
+    <li>Small icons now appear on the corner of every <em>other</em> visual on the page.</li>
+    <li>On the <strong>card</strong> (total Sales Amount), click the <strong>None</strong> icon (a circle with a line through it).</li>
+    <li>Click <strong>Edit interactions</strong> again to leave editing mode.</li>
+  </ol>
+</div>
+
+<div class="udn-box mistake">
+  <span class="label">⚠️ COMMON MISTAKE</span>
+  A card only shows <strong>two</strong> interaction icons — Filter and None — not three. A card has nothing to dim, so Highlight does not apply. If you expected three icons and see two, that is the visual type, not a bug. Pick <strong>None</strong>.
+</div>
+
+<div class="udn-box stop">
+  <span class="label">🛑 STOP AND CHECK</span>
+  Click a bar in the column chart — say, Bikes. The chart filters, but the <strong>card stays at the full company total</strong> and does not change. That is the None interaction doing its job: the total stays a fixed reference no matter what the audience clicks.
+</div>
+
+<label class="paste-label">📸 Paste a screenshot showing a bar selected and the card still showing the full total:</label>
+<div class="paste-zone" id="paste-interaction" tabindex="0">
+  <button class="remove-btn" title="Remove image">✕</button>
+  <div class="placeholder"><span class="icon">📋</span>Click here, then press <strong>Ctrl + V</strong> to paste your screenshot</div>
+</div>
+
+<h3>Step 6 — Add a drill-down hierarchy</h3>
+
+<div class="udn-box why">
+  <span class="label">💡 WHY ARE WE DOING THIS?</span>
+  A <strong>hierarchy</strong> is a field with built-in levels. Sales Territory has a Group level, then Country inside it, then Region inside that. Put a hierarchy on a chart's axis and the audience can <strong>drill down</strong> — start at the top level, then expand one branch a level deeper, all without leaving the visual or the page.
+</div>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS</span>
+  <ol>
+    <li>On the <strong>Detail</strong> page, click an empty part of the canvas, then add a new <strong>Column chart</strong> from the Visualizations pane.</li>
+    <li>From the Data pane, expand the <code>Sales Territory</code> table. Drag <strong>Group</strong>, then <strong>Country</strong>, then <strong>Region</strong> — in that order — onto the chart's <strong>X-axis</strong> well. The three fields stack to form a hierarchy.</li>
+    <li>Drag <code>Sales Amount</code> onto the <strong>Y-axis</strong> well.</li>
+    <li><strong>See it.</strong> Small arrow icons appear in the top corner of the chart.</li>
+    <li><strong>Do it.</strong> Click the <strong>drill-mode</strong> arrow (the downward split-arrow) to turn drill mode on. Then click one column — for example, <strong>Europe</strong>. The chart redraws to show the countries inside Europe.</li>
+    <li>Click the <strong>drill-up</strong> arrow to climb back to the top level.</li>
+  </ol>
+</div>
+
+<div class="udn-box mistake">
+  <span class="label">⚠️ COMMON MISTAKE</span>
+  Drill-down only works when the axis has <strong>more than one field</strong> stacked on it. If clicking a column does nothing, check the X-axis well — you need Group, Country, and Region all in it. One field alone gives you no levels to drill into.
+</div>
+
+<label class="paste-label">📸 Paste a screenshot of your drilled-down column chart (showing one level deeper):</label>
+<div class="paste-zone" id="paste-drill" tabindex="0">
+  <button class="remove-btn" title="Remove image">✕</button>
+  <div class="placeholder"><span class="icon">📋</span>Click here, then press <strong>Ctrl + V</strong> to paste your screenshot</div>
+</div>
+
+<!-- ============ PHASE 4 ============ -->
+<div class="phase-banner">PHASE 4 — VERIFY <span>· about 20 minutes</span></div>
+
+<h3>Step 7 — Final check and written response</h3>
+
+<div class="udn-box stop">
+  <span class="label">🛑 STOP AND CHECK — Your finished report</span>
+  Before you answer the questions, confirm your report has all of this:
+  <br><br>
+  ✅ A <strong>report filter</strong> on <code>Year</code> in <em>Filters on all pages</em><br>
+  ✅ Two <strong>slicers</strong> on the Overview page — Product Category and Country<br>
+  ✅ Both slicers <strong>synced</strong> to the Detail page<br>
+  ✅ The <strong>card</strong> set to <strong>None</strong> interaction so it ignores clicks<br>
+  ✅ A <strong>column chart</strong> with the Sales Territory hierarchy that <strong>drills down</strong>
+</div>
+
+<label class="paste-label">📸 Paste a screenshot of your finished Overview page (slicers, chart, and card all visible):</label>
+<div class="paste-zone" id="paste-final" tabindex="0">
+  <button class="remove-btn" title="Remove image">✕</button>
+  <div class="placeholder"><span class="icon">📋</span>Click here, then press <strong>Ctrl + V</strong> to paste your screenshot</div>
+</div>
+
+<h3>Written Response</h3>
+
+<div class="udn-box why">
+  <span class="label">💡 WHY THESE QUESTIONS?</span>
+  The screenshots show <em>that</em> you did the work. These two questions show that you understood <em>why</em>. Answer in your own words — two or three sentences each is plenty.
+</div>
+
+<label class="response-label">✍️ Question 1 — You set the Year filter in <em>Filters on all pages</em>, and you set the slicers on a single page. In your own words, explain the difference between a <strong>report filter</strong> and a <strong>slicer</strong> — who controls each one, and how far does each one reach?</label>
+<textarea placeholder="Write 2-3 sentences here..."></textarea>
+
+<label class="response-label">✍️ Question 2 — You set the card's editing interaction to <strong>None</strong>. Explain what would go wrong on this page if the card were left on its default <strong>Filter</strong> interaction instead — why does a total card need to be a fixed reference?</label>
+<textarea placeholder="Write 2-3 sentences here..."></textarea>
+
+<!-- ===== MINI RUBRIC ===== -->
+<h2>How This Lab Is Graded</h2>
+<div class="rubric-mini">
+  <table>
+    <tr>
+      <th>Tier</th>
+      <th class="pts">Points</th>
+      <th>What it looks like</th>
+    </tr>
+    <tr class="rubric-excellent">
+      <td><strong>Excellent</strong></td>
+      <td class="pts">13–15</td>
+      <td>Report filter correctly placed in <em>Filters on all pages</em>. Both slicers built and synced to the Detail page. Card interaction correctly set to None. Drill-down hierarchy built and working. Both written responses are accurate and in the student's own words. All screenshots pasted.</td>
+    </tr>
+    <tr class="rubric-good">
+      <td><strong>Good</strong></td>
+      <td class="pts">9–12</td>
+      <td>Filter and slicers mostly correct. Sync or interaction set with minor errors. Drill-down built. Written responses show understanding with minor gaps. Most screenshots pasted.</td>
+    </tr>
+    <tr class="rubric-needs">
+      <td><strong>Needs Work</strong></td>
+      <td class="pts">0–8</td>
+      <td>Report filter at the wrong scope or missing. Slicers not synced. Interaction not set. Drill-down missing or non-functional. Written responses missing or do not address the question. <strong>Eligible for redo</strong> — revise and resubmit once for up to the Good tier.</td>
+    </tr>
+  </table>
+  <p style="font-size:12px; color:#666; margin-top:8px;"><strong>Late policy:</strong> 48-hour grace period, no penalty. After 48 hours: 10% per day, capped at 30% maximum reduction. <strong>Redo:</strong> if you score below Good, you may revise and resubmit once for up to 12 points.</p>
+</div>
+
+<!-- ===== SUBMIT ===== -->
+<div class="submit-section">
+  <h3>📤 How to Submit</h3>
+  <ol>
+    <li>In Power BI Desktop, press <strong>Ctrl + S</strong> to save.</li>
+    <li>Use <strong>File → Save As</strong> and name your file <code>LastName_FirstName_Lab05.pbix</code>.</li>
+    <li>In this worksheet, fill in your name and date at the top, and confirm every paste zone has a screenshot and every textarea has an answer.</li>
+    <li>Print this worksheet to PDF: <strong>Ctrl + P</strong> → Destination <strong>Save as PDF</strong> → Save.</li>
+    <li>Go to the <strong>Lab 5</strong> assignment in Canvas. Upload <strong>two files</strong>: your <code>.pbix</code> and your worksheet PDF.</li>
+  </ol>
+</div>
+
+<p class="footer-note">CAP2743C — Power BI: Data Visualization and Analysis · Miami Dade College · Lab 5 · Week 3</p>
+
+</div><!-- end wrap -->
+
+<!-- ============ SCREENSHOT PASTE SCRIPT ============ -->
+<script>
+document.querySelectorAll('.paste-zone').forEach(function(zone) {
+  function setImage(dataUrl) {
+    var existing = zone.querySelector('img');
+    if (existing) existing.remove();
+    var img = document.createElement('img');
+    img.src = dataUrl;
+    zone.appendChild(img);
+    zone.classList.add('has-image');
+  }
+  zone.addEventListener('paste', function(e) {
+    var items = e.clipboardData.items;
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image') !== -1) {
+        e.preventDefault();
+        var reader = new FileReader();
+        reader.onload = function(ev) { setImage(ev.target.result); };
+        reader.readAsDataURL(items[i].getAsFile());
+        break;
+      }
+    }
+  });
+  zone.addEventListener('click', function(e) {
+    if (!e.target.classList.contains('remove-btn')) zone.focus();
+  });
+  zone.querySelector('.remove-btn').addEventListener('click', function(e) {
+    e.stopPropagation();
+    var img = zone.querySelector('img');
+    if (img) img.remove();
+    zone.classList.remove('has-image');
+  });
+  zone.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    zone.classList.add('drag-over');
+  });
+  zone.addEventListener('dragleave', function() {
+    zone.classList.remove('drag-over');
+  });
+  zone.addEventListener('drop', function(e) {
+    e.preventDefault();
+    zone.classList.remove('drag-over');
+    var files = e.dataTransfer.files;
+    if (files.length > 0 && files[0].type.indexOf('image') !== -1) {
+      var reader = new FileReader();
+      reader.onload = function(ev) { setImage(ev.target.result); };
+      reader.readAsDataURL(files[0]);
+    }
+  });
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab 4 — Branded &amp; Accessible Report</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #222;
+    background: #f4f5f7;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 0 60px 0;
+  }
+
+  /* ---------- HEADER ---------- */
+  .course-header {
+    background: #1a3a5c;
+    color: #fff;
+    padding: 28px 40px 24px 40px;
+  }
+  .course-header .course-code {
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    opacity: 0.8;
+  }
+  .course-header .lab-title {
+    font-size: 26px;
+    font-weight: 700;
+    margin: 6px 0 4px 0;
+  }
+  .course-header .meta { font-size: 13px; opacity: 0.85; }
+
+  /* ---------- NAME BAR ---------- */
+  .name-bar {
+    background: #fff;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 16px 40px;
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  .name-bar label {
+    font-weight: 600;
+    font-size: 12px;
+    color: #666;
+    display: block;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .name-bar input {
+    border: none;
+    border-bottom: 2px solid #1a3a5c;
+    font-size: 15px;
+    font-family: inherit;
+    padding: 4px 2px;
+    width: 260px;
+    background: transparent;
+  }
+  .name-bar input:focus { outline: none; border-bottom-color: #C9A23A; }
+
+  /* ---------- CONTENT WRAP ---------- */
+  .wrap { padding: 0 40px; }
+
+  h2 {
+    font-size: 20px;
+    color: #1a3a5c;
+    margin: 30px 0 12px 0;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #C9A23A;
+  }
+  h3 { font-size: 16px; color: #1a3a5c; margin: 22px 0 8px 0; }
+  p { margin: 10px 0; }
+  ol, ul { margin: 10px 0 10px 26px; }
+  li { margin-bottom: 6px; }
+  code {
+    background: #eef0f3;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 13px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: #1a3a5c;
+  }
+  hr { border: none; border-top: 1px solid #ddd; margin: 26px 0; }
+  strong { color: #1a1a1a; }
+
+  /* ---------- LAUNCH PAD ---------- */
+  .launch-pad {
+    background: #eaf1f8;
+    border: 1px solid #b9d2ea;
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin: 22px 0;
+  }
+  .launch-pad h3 { margin-top: 0; color: #1a3a5c; }
+  .launch-pad table { width: 100%; border-collapse: collapse; }
+  .launch-pad td {
+    padding: 7px 10px;
+    vertical-align: top;
+    border-bottom: 1px solid #d3e2f0;
+    font-size: 13.5px;
+  }
+  .launch-pad td:first-child {
+    font-weight: 700;
+    color: #1a3a5c;
+    width: 165px;
+    white-space: nowrap;
+  }
+  .launch-pad tr:last-child td { border-bottom: none; }
+
+  /* ---------- PHASE BANNER ---------- */
+  .phase-banner {
+    background: #34495e;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 6px;
+    margin: 30px 0 14px 0;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .phase-banner span { opacity: 0.7; font-weight: 400; font-size: 13px; }
+
+  /* ---------- UDN BOXES ---------- */
+  .udn-box {
+    padding: 14px 18px;
+    margin: 14px 0;
+    border-radius: 6px;
+    border-left: 5px solid;
+    font-size: 13.5px;
+  }
+  .udn-box .label {
+    font-weight: 700;
+    display: block;
+    margin-bottom: 6px;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+  }
+  .udn-box ol, .udn-box ul { margin: 8px 0 4px 22px; }
+  .udn-box.do      { background: #D5F5E3; border-color: #27AE60; }
+  .udn-box.do      .label { color: #1E8449; }
+  .udn-box.why     { background: #D6EAF8; border-color: #2E86C1; }
+  .udn-box.why     .label { color: #1A5276; }
+  .udn-box.mistake { background: #FEF9E7; border-color: #F1C40F; }
+  .udn-box.mistake .label { color: #7D6608; }
+  .udn-box.stop    { background: #FADBD8; border-color: #E74C3C; }
+  .udn-box.stop    .label { color: #922B21; }
+  .udn-box.breath  { background: #E8DAEF; border-color: #8E44AD; }
+  .udn-box.breath  .label { color: #6C3483; }
+
+  /* ---------- PASTE ZONE ---------- */
+  .paste-label {
+    font-weight: 600;
+    font-size: 13px;
+    color: #495057;
+    display: block;
+    margin: 16px 0 4px 0;
+  }
+  .paste-zone {
+    border: 2px dashed #b0bcc8;
+    border-radius: 8px;
+    min-height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    background: #fafbfc;
+    transition: border-color 0.15s, background 0.15s;
+    padding: 12px;
+  }
+  .paste-zone:focus { outline: none; border-color: #2E86C1; background: #f0f7fd; }
+  .paste-zone.drag-over { border-color: #2E86C1; background: #eaf3fb; }
+  .paste-zone.has-image { border-style: solid; border-color: #27AE60; background: #fff; }
+  .paste-zone .placeholder { color: #8a97a4; font-size: 13px; }
+  .paste-zone .placeholder .icon { font-size: 26px; display: block; margin-bottom: 6px; }
+  .paste-zone img { max-width: 100%; border-radius: 4px; display: block; }
+  .remove-btn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: #E74C3C;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    font-size: 13px;
+    line-height: 1;
+    display: none;
+  }
+  .paste-zone.has-image .remove-btn { display: block; }
+
+  /* ---------- TEXTAREA ---------- */
+  .response-label {
+    font-weight: 600;
+    font-size: 13px;
+    color: #495057;
+    display: block;
+    margin: 16px 0 4px 0;
+  }
+  textarea {
+    width: 100%;
+    border: 1px solid #c4ccd4;
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-family: inherit;
+    font-size: 13.5px;
+    line-height: 1.5;
+    min-height: 80px;
+    resize: vertical;
+    background: #fff;
+  }
+  textarea:focus { outline: none; border-color: #2E86C1; }
+
+  /* ---------- MINI RUBRIC ---------- */
+  .rubric-mini { margin: 20px 0; }
+  .rubric-mini table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .rubric-mini th, .rubric-mini td {
+    border: 1px solid #ccd4dc;
+    padding: 8px 10px;
+    text-align: left;
+    vertical-align: top;
+  }
+  .rubric-mini th { background: #1a3a5c; color: #fff; font-weight: 600; }
+  .rubric-mini .pts { white-space: nowrap; font-weight: 700; color: #1a3a5c; }
+  .rubric-excellent td { background: #eafaf0; }
+  .rubric-good td { background: #fef9e7; }
+  .rubric-needs td { background: #fdedec; }
+
+  /* ---------- SUBMIT SECTION ---------- */
+  .submit-section {
+    background: #1a3a5c;
+    color: #fff;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 30px 0 0 0;
+  }
+  .submit-section h3 { color: #fff; margin-top: 0; }
+  .submit-section ol { margin-left: 22px; }
+  .submit-section li { margin-bottom: 7px; }
+  .submit-section code { background: rgba(255,255,255,0.16); color: #ffe9b0; }
+
+  .footer-note {
+    text-align: center;
+    color: #8a97a4;
+    font-size: 12px;
+    margin-top: 28px;
+  }
+
+  /* ---------- PRINT ---------- */
+  @media print {
+    body { background: #fff; max-width: none; padding: 0.4in; font-size: 11pt; }
+    .remove-btn { display: none !important; }
+    .paste-zone {
+      border: 1px solid #999;
+      min-height: auto;
+      padding: 8px;
+      cursor: default;
+      page-break-inside: avoid;
+    }
+    .paste-zone .placeholder { display: none; }
+    .paste-zone:not(.has-image)::after {
+      content: "[no screenshot pasted]";
+      color: #c0392b;
+      font-style: italic;
+    }
+    .udn-box, .phase-banner, .launch-pad, .rubric-mini, .submit-section {
+      page-break-inside: avoid;
+    }
+    .course-header, .phase-banner, .submit-section {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .course-header { background: #1a3a5c !important; }
+    .phase-banner { background: #34495e !important; }
+    .submit-section { background: #1a3a5c !important; }
+    textarea { border: 1px solid #999; background: #fff; min-height: 60px; }
+    input { border: none; border-bottom: 1px solid #333; }
+    h2, h3 { page-break-after: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="course-header">
+  <div class="course-code">CAP2743C — POWER BI: DATA VISUALIZATION AND ANALYSIS</div>
+  <div class="lab-title">Lab 4 — Branded &amp; Accessible Report</div>
+  <div class="meta">In-Class Lab · Session 5 · Tuesday, May 26, 2026 · 15 points · Chapter 3</div>
+</div>
+
+<!-- ===== NAME / DATE ===== -->
+<div class="name-bar">
+  <div>
+    <label for="student-name">Student Name</label>
+    <input type="text" id="student-name" name="student-name" placeholder="First Last">
+  </div>
+  <div>
+    <label for="lab-date">Date</label>
+    <input type="text" id="lab-date" name="lab-date" placeholder="May 26, 2026">
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- ===== LAUNCH PAD ===== -->
+<div class="launch-pad">
+  <h3>🚀 Launch Pad — Read This First</h3>
+  <table>
+    <tr><td>What you're building</td><td>You will take a correct-but-plain report and make it <strong>convincing</strong> and <strong>accessible</strong> — apply a custom theme, add conditional formatting two ways, build a small-multiples chart, and pass the four accessibility checks.</td></tr>
+    <tr><td>Tool</td><td>Power BI Desktop, with the AdventureWorks model loaded.</td></tr>
+    <tr><td>Starter file</td><td>Open the Lab 4 starter <code>.pbix</code> from the Canvas assignment page. It has the AdventureWorks model and one plain page already built.</td></tr>
+    <tr><td>Phases</td><td>4 phases — Setup → Build → Format → Verify.</td></tr>
+    <tr><td>Time</td><td>About 75 minutes. Block B work — steady pace, no rush.</td></tr>
+    <tr><td>What "done" looks like</td><td>A saved <code>.pbix</code> with a themed report page, a conditionally-formatted matrix, a small-multiples chart, alt text and titles on every visual — plus this worksheet completed.</td></tr>
+    <tr><td>How to submit</td><td>Save your <code>.pbix</code> as <code>LastName_FirstName_Lab04.pbix</code>. Submit it <strong>plus this worksheet as a PDF</strong> to the Canvas assignment.</td></tr>
+  </table>
+</div>
+
+<div class="udn-box why">
+  <span class="label">💡 WHAT THIS LAB IS REALLY ABOUT</span>
+  In the demo you watched a plain report become convincing on <em>Product Category</em>. This lab is the same set of moves, but you do them yourself, on <strong>different fields</strong> — Sales Territory, Product Subcategory, Country. The data was already correct before you started. This lab is the <em>second argument</em> the report makes: the colors, the theme, and the accessibility work that decide whether your audience glances at the report or acts on it.
+</div>
+
+<!-- ============ PHASE 1 ============ -->
+<div class="phase-banner">PHASE 1 — SETUP <span>· about 10 minutes</span></div>
+
+<h3>Step 1 — Open the starter file and find your page</h3>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS</span>
+  <ol>
+    <li>Open Power BI Desktop.</li>
+    <li>Open the Lab 4 starter <code>.pbix</code> you downloaded from Canvas.</li>
+    <li>You should land in <strong>Report View</strong> — the canvas with visuals, the Visualizations pane, and the Format pane. (Report View is the first icon on the far-left toolbar.)</li>
+    <li>The starter has one page named <strong>Report</strong> with a plain bar chart already on it: <strong>Sales Amount by Sales Territory Region</strong>. It uses the Power BI default teal. That plain look is your starting point.</li>
+  </ol>
+</div>
+
+<div class="udn-box stop">
+  <span class="label">🛑 STOP AND CHECK</span>
+  Before you change anything, confirm you can see: a <strong>bar chart</strong> with region names down one side, the <strong>Visualizations pane</strong> on the right, and a <strong>Format pane</strong> (the paint-roller icon) next to it. If the Format pane is missing, click any visual once — it appears when a visual is selected.
+</div>
+
+<label class="paste-label">📸 Paste a screenshot of the starter page (the plain teal bar chart) below:</label>
+<div class="paste-zone" id="paste-starter" tabindex="0">
+  <button class="remove-btn" title="Remove image">✕</button>
+  <div class="placeholder"><span class="icon">📋</span>Click here, then press <strong>Ctrl + V</strong> to paste your screenshot</div>
+</div>
+
+<!-- ============ PHASE 2 ============ -->
+<div class="phase-banner">PHASE 2 — BUILD <span>· about 20 minutes</span></div>
+
+<h3>Step 2 — Apply and customize a theme</h3>
+
+<div class="udn-box why">
+  <span class="label">💡 WHY ARE WE DOING THIS?</span>
+  A <strong>theme</strong> is one saved set of formatting decisions — colors, fonts, defaults — applied to every visual on every page at once. Instead of styling each chart by hand, you set the theme once and the whole report follows. This is the fastest single move from "plain" to "on-brand."
+</div>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS — apply a built-in theme first</span>
+  <ol>
+    <li><strong>See it.</strong> The <strong>View</strong> tab of the ribbon has a <strong>Themes</strong> group with a gallery dropdown.</li>
+    <li><strong>Find it.</strong> Click the <strong>View</strong> tab → <strong>Themes</strong> group → open the <strong>Themes</strong> dropdown.</li>
+    <li><strong>Do it.</strong> Hover over a few presets to preview them live on your canvas. Click <strong>Executive</strong>. Every visual updates at once.</li>
+  </ol>
+</div>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS — now customize the theme</span>
+  <ol>
+    <li>View tab → Themes group → click the small <strong>drop arrow</strong> on the Themes button → <strong>Customize current theme</strong>.</li>
+    <li>A dialog opens with tabs: Name and colors, Text, Visuals, Page, Filter pane.</li>
+    <li>In <strong>Name and colors</strong>: set <strong>Theme name</strong> to <code>AW-Lab4</code>.</li>
+    <li>Set the <strong>first data color</strong> to navy — type the hex value <code>#1B2A47</code>.</li>
+    <li>Set the <strong>second data color</strong> to gold — type <code>#C9A23A</code>.</li>
+    <li>Click the <strong>Text</strong> tab. Set the default font family to <strong>Segoe UI</strong>.</li>
+    <li>Click <strong>Apply</strong>.</li>
+  </ol>
+</div>
+
+<div class="udn-box stop">
+  <span class="label">🛑 STOP AND CHECK</span>
+  Your bar chart should redraw — the bars now navy instead of teal, the text in Segoe UI. <strong>If a visual did not update:</strong> click it once to give it focus, then click an empty part of the canvas. Power BI sometimes waits for a re-render trigger. This is normal — not an error.
+</div>
+
+<h3>Step 3 — Add a matrix and apply conditional formatting (Rules)</h3>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS — build the matrix</span>
+  <ol>
+    <li>Click an empty part of the canvas so no visual is selected.</li>
+    <li>In the Visualizations pane, click the <strong>Matrix</strong> icon (a grid of small squares).</li>
+    <li>From the Data pane, drag <code>Product → Subcategory</code> into the <strong>Rows</strong> well.</li>
+    <li>From the Data pane, drag <code>Sales Amount</code> into the <strong>Values</strong> well.</li>
+    <li>The matrix fills with product subcategories and their sales totals.</li>
+  </ol>
+</div>
+
+<div class="udn-box why">
+  <span class="label">💡 WHY ARE WE DOING THIS?</span>
+  <strong>Conditional formatting</strong> changes how a value <em>looks</em> based on what it <em>is</em>. The <strong>Rules</strong> driver lets you set explicit threshold bands — under this number, between these numbers, above that number. Pre-attentive processing does the rest: a column of green numbers reads as "healthy" before the audience reads a single digit.
+</div>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS — apply the Rules driver</span>
+  Remember the shared pattern: <strong>select the visual → find the property → click fx → choose a style → configure → OK</strong>.
+  <ol>
+    <li>Click the <strong>matrix</strong> to select it.</li>
+    <li>Open the <strong>Format pane</strong> → find <strong>Cell elements</strong>.</li>
+    <li>Find the <strong>Sales Amount</strong> field in Cell elements → switch the target to <strong>Font color</strong> → click the <strong>fx</strong> button next to it.</li>
+    <li>In the dialog, set <strong>Format style</strong> to <strong>Rules</strong>.</li>
+    <li>Click <strong>+ New rule</strong> to add bands. Create these three:
+      <ul>
+        <li>If value <code>&gt;= 0</code> and <code>&lt; 1000000</code> → <strong>red</strong></li>
+        <li>If value <code>&gt;= 1000000</code> and <code>&lt; 10000000</code> → <strong>orange</strong></li>
+        <li>If value <code>&gt;= 10000000</code> → <strong>green</strong></li>
+      </ul>
+    </li>
+    <li>Click <strong>OK</strong>.</li>
+  </ol>
+</div>
+
+<div class="udn-box mistake">
+  <span class="label">⚠️ COMMON MISTAKE</span>
+  Students often apply the rule to the wrong field, or forget to switch the target from Background color to <strong>Font color</strong>. If your numbers did not change color, reopen the <strong>fx</strong> dialog and confirm: the target is <strong>Font color</strong>, the <strong>Based on field</strong> is Sales Amount, and you actually clicked <strong>+ New rule</strong> for each band.
+</div>
+
+<label class="paste-label">📸 Paste a screenshot of your matrix with the colored numbers below:</label>
+<div class="paste-zone" id="paste-matrix" tabindex="0">
+  <button class="remove-btn" title="Remove image">✕</button>
+  <div class="placeholder"><span class="icon">📋</span>Click here, then press <strong>Ctrl + V</strong> to paste your screenshot</div>
+</div>
+
+<div class="udn-box breath">
+  <span class="label">💜 TAKE A BREATH</span>
+  You have applied a theme and your first conditional formatting rule. That is real skill — analysts do exactly this on real reports every week. Stand up, look away from the screen, get some water. The next phase adds a small-multiples chart and then the accessibility checklist. You are past the hardest part.
+</div>
+
+<!-- ============ PHASE 3 ============ -->
+<div class="phase-banner">PHASE 3 — FORMAT <span>· about 25 minutes</span></div>
+
+<h3>Step 4 — Build a small-multiples chart</h3>
+
+<div class="udn-box why">
+  <span class="label">💡 WHY ARE WE DOING THIS?</span>
+  A <strong>small multiples</strong> visual draws one chart once per category and tiles the results into a grid — same axes, same colors, one panel per category. The eye reads the whole system in a single sweep: which country is climbing, which is flat, which is collapsing — without a single click.
+</div>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS</span>
+  <ol>
+    <li>Click an empty part of the canvas so no visual is selected.</li>
+    <li>In the Visualizations pane, click the <strong>Line chart</strong> icon.</li>
+    <li>From the Data pane, drag <code>Date</code> onto the <strong>X-axis</strong> well.</li>
+    <li>Drag <code>Sales Amount</code> onto the <strong>Y-axis</strong> well.</li>
+    <li>Now find the <strong>Small multiples</strong> well in the Visualizations pane — you may need to scroll the pane down to see it.</li>
+    <li>Drag <code>Sales Territory → Country</code> into the <strong>Small multiples</strong> well.</li>
+    <li>The single line chart breaks into a grid — one mini line chart per country.</li>
+  </ol>
+</div>
+
+<div class="udn-box mistake">
+  <span class="label">⚠️ COMMON MISTAKE</span>
+  If you do not see a <strong>Small multiples</strong> well at all, the current visual does not support it — small multiples work on line, area, bar, and column charts, but <strong>not</strong> on pies, donuts, cards, or maps. Confirm your visual is a <strong>Line chart</strong> before looking for the well.
+</div>
+
+<label class="paste-label">📸 Paste a screenshot of your small-multiples line chart (the grid of mini charts) below:</label>
+<div class="paste-zone" id="paste-multiples" tabindex="0">
+  <button class="remove-btn" title="Remove image">✕</button>
+  <div class="placeholder"><span class="icon">📋</span>Click here, then press <strong>Ctrl + V</strong> to paste your screenshot</div>
+</div>
+
+<h3>Step 5 — Run the four accessibility checks</h3>
+
+<div class="udn-box why">
+  <span class="label">💡 WHY ARE WE DOING THIS?</span>
+  An accessible report is one a colleague using a screen reader, a board member with color vision deficiency, or a stakeholder squinting at a low-end projector can all actually use. There are four checks. You walk them at the end — like a pre-flight checklist — so you do not have to hold them in your head while building.
+</div>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS — Check 1: Alt text on every visual</span>
+  <ol>
+    <li>Click your <strong>bar chart</strong> to select it.</li>
+    <li>Open the <strong>Format pane</strong> → <strong>General</strong> → find <strong>Alt text</strong>.</li>
+    <li>Type a sentence that says what the chart <em>shows</em>, not what kind of chart it is. Example: <code>Sales Amount by sales territory region, sorted descending.</code></li>
+    <li>Repeat for the <strong>matrix</strong> and the <strong>small-multiples chart</strong> — every visual gets its own alt text.</li>
+  </ol>
+</div>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS — Check 2: Tab order follows the narrative</span>
+  <ol>
+    <li>Click <strong>View</strong> tab → <strong>Show panes</strong> group → <strong>Selection</strong>.</li>
+    <li>The Selection pane opens on the right. Click <strong>Tab order</strong> at the top of the pane.</li>
+    <li>Drag the visual entries into the order a keyboard user should meet them — typically the main chart first, then supporting visuals.</li>
+  </ol>
+</div>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS — Check 3: Color contrast meets WCAG AA</span>
+  <ol>
+    <li>Open a web browser. Search for a <strong>WCAG contrast checker</strong> and open one.</li>
+    <li>Paste your foreground color (navy <code>#1B2A47</code>) and a white background (<code>#FFFFFF</code>).</li>
+    <li>Read the ratio. WCAG <strong>AA</strong> requires at least <strong>4.5:1</strong> for body text. Navy on white clears this easily.</li>
+    <li>Write the ratio you got in the response box below.</li>
+  </ol>
+</div>
+
+<div class="udn-box do">
+  <span class="label">✅ DO THIS — Check 4: Screen-reader titles</span>
+  <ol>
+    <li>Click each visual in turn. Open the <strong>Format pane</strong> → <strong>General</strong> → <strong>Title</strong>.</li>
+    <li>Confirm the title is descriptive — <code>Sales by Region</code>, not blank. A blank title makes a screen reader announce only "chart," which tells the listener nothing.</li>
+  </ol>
+</div>
+
+<label class="response-label">✍️ Write the contrast ratio you measured in Check 3, and name which color pair you tested:</label>
+<textarea placeholder="Example: I tested navy #1B2A47 against white #FFFFFF and got a ratio of ___ : 1, which passes WCAG AA."></textarea>
+
+<!-- ============ PHASE 4 ============ -->
+<div class="phase-banner">PHASE 4 — VERIFY <span>· about 20 minutes</span></div>
+
+<h3>Step 6 — Final check and written response</h3>
+
+<div class="udn-box stop">
+  <span class="label">🛑 STOP AND CHECK — Your finished report</span>
+  Before you answer the questions, confirm your report page has all of this:
+  <br><br>
+  ✅ A <strong>theme</strong> applied — navy and gold, Segoe UI (theme named <code>AW-Lab4</code>)<br>
+  ✅ A <strong>bar chart</strong> — Sales Amount by Sales Territory Region, in theme colors<br>
+  ✅ A <strong>matrix</strong> — Product Subcategory with Sales Amount, numbers colored by Rules<br>
+  ✅ A <strong>small-multiples line chart</strong> — Sales Amount over Date, one panel per Country<br>
+  ✅ <strong>Alt text</strong> on all three visuals<br>
+  ✅ A sensible <strong>tab order</strong> set in the Selection pane<br>
+  ✅ A descriptive <strong>title</strong> on every visual
+</div>
+
+<label class="paste-label">📸 Paste a screenshot of your full finished report page below:</label>
+<div class="paste-zone" id="paste-final" tabindex="0">
+  <button class="remove-btn" title="Remove image">✕</button>
+  <div class="placeholder"><span class="icon">📋</span>Click here, then press <strong>Ctrl + V</strong> to paste your screenshot</div>
+</div>
+
+<h3>Written Response</h3>
+
+<div class="udn-box why">
+  <span class="label">💡 WHY THESE QUESTIONS?</span>
+  The screenshots show <em>that</em> you did the work. These two questions show that you understood <em>why</em>. Answer in your own words — two or three sentences each is plenty.
+</div>
+
+<label class="response-label">✍️ Question 1 — You used the <strong>Rules</strong> driver on your matrix. The chapter describes three drivers: Gradient, Rules, and Field value. In your own words, why was Rules the right choice for coloring sales numbers against business thresholds, instead of a Gradient?</label>
+<textarea placeholder="Write 2-3 sentences here..."></textarea>
+
+<label class="response-label">✍️ Question 2 — Pick <strong>one</strong> of the four accessibility checks you ran. Explain what audience problem that check solves — who is helped, and what would go wrong for them if you skipped it?</label>
+<textarea placeholder="Write 2-3 sentences here..."></textarea>
+
+<!-- ===== MINI RUBRIC ===== -->
+<h2>How This Lab Is Graded</h2>
+<div class="rubric-mini">
+  <table>
+    <tr>
+      <th>Tier</th>
+      <th class="pts">Points</th>
+      <th>What it looks like</th>
+    </tr>
+    <tr class="rubric-excellent">
+      <td><strong>Excellent</strong></td>
+      <td class="pts">13–15</td>
+      <td>Custom theme applied and named. Matrix correctly formatted with the Rules driver. Small-multiples chart built correctly. All four accessibility checks done — alt text, tab order, contrast, titles. Both written responses are accurate and in the student's own words. All screenshots pasted.</td>
+    </tr>
+    <tr class="rubric-good">
+      <td><strong>Good</strong></td>
+      <td class="pts">9–12</td>
+      <td>Theme and conditional formatting mostly correct. Small multiples built. Most accessibility checks complete. Written responses show understanding with minor gaps. Most screenshots pasted.</td>
+    </tr>
+    <tr class="rubric-needs">
+      <td><strong>Needs Work</strong></td>
+      <td class="pts">0–8</td>
+      <td>Theme or conditional formatting missing or incorrect. Small multiples missing. Accessibility checks largely skipped. Written responses missing or do not address the question. <strong>Eligible for redo</strong> — revise and resubmit once for up to the Good tier.</td>
+    </tr>
+  </table>
+  <p style="font-size:12px; color:#666; margin-top:8px;"><strong>Late policy:</strong> 48-hour grace period, no penalty. After 48 hours: 10% per day, capped at 30% maximum reduction. <strong>Redo:</strong> if you score below Good, you may revise and resubmit once for up to 12 points.</p>
+</div>
+
+<!-- ===== SUBMIT ===== -->
+<div class="submit-section">
+  <h3>📤 How to Submit</h3>
+  <ol>
+    <li>In Power BI Desktop, press <strong>Ctrl + S</strong> to save.</li>
+    <li>Use <strong>File → Save As</strong> and name your file <code>LastName_FirstName_Lab04.pbix</code>.</li>
+    <li>In this worksheet, fill in your name and date at the top, and confirm every paste zone has a screenshot and every textarea has an answer.</li>
+    <li>Print this worksheet to PDF: <strong>Ctrl + P</strong> → Destination <strong>Save as PDF</strong> → Save.</li>
+    <li>Go to the <strong>Lab 4</strong> assignment in Canvas. Upload <strong>two files</strong>: your <code>.pbix</code> and your worksheet PDF.</li>
+  </ol>
+</div>
+
+<p class="footer-note">CAP2743C — Power BI: Data Visualization and Analysis · Miami Dade College · Lab 4 · Week 3</p>
+
+</div><!-- end wrap -->
+
+<!-- ============ SCREENSHOT PASTE SCRIPT ============ -->
+<script>
+document.querySelectorAll('.paste-zone').forEach(function(zone) {
+  function setImage(dataUrl) {
+    var existing = zone.querySelector('img');
+    if (existing) existing.remove();
+    var img = document.createElement('img');
+    img.src = dataUrl;
+    zone.appendChild(img);
+    zone.classList.add('has-image');
+  }
+  zone.addEventListener('paste', function(e) {
+    var items = e.clipboardData.items;
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image') !== -1) {
+        e.preventDefault();
+        var reader = new FileReader();
+        reader.onload = function(ev) { setImage(ev.target.result); };
+        reader.readAsDataURL(items[i].getAsFile());
+        break;
+      }
+    }
+  });
+  zone.addEventListener('click', function(e) {
+    if (!e.target.classList.contains('remove-btn')) zone.focus();
+  });
+  zone.querySelector('.remove-btn').addEventListener('click', function(e) {
+    e.stopPropagation();
+    var img = zone.querySelector('img');
+    if (img) img.remove();
+    zone.classList.remove('has-image');
+  });
+  zone.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    zone.classList.add('drag-over');
+  });
+  zone.addEventListener('dragleave', function() {
+    zone.classList.remove('drag-over');
+  });
+  zone.addEventListener('drop', function(e) {
+    e.preventDefault();
+    zone.classList.remove('drag-over');
+    var files = e.dataTransfer.files;
+    if (files.length > 0 && files[0].type.indexOf('image') !== -1) {
+      var reader = new FileReader();
+      reader.onload = function(ev) { setImage(ev.target.result); };
+      reader.readAsDataURL(files[0]);
+    }
+  });
+});
+</script>
+
+</body>
+</html>
