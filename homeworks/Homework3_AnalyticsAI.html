@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Homework 3 — Analytics &amp; AI</title>
+<style>
+  :root {
+    --navy: #1a3a5c;
+    --gold: #C9A23A;
+    --phase: #34495e;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #1f2933;
+    background: #eef1f4;
+    margin: 0;
+    padding: 24px 12px;
+    text-align: left;
+  }
+  .sheet {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #ffffff;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.12);
+  }
+
+  /* ---- Header band ---- */
+  header {
+    background: var(--navy);
+    color: #ffffff;
+    padding: 22px 30px;
+  }
+  header .course { font-size: 13px; letter-spacing: 0.5px; opacity: 0.85; }
+  header h1 { font-size: 26px; margin: 6px 0 8px; }
+  header .meta { font-size: 13px; opacity: 0.9; }
+
+  /* ---- Name bar ---- */
+  .namebar {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    padding: 14px 30px;
+    background: #ffffff;
+    border-bottom: 2px solid #e3e7eb;
+  }
+  .namebar label { font-size: 13px; font-weight: 600; color: var(--navy); }
+  .namebar input {
+    font-family: inherit;
+    font-size: 14px;
+    border: none;
+    border-bottom: 2px solid var(--navy);
+    padding: 3px 4px;
+    margin-left: 6px;
+    min-width: 200px;
+    background: transparent;
+  }
+  .namebar input:focus { outline: none; border-bottom-color: var(--gold); }
+
+  .body { padding: 8px 30px 30px; }
+
+  h2 {
+    font-size: 19px;
+    color: var(--navy);
+    border-bottom: 3px solid var(--gold);
+    padding-bottom: 5px;
+    margin-top: 32px;
+  }
+  h3 { font-size: 16px; color: var(--navy); margin-top: 22px; }
+  p { margin: 10px 0; }
+  ul, ol { margin: 10px 0; padding-left: 24px; }
+  li { margin: 5px 0; }
+  code {
+    background: #eef1f4;
+    border: 1px solid #d6dbe0;
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 13px;
+  }
+
+  /* ---- Launch Pad ---- */
+  .launchpad {
+    background: #eaf2fb;
+    border: 1px solid #b9d3ee;
+    border-radius: 6px;
+    padding: 8px 20px 14px;
+    margin: 18px 0;
+  }
+  .launchpad h3 { margin-top: 12px; color: var(--navy); }
+  .launchpad table { width: 100%; border-collapse: collapse; }
+  .launchpad td { padding: 6px 8px; vertical-align: top; font-size: 14px; }
+  .launchpad td:first-child {
+    font-weight: 700; color: var(--navy); width: 33%;
+  }
+  .launchpad tr + tr td { border-top: 1px solid #cfe0f1; }
+
+  /* ---- UDN boxes ---- */
+  .box {
+    padding: 14px 16px;
+    margin: 16px 0;
+    border-radius: 4px;
+    border-left: 5px solid;
+  }
+  .box strong.boxlabel { display: block; margin-bottom: 4px; }
+  .do      { background: #D5F5E3; border-color: #27AE60; }
+  .do strong.boxlabel { color: #1E8449; }
+  .why     { background: #D6EAF8; border-color: #2E86C1; }
+  .why strong.boxlabel { color: #1B4F72; }
+  .mistake { background: #FEF9E7; border-color: #F1C40F; }
+  .mistake strong.boxlabel { color: #7D6608; }
+  .check   { background: #FADBD8; border-color: #E74C3C; }
+  .check strong.boxlabel { color: #922B21; }
+  .breath  { background: #E8DAEF; border-color: #8E44AD; }
+  .breath strong.boxlabel { color: #6C3483; }
+  .box .snfd { margin: 8px 0 0; }
+  .box .snfd li { margin: 4px 0; }
+
+  /* ---- Part banner ---- */
+  .phase {
+    background: var(--phase);
+    color: #ffffff;
+    padding: 10px 18px;
+    margin: 30px 0 6px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .phase .pts {
+    float: right;
+    font-weight: 600;
+    font-size: 13px;
+    background: rgba(255,255,255,0.18);
+    padding: 2px 9px;
+    border-radius: 10px;
+  }
+
+  /* ---- DAX formula block ---- */
+  .formula {
+    background: #1e2a3a;
+    color: #e8eef4;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    padding: 12px 14px;
+    border-radius: 5px;
+    margin: 12px 0;
+    overflow-x: auto;
+  }
+  .formula .fx-c { color: #8fa8bf; }
+
+  /* ---- Paste zones ---- */
+  .paste-zone {
+    border: 2px dashed #9aa7b3;
+    border-radius: 6px;
+    background: #f7f9fb;
+    min-height: 150px;
+    margin: 12px 0;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    cursor: pointer;
+  }
+  .paste-zone:focus { outline: 3px solid #b9d3ee; outline-offset: 2px; }
+  .paste-zone .pz-prompt { color: #5a6b7b; font-size: 13px; }
+  .paste-zone .pz-label {
+    position: absolute; top: 6px; left: 10px;
+    font-size: 11px; font-weight: 700; color: var(--navy);
+  }
+  .paste-zone.filled {
+    border: 3px solid #27AE60;
+    background: #ffffff;
+    cursor: default;
+  }
+  .paste-zone img { max-width: 100%; max-height: 520px; display: block; }
+  .pz-remove {
+    position: absolute; top: 6px; right: 6px;
+    background: #E74C3C; color: #fff; border: none;
+    width: 26px; height: 26px; border-radius: 13px;
+    font-size: 14px; cursor: pointer; line-height: 1;
+  }
+  .pz-noshot { display: none; color: #c0392b; font-weight: 700; font-size: 13px; }
+
+  /* ---- Textareas ---- */
+  .written label {
+    display: block; font-weight: 700; color: var(--navy);
+    margin: 14px 0 6px;
+  }
+  textarea {
+    width: 100%;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.5;
+    border: 1px solid #aab4bf;
+    border-radius: 4px;
+    padding: 10px;
+    resize: vertical;
+  }
+  textarea:focus { outline: 2px solid #b9d3ee; }
+
+  /* ---- Rubric ---- */
+  .rubric { border-collapse: collapse; width: 100%; margin: 14px 0; }
+  .rubric th, .rubric td {
+    border: 1px solid #cfd6dd; padding: 8px 10px;
+    font-size: 13px; vertical-align: top; text-align: left;
+  }
+  .rubric th { background: var(--navy); color: #fff; }
+  .rubric td:first-child { font-weight: 700; }
+
+  /* ---- Submit block ---- */
+  .submit {
+    background: var(--navy);
+    color: #ffffff;
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin: 26px 0 6px;
+  }
+  .submit h3 { color: #ffffff; margin-top: 0; }
+  .submit code {
+    background: rgba(255,255,255,0.16);
+    border-color: rgba(255,255,255,0.3);
+    color: #fff;
+  }
+
+  .tag {
+    display: inline-block; font-size: 11px; font-weight: 700;
+    background: var(--gold); color: #3a2e08;
+    padding: 1px 7px; border-radius: 9px; margin-left: 6px;
+  }
+
+  /* ---- Print ---- */
+  @media print {
+    body { background: #ffffff; padding: 0; font-size: 12px; }
+    .sheet { box-shadow: none; max-width: 100%; }
+    .paste-zone { min-height: 90px; page-break-inside: avoid; }
+    .paste-zone .pz-prompt { display: none; }
+    .paste-zone:not(.filled) .pz-noshot { display: inline; }
+    .pz-remove { display: none; }
+    textarea { border: 1px solid #888; min-height: 90px; }
+    .phase, .box, .submit, .rubric, .paste-zone, .formula { page-break-inside: avoid; }
+    h2, h3 { page-break-after: avoid; }
+    .namebar input { border-bottom: 1px solid #000; }
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<header>
+  <div class="course">CAP2743C &middot; Power BI: Data Visualization and Analysis &middot; Neurodivergent Section</div>
+  <h1>Homework 3 &mdash; Analytics &amp; AI</h1>
+  <div class="meta">Take-home &middot; Launched Tuesday, June 9, 2026 &middot; Due Sunday, June 14, 2026 &nbsp;|&nbsp; 34 points &nbsp;|&nbsp; Chapters 5 &amp; 6</div>
+</header>
+
+<div class="namebar">
+  <div><label>Student Name<input type="text" placeholder="Type your name"></label></div>
+  <div><label>Date<input type="text" placeholder="MM / DD / YYYY"></label></div>
+</div>
+
+<div class="body">
+
+<p>This take-home pulls together the two halves of the analytics story. <strong>Chapter 5</strong> gave you tools
+that <em>interrogate</em> the data when you point them at a question. <strong>Chapter 6</strong> gave you AI visuals
+that <em>notice</em> things you did not think to ask. You will use both on the AdventureWorks data, then
+step back and judge what the AI gave you. Work at your own pace &mdash; this is built to be spread across
+the weekend, not finished in one sitting.</p>
+
+<!-- ===================== LAUNCH PAD ===================== -->
+<div class="launchpad">
+  <h3>&#128640; Launch Pad</h3>
+  <table>
+    <tr><td>What you're building</td><td>A report that applies Chapter 5's analytics features and Chapter 6's AI visuals to the AdventureWorks data, plus three short written reflections.</td></tr>
+    <tr><td>Tool</td><td>Power BI Desktop</td></tr>
+    <tr><td>Starter file</td><td>Download <code>Homework3_Start.pbix</code> from the course GitHub:<br><code>github.com/c-marq/cap2743c-power-bi-viz/raw/main/starter-files/Homework3_Start.pbix</code><br>It opens with the AdventureWorks model loaded.</td></tr>
+    <tr><td>Structure</td><td>3 Parts &mdash; Analytics in Action (Ch 5) &rarr; AI-Powered Analysis (Ch 6) &rarr; Verify Before You Trust</td></tr>
+    <tr><td>Time</td><td>About two to three hours. You can spread it across the weekend &mdash; it does not need to be done in one sitting.</td></tr>
+    <tr><td>What "done" looks like</td><td>A report with an Analyze chart, a forecast, a running-total table, a Key Influencers visual, and a Decomposition Tree &mdash; and all three reflection boxes filled in.</td></tr>
+    <tr><td>How to submit</td><td>Save your file as <code>LastName_FirstName_HW3.pbix</code>. Submit that file <strong>and</strong> this worksheet as a PDF to the Canvas assignment, by Sunday.</td></tr>
+  </table>
+</div>
+
+<div class="box mistake">
+  <strong class="boxlabel">&#9888;&#65039; A NOTE ON COPILOT</strong>
+  Chapters 5 and 6 both cover Copilot &mdash; narrative visuals, drafting report pages, summarizing a model.
+  Copilot has to be switched on by an administrator for the whole organization, so <strong>nothing in this
+  homework requires Copilot</strong> and none of it is graded on Copilot. The features you use here all work on
+  any Power BI Desktop install.
+</div>
+
+<!-- ===================== PART 1 ===================== -->
+<div class="phase">Part 1 of 3 &mdash; Analytics in Action (Chapter 5) <span class="pts">14 points</span></div>
+<p><strong>Part goal:</strong> point three Chapter 5 features at the AdventureWorks sales data &mdash; one that
+explains a change, one that projects forward, and one that calculates down a visual's rows.</p>
+
+<h3>Task A &mdash; Explain a change <span class="tag">4 pts</span></h3>
+
+<div class="box do">
+  <strong class="boxlabel">&#9989; DO THIS</strong>
+  <ol class="snfd">
+    <li><strong>See it.</strong> Build a <strong>Clustered column chart</strong>. Put <code>Month</code> (Date table) on the <strong>X axis</strong> and <code>Sales Amount</code> on the <strong>Y axis</strong>. Each column is a month you can right-click.</li>
+    <li><strong>Name it.</strong> The right-click menu has an <strong>Analyze</strong> submenu — <em>Explain the increase</em>, <em>Explain the decrease</em>, and <em>Find where this distribution is different</em>.</li>
+    <li><strong>Find it.</strong> Right-click the column for a month that <em>dropped</em> from the month before it &rarr; <strong>Analyze</strong>.</li>
+    <li><strong>Do it.</strong> Choose <strong>Explain the decrease</strong>. Page through the candidate explanations with the arrows. When one looks like it explains the drop, click the small <strong>+</strong> to add that chart to your page.</li>
+  </ol>
+</div>
+
+<div class="box why">
+  <strong class="boxlabel">&#128161; WHY ARE WE DOING THIS?</strong>
+  The Analyze feature reports <em>statistical contribution</em> — it ranks the factors that moved with the
+  number. It narrows two days of searching to one chart. It does not prove cause; that last check stays
+  yours. You will come back to exactly this distinction in Part 3.
+</div>
+
+<p><strong>Screenshot</strong> &mdash; your column chart with the explanation chart that Analyze added:</p>
+<div class="paste-zone" tabindex="0" data-prompt="Click here, then press Ctrl+V to paste your screenshot">
+  <span class="pz-label">SCREENSHOT A &mdash; Analyze: Explain the decrease</span>
+  <span class="pz-prompt">Click here, then press Ctrl+V to paste your screenshot</span>
+  <span class="pz-noshot">[no screenshot pasted]</span>
+</div>
+
+<h3>Task B &mdash; Forecast forward <span class="tag">4 pts</span></h3>
+
+<div class="box do">
+  <strong class="boxlabel">&#9989; DO THIS</strong>
+  <ol class="snfd">
+    <li><strong>See it.</strong> Build a <strong>Line chart</strong>. Put <code>Month</code> (Date table) on the <strong>X axis</strong> and <code>Sales Amount</code> on the <strong>Y axis</strong>.</li>
+    <li><strong>Name it.</strong> With the line chart selected, the Visualizations pane's third tab is the <strong>Analytics</strong> pane; its last section is <strong>Forecast</strong>.</li>
+    <li><strong>Find it.</strong> Visualizations pane &rarr; <strong>Analytics</strong> tab &rarr; <strong>Forecast</strong> &rarr; <strong>Add</strong>.</li>
+    <li><strong>Do it.</strong> Set <em>Forecast length</em> to <strong>3 months</strong> and <em>Confidence interval</em> to <strong>95%</strong>. The chart extends with a projected line and a shaded band. Leave both showing.</li>
+  </ol>
+</div>
+
+<div class="box mistake">
+  <strong class="boxlabel">&#9888;&#65039; COMMON MISTAKE</strong>
+  Turning off the shaded confidence band because the chart looks "cleaner" without it. The band is the
+  honest part &mdash; like a hurricane forecast cone, it widens because uncertainty grows with distance.
+  A projection line with no band tells the audience the report is more certain than it is. Keep the band.
+</div>
+
+<p><strong>Screenshot</strong> &mdash; your line chart with the 3-month forecast and its confidence band:</p>
+<div class="paste-zone" tabindex="0" data-prompt="Click here, then press Ctrl+V to paste your screenshot">
+  <span class="pz-label">SCREENSHOT B &mdash; Forecast</span>
+  <span class="pz-prompt">Click here, then press Ctrl+V to paste your screenshot</span>
+  <span class="pz-noshot">[no screenshot pasted]</span>
+</div>
+
+<h3>Task C &mdash; A visual calculation <span class="tag">4 pts</span></h3>
+
+<div class="box do">
+  <strong class="boxlabel">&#9989; DO THIS</strong>
+  <ol class="snfd">
+    <li><strong>See it.</strong> Build a <strong>Table</strong> visual. Put <code>Month</code> (Date table) and <code>Sales Amount</code> into it, so the table lists each month and its sales.</li>
+    <li><strong>Name it.</strong> The control that adds a calculation onto a visual is <strong>New visual calculation</strong>.</li>
+    <li><strong>Find it.</strong> With the table selected, on the ribbon: <strong>Home</strong> tab &rarr; <strong>New visual calculation</strong>. An edit screen opens showing the table's rows as a grid.</li>
+    <li><strong>Do it.</strong> In the formula bar, type the line below, confirm it, and close the edit screen. The table now carries a running total that accumulates down the months.</li>
+  </ol>
+</div>
+
+<div class="formula">Running Total = RUNNINGSUM(<span class="fx-c">[Sales Amount]</span>)</div>
+
+<div class="box why">
+  <strong class="boxlabel">&#128161; WHY ARE WE DOING THIS?</strong>
+  A visual calculation is computed <em>on the visual's own rows</em>, after they are aggregated — which is
+  why a running total is one short line here, instead of the denser <code>CALCULATE</code> pattern a measure
+  would need. <code>RUNNINGSUM</code> can walk the rows because the visual is where the rows live.
+</div>
+
+<p><strong>Screenshot</strong> &mdash; your table showing the <code>Running Total</code> column:</p>
+<div class="paste-zone" tabindex="0" data-prompt="Click here, then press Ctrl+V to paste your screenshot">
+  <span class="pz-label">SCREENSHOT C &mdash; Visual calculation</span>
+  <span class="pz-prompt">Click here, then press Ctrl+V to paste your screenshot</span>
+  <span class="pz-noshot">[no screenshot pasted]</span>
+</div>
+
+<h3>Written Response 1 &mdash; Measure or visual calculation? <span class="tag">2 pts</span></h3>
+<div class="written">
+  <p>You just wrote <code>Running Total</code> as a <em>visual calculation</em>. Suppose a teammate asks you to
+  also show that running total on a chart on a different report page. Would you copy the visual
+  calculation, or would you rebuild it as a <em>measure</em>? Explain your answer using the one deciding
+  question from Chapter 5.</p>
+  <label for="wr1">Your answer:</label>
+  <textarea id="wr1" rows="6" placeholder="Name the deciding question, then apply it to this situation."></textarea>
+</div>
+
+<div class="box breath">
+  <strong class="boxlabel">&#128156; TAKE A BREATH</strong>
+  Part 1 done — three Chapter 5 features, all working. This is a good place to stop if you have been at
+  it a while. When you come back, Part 2 switches from features <em>you</em> aim to features that aim
+  themselves.
+</div>
+
+<!-- ===================== PART 2 ===================== -->
+<div class="phase">Part 2 of 3 &mdash; AI-Powered Analysis (Chapter 6) <span class="pts">12 points</span></div>
+<p><strong>Part goal:</strong> use two of Chapter 6's AI visuals to explain a number — what moves it, and
+what it is made of.</p>
+
+<h3>Task D &mdash; Key Influencers <span class="tag">5 pts</span></h3>
+
+<div class="box do">
+  <strong class="boxlabel">&#9989; DO THIS</strong>
+  <ol class="snfd">
+    <li><strong>See it.</strong> The Visualizations pane's grid of icons includes the Key Influencers icon.</li>
+    <li><strong>Name it.</strong> The <strong>Key Influencers</strong> visual. With no visual selected, click its icon to add one.</li>
+    <li><strong>Find it.</strong> The visual has an <strong>Analyze</strong> well and an <strong>Explain by</strong> well.</li>
+    <li><strong>Do it.</strong> Drag <code>Sales Amount</code> into <strong>Analyze</strong>. Drag <code>Color</code> (Product table), <code>Business Type</code> (Reseller table), and <code>Country</code> (SalesTerritory table) into <strong>Explain by</strong>. Read the ranked influencers, then click the <strong>Top Segments</strong> tab to see combinations of factors that form a high or low group.</li>
+  </ol>
+</div>
+
+<div class="box why">
+  <strong class="boxlabel">&#128161; WHY ARE WE DOING THIS?</strong>
+  Key Influencers answers <em>what moves this number?</em> It ranks factors that are <em>associated with</em>
+  Sales Amount going up or down. "Associated with" is the careful phrase — it is correlation, not proven
+  cause. Hold that thought; Written Response 2 is about exactly it.
+</div>
+
+<p><strong>Screenshot</strong> &mdash; your Key Influencers visual, showing the ranked influencers:</p>
+<div class="paste-zone" tabindex="0" data-prompt="Click here, then press Ctrl+V to paste your screenshot">
+  <span class="pz-label">SCREENSHOT D &mdash; Key Influencers</span>
+  <span class="pz-prompt">Click here, then press Ctrl+V to paste your screenshot</span>
+  <span class="pz-noshot">[no screenshot pasted]</span>
+</div>
+
+<h3>Task E &mdash; Decomposition Tree <span class="tag">5 pts</span></h3>
+
+<div class="box do">
+  <strong class="boxlabel">&#9989; DO THIS</strong>
+  <ol class="snfd">
+    <li><strong>See it.</strong> One Visualizations-pane icon is shaped like a small branching tree.</li>
+    <li><strong>Name it.</strong> The <strong>Decomposition tree</strong> visual. With no visual selected, click its icon to add one.</li>
+    <li><strong>Find it.</strong> The visual has an <strong>Analyze</strong> well and an <strong>Explain by</strong> well.</li>
+    <li><strong>Do it.</strong> Drag <code>Total Product Cost</code> into <strong>Analyze</strong>. Drag <code>Category</code> (Product table), <code>Business Type</code> (Reseller table), and <code>Country</code> (SalesTerritory table) into <strong>Explain by</strong>. Click the <strong>+</strong> on the root node and choose <strong>High value</strong> — let the AI pick the most revealing split. Then click <strong>+</strong> again and pick a field yourself.</li>
+  </ol>
+</div>
+
+<div class="box check">
+  <strong class="boxlabel">&#128721; STOP AND CHECK</strong>
+  Your decomposition tree should be expanded at least <strong>two levels</strong> deep, and you should have used
+  the <strong>High value</strong> option at least once (the AI-chosen split shows a small light-bulb marker). If
+  the tree shows only the root node, click the <strong>+</strong> to expand it.
+</div>
+
+<p><strong>Screenshot</strong> &mdash; your decomposition tree, expanded at least two levels:</p>
+<div class="paste-zone" tabindex="0" data-prompt="Click here, then press Ctrl+V to paste your screenshot">
+  <span class="pz-label">SCREENSHOT E &mdash; Decomposition Tree</span>
+  <span class="pz-prompt">Click here, then press Ctrl+V to paste your screenshot</span>
+  <span class="pz-noshot">[no screenshot pasted]</span>
+</div>
+
+<h3>Written Response 2 &mdash; Correlation or cause? <span class="tag">2 pts</span></h3>
+<div class="written">
+  <p>Look at the top influencer your Key Influencers visual reported in Task D. In your own words: what
+  has the visual actually shown you, and what would you still need to find out before telling a manager
+  that influencer is the <em>reason</em> Sales Amount moved?</p>
+  <label for="wr2">Your answer:</label>
+  <textarea id="wr2" rows="6" placeholder="Separate what the visual proved from what it only suggested."></textarea>
+</div>
+
+<!-- ===================== PART 3 ===================== -->
+<div class="phase">Part 3 of 3 &mdash; Verify Before You Trust <span class="pts">8 points</span></div>
+<p><strong>Part goal:</strong> Chapter 6 ends on the rule every AI chapter owes its reader — AI <em>notices</em>,
+you <em>judge</em>. This Part has no new visual to build. It is the judgment.</p>
+
+<div class="box why">
+  <strong class="boxlabel">&#128161; WHY ARE WE DOING THIS?</strong>
+  An AI result is a <em>lead</em>, never a finished <em>finding</em>. Section 6.7 gives you five checks to run
+  on any AI-generated insight before it informs a decision. Running them is the part of the job the exam
+  &mdash; and an employer &mdash; is really testing.
+</div>
+
+<h3>Written Response 3 &mdash; Run the five checks <span class="tag">8 pts</span></h3>
+<div class="written">
+  <p>Pick <strong>one</strong> result from Part 2 — a Key Influencers influencer, or a branch of your
+  decomposition tree. Name which result you chose, then walk it through all five checks from Section 6.7,
+  writing a sentence or two on each:</p>
+  <ol>
+    <li><strong>Business sense</strong> — does the result make sense given what you know about a bike company?</li>
+    <li><strong>Correlation or cause</strong> — is this a proven cause, or two things that move together?</li>
+    <li><strong>Bias</strong> — could the data behind it be skewed in a way that produced this result?</li>
+    <li><strong>Traceable</strong> — could you follow the numbers back to the rows they came from?</li>
+    <li><strong>Sign your name</strong> — would you put your initials on this and show it to Marcus?</li>
+  </ol>
+  <p>Finish with one sentence: based on the five checks, would you present this result as-is, present it
+  with a caveat, or hold it back and investigate first?</p>
+  <label for="wr3">Your answer:</label>
+  <textarea id="wr3" rows="12" placeholder="Name the result you chose, take the five checks one at a time, then give your one-sentence decision."></textarea>
+</div>
+
+<!-- ===================== RUBRIC ===================== -->
+<h2>How this homework is graded</h2>
+<table class="rubric">
+  <tr><th>Tier</th><th>Points</th><th>What it looks like</th></tr>
+  <tr><td>Excellent</td><td>30&ndash;34</td><td>All five tasks built correctly on the right fields; all five screenshots pasted; all three written responses are specific, use the chapter vocabulary correctly, and show real judgment about what each tool can and cannot do.</td></tr>
+  <tr><td>Good</td><td>20&ndash;29</td><td>Most tasks built correctly; most screenshots present; written responses answer the questions but stay general or miss a key distinction (measure vs. visual calculation, correlation vs. cause).</td></tr>
+  <tr><td>Needs Work</td><td>0&ndash;19</td><td>Tasks incomplete or on the wrong fields; screenshots missing; written responses skipped or off-topic.</td></tr>
+</table>
+<div class="box why">
+  <strong class="boxlabel">&#128161; REDO OPTION</strong>
+  Score below "Good"? You may revise this homework once and resubmit for a score of up to <strong>29 points</strong>.
+  See the instructor or use the tutoring block.
+</div>
+
+<!-- ===================== SUBMIT ===================== -->
+<div class="submit">
+  <h3>&#128228; Before you submit</h3>
+  <ol>
+    <li>Save your Power BI file as <code>LastName_FirstName_HW3.pbix</code>.</li>
+    <li>Check that all five screenshot zones above show an image.</li>
+    <li>Check that all three written-response boxes are filled in.</li>
+    <li>Print this worksheet to PDF (Ctrl+P &rarr; Save as PDF).</li>
+    <li>Upload <strong>both</strong> files &mdash; the <code>.pbix</code> and the PDF &mdash; to the Canvas assignment <strong>Homework 3 &mdash; Analytics &amp; AI</strong>, by Sunday.</li>
+  </ol>
+  <p style="margin-bottom:0;">Late work: 48-hour grace period, then 10% per day, capped at 30%. A late, imperfect submission still beats a zero.</p>
+</div>
+
+</div><!-- /body -->
+</div><!-- /sheet -->
+
+<script>
+(function () {
+  function resetZone(zone) {
+    zone.classList.remove('filled');
+    zone.innerHTML =
+      '<span class="pz-label">' + zone.dataset.label + '</span>' +
+      '<span class="pz-prompt">' + zone.dataset.prompt + '</span>' +
+      '<span class="pz-noshot">[no screenshot pasted]</span>';
+  }
+
+  document.querySelectorAll('.paste-zone').forEach(function (zone) {
+    var labelEl = zone.querySelector('.pz-label');
+    zone.dataset.label = labelEl ? labelEl.textContent : 'Screenshot';
+
+    zone.addEventListener('paste', function (e) {
+      var items = (e.clipboardData || window.clipboardData).items;
+      for (var i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf('image') === 0) {
+          e.preventDefault();
+          var file = items[i].getAsFile();
+          var reader = new FileReader();
+          reader.onload = function (ev) {
+            zone.innerHTML = '';
+            var img = document.createElement('img');
+            img.src = ev.target.result;
+            img.alt = 'Pasted screenshot';
+            zone.appendChild(img);
+            var btn = document.createElement('button');
+            btn.className = 'pz-remove';
+            btn.type = 'button';
+            btn.textContent = '\u2715';
+            btn.title = 'Remove this screenshot';
+            btn.addEventListener('click', function () { resetZone(zone); });
+            zone.appendChild(btn);
+            zone.classList.add('filled');
+          };
+          reader.readAsDataURL(file);
+          return;
+        }
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>
