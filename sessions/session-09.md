@@ -54,11 +54,11 @@ Step away from the screen. Eat something. The second half is hands-on.
 
 ## Block B — Lab Work
 
-This session's lab: **Lab 8 — AI Visuals**. [Homework 3](https://github.com/c-marq/cap2743c-power-bi-viz/blob/main/homeworks/Homework3_AnalyticsAI.html) also launches today — a take-home spanning Chapters 5 and 6, due Sunday.
+This session's lab: **Lab 8 — AI Visuals**. [Homework 3](https://c-marq.github.io/cap2743c-power-bi-viz/homeworks/Homework3_AnalyticsAI.html) also launches today — a take-home spanning Chapters 5 and 6, due Sunday.
 
 The lab is **Lab 8 — AI Visuals**.
 
-📋 **Lab worksheet: [Lab 8 — AI Visuals](https://github.com/c-marq/cap2743c-power-bi-viz/blob/main/labs/Lab08_AIVisuals.html)**
+📋 **Lab worksheet: [Lab 8 — AI Visuals](https://c-marq.github.io/cap2743c-power-bi-viz/labs/Lab08_AIVisuals.html)**
 
 Open the worksheet, work through all phases, and submit your .pbix plus the worksheet PDF on the Canvas assignment page for this lab.
 

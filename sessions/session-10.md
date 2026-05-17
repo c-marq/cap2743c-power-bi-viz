@@ -56,7 +56,7 @@ This session's lab: **Lab 9 — Mobile Layout & the Distribution-Ready Report**.
 
 The lab is **Lab 9 — Mobile Layout & the Distribution-Ready Report**.
 
-📋 **Lab worksheet: [Lab 9 — Mobile Layout & the Distribution-Ready Report](https://github.com/c-marq/cap2743c-power-bi-viz/blob/main/labs/Lab09_PublishMobile.html)**
+📋 **Lab worksheet: [Lab 9 — Mobile Layout & the Distribution-Ready Report](https://c-marq.github.io/cap2743c-power-bi-viz/labs/Lab09_PublishMobile.html)**
 
 Open the worksheet, work through all phases, and submit your .pbix plus the worksheet PDF on the Canvas assignment page for this lab.
 
