@@ -54,7 +54,7 @@ Step away from the screen. Eat something. The second half is hands-on.
 
 **This session's lab:** Lab 10 — Row-Level Security Configuration.
 
-📋 **Lab worksheet:** [Lab 10 — Row-Level Security Configuration](https://github.com/c-marq/cap2743c-power-bi-viz/blob/main/labs/Lab10_RowLevelSecurity.html)
+📋 **Lab worksheet:** [Lab 10 — Row-Level Security Configuration](https://c-marq.github.io/cap2743c-power-bi-viz/labs/Lab10_RowLevelSecurity.html)
 
 Open the worksheet, work through all phases, and submit your `.pbix` plus the worksheet PDF on the Canvas assignment page for this lab.
 
